@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../Common.props" />
+
+  <PropertyGroup>
+    <PackageId>Byndyusoft.Data.Relational.Abstractions</PackageId>
+    <Title>Byndyusoft.Data.Relational.Abstractions</Title>
+    <Description>
+      Relational abstractions for Byndyusoft.Data.Relational.
+
+      Commonly Used Types:
+      Byndyusoft.Data.Relational.IDbSession
+      Byndyusoft.Data.Relational.QueryObject
+    </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.35" />
+  </ItemGroup>
+
+</Project>

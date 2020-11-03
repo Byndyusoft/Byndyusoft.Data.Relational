@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30621.155
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB5CC894-9D24-4C18-B59A-EAAEDD86DACC}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5161DEF3-EAA7-4B22-8971-CE8A70062C25}"
+	ProjectSection(SolutionItems) = preProject
+		src\Common.props = src\Common.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{E62DD962-69DD-402B-A0B2-DD1028FB5FF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{994FAF84-3550-4B3F-BC67-E10089C7B7BB}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pull-request.yml = .github\workflows\pull-request.yml
+		.github\workflows\push.yml = .github\workflows\push.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational", "src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj", "{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational.Abstractions", "src\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj", "{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{994FAF84-3550-4B3F-BC67-E10089C7B7BB} = {E62DD962-69DD-402B-A0B2-DD1028FB5FF4}
+		{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE} = {5161DEF3-EAA7-4B22-8971-CE8A70062C25}
+		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3} = {5161DEF3-EAA7-4B22-8971-CE8A70062C25}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8722EB16-9BEE-4F1A-9218-494BA9C1E369}
+	EndGlobalSection
+EndGlobal

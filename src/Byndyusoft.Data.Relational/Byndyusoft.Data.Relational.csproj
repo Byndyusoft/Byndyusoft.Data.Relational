@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../Common.props" />
+
+  <PropertyGroup>
+    <PackageId>Byndyusoft.Data.Relational</PackageId>
+    <Title>Byndyusoft.Data.Relational</Title>
+    <Description>Relational database default implementation for Byndyusoft.Data.Relational.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.35" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
