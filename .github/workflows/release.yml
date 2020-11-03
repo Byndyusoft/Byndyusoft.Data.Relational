@@ -22,9 +22,7 @@ jobs:
         run: dotnet build
 
       - name: test
-        run: > 
-           dotnet test --framework netcoreapp2.1
-           dotnet test --framework netcoreapp3.1
+        run: dotnet test
         
       - name: publish Byndyusoft.Data.Relational.Abstractions
         uses: rohith/publish-nuget@v2
