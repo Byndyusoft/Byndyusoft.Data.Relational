@@ -30,4 +30,6 @@ jobs:
         run: dotnet build
 
       - name: test
-        run: dotnet test
+        run: > 
+           dotnet test --framework netcoreapp2.1
+           dotnet test --framework netcoreapp3.1

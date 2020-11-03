@@ -1,4 +1,6 @@
-﻿namespace Byndyusoft.Data.Relational
+﻿using System.Runtime.Versioning;
+
+namespace Byndyusoft.Data.Relational
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +17,7 @@
         private DbTransaction _transaction;
         private IsolationLevel? _isolationLevel;
 
-        public DbSession(DbConnection connection, IsolationLevel? isolationLevel)
+        public DbSession(DbConnection connection, IsolationLevel? isolationLevel = default)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             _isolationLevel = isolationLevel;
@@ -32,14 +34,28 @@
             Dispose(true);
         }
 
-        public DbConnection Connection => _connection;
+        public DbConnection Connection
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _connection;
+            }
+        }
 
-        public DbTransaction Transaction => _transaction;
+        public DbTransaction Transaction
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _transaction;
+            }
+        }
 
         public async Task<IEnumerable<TSource>> QueryAsync<TSource>(string sql, object param = null,
             int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
-            await EnsureOpenedAsync().ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.QueryAsync<TSource>(command).ConfigureAwait(false);
         }
@@ -51,7 +67,7 @@
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            await EnsureOpenedAsync().ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.QueryAsync(command).ConfigureAwait(false);
         }
@@ -59,7 +75,7 @@
         public async Task<int> ExecuteAsync(string sql, object param = null, int? commandTimeout = null,
             CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
-            await EnsureOpenedAsync().ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.ExecuteAsync(command).ConfigureAwait(false);
         }
@@ -67,7 +83,7 @@
         public async Task<TSource> ExecuteScalarAsync<TSource>(string sql, object param = null,
             int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
-            await EnsureOpenedAsync().ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.ExecuteScalarAsync<TSource>(command).ConfigureAwait(false);
         }
@@ -75,7 +91,7 @@
         public async Task<SqlMapper.GridReader> QueryMultipleAsync(string sql, object param = null,
             int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
-            await EnsureOpenedAsync().ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.QueryMultipleAsync(command).ConfigureAwait(false);
         }
@@ -86,7 +102,7 @@
             return new CommandDefinition(sql, param, _transaction, commandTimeout, commandType, CommandFlags.Buffered,
                 cancellationToken);
         }
-        
+
         protected void ThrowIfDisposed()
         {
             if (_disposed)
@@ -108,19 +124,20 @@
             DbSessionAccessor.DbSession = null;
         }
 
-        private async Task EnsureOpenedAsync()
+        internal async Task EnsureOpenedAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
 
             if (_connection.State == ConnectionState.Open)
                 return;
 
-            await _connection.OpenAsync().ConfigureAwait(false);
+            await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             if (_isolationLevel.HasValue)
             {
 #if NETSTANDARD2_1
-                _transaction = await _connection.BeginTransactionAsync(_isolationLevel.Value).ConfigureAwait(false);
+                _transaction = await _connection.BeginTransactionAsync(_isolationLevel.Value, cancellationToken)
+                    .ConfigureAwait(false);
 #else
                 _transaction = _connection.BeginTransaction(_isolationLevel.Value);
 #endif
@@ -129,7 +146,7 @@
     }
 
 #if NETSTANDARD2_1
-    public partial class DbSession : IAsyncDisposable
+    public partial class DbSession
     {
         public async IAsyncEnumerable<TSource> Query<TSource>(
             string sql,
@@ -176,7 +193,7 @@
                 _connection = null;
             }
 
-            Dispose(true);
+            ((IDisposable) this).Dispose();
         }
     }
 #endif

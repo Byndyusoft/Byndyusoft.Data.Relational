@@ -13,7 +13,9 @@
 
         public DbSessionFactory(DbProviderFactory dbProviderFactory, string connectionString)
         {
-            ConnectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
+            if (string.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException(nameof(connectionString));
+
+            ConnectionString = connectionString;
             DbProviderFactory = dbProviderFactory ?? throw new ArgumentNullException(nameof(dbProviderFactory));
         }
 

@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational.Abstractions", "src\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj", "{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{961A329D-C08A-4505-B037-30BBEE1285EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational.Tests", "tests\Byndyusoft.Data.Relational.Tests.csproj", "{C91BC70E-01E4-46E7-9FDE-685BFE34755D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C91BC70E-01E4-46E7-9FDE-685BFE34755D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C91BC70E-01E4-46E7-9FDE-685BFE34755D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C91BC70E-01E4-46E7-9FDE-685BFE34755D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C91BC70E-01E4-46E7-9FDE-685BFE34755D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,7 @@ Global
 		{994FAF84-3550-4B3F-BC67-E10089C7B7BB} = {E62DD962-69DD-402B-A0B2-DD1028FB5FF4}
 		{61DFD8C6-65AD-4129-B7B3-EF29242E4BCE} = {5161DEF3-EAA7-4B22-8971-CE8A70062C25}
 		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3} = {5161DEF3-EAA7-4B22-8971-CE8A70062C25}
+		{C91BC70E-01E4-46E7-9FDE-685BFE34755D} = {961A329D-C08A-4505-B037-30BBEE1285EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8722EB16-9BEE-4F1A-9218-494BA9C1E369}
