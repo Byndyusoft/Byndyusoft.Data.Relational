@@ -42,6 +42,13 @@
             CommandType? commandType = null,
             CancellationToken cancellationToken = default);
 
+        Task<dynamic> ExecuteScalarAsync(
+            string sql,
+            object param = null,
+            int? commandTimeout = null,
+            CommandType? commandType = null,
+            CancellationToken cancellationToken = default);
+
         Task<SqlMapper.GridReader> QueryMultipleAsync(
             string sql,
             object param = null,

@@ -1,6 +1,4 @@
-﻿using System.Runtime.Versioning;
-
-namespace Byndyusoft.Data.Relational
+﻿namespace Byndyusoft.Data.Relational
 {
     using System;
     using System.Collections.Generic;
@@ -55,6 +53,8 @@ namespace Byndyusoft.Data.Relational
         public async Task<IEnumerable<TSource>> QueryAsync<TSource>(string sql, object param = null,
             int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.QueryAsync<TSource>(command).ConfigureAwait(false);
@@ -67,6 +67,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.QueryAsync(command).ConfigureAwait(false);
@@ -75,6 +77,8 @@ namespace Byndyusoft.Data.Relational
         public async Task<int> ExecuteAsync(string sql, object param = null, int? commandTimeout = null,
             CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.ExecuteAsync(command).ConfigureAwait(false);
@@ -83,14 +87,28 @@ namespace Byndyusoft.Data.Relational
         public async Task<TSource> ExecuteScalarAsync<TSource>(string sql, object param = null,
             int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.ExecuteScalarAsync<TSource>(command).ConfigureAwait(false);
         }
 
+        public async Task<dynamic> ExecuteScalarAsync(string sql, object param = null,
+            int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
+            var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
+            return await Connection.ExecuteScalarAsync(command).ConfigureAwait(false);
+        }
+
         public async Task<SqlMapper.GridReader> QueryMultipleAsync(string sql, object param = null,
             int? commandTimeout = null, CommandType? commandType = null, CancellationToken cancellationToken = default)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
             var command = CreateCommand(sql, param, commandTimeout, commandType, cancellationToken);
             return await Connection.QueryMultipleAsync(command).ConfigureAwait(false);
@@ -109,7 +127,7 @@ namespace Byndyusoft.Data.Relational
                 throw new ObjectDisposedException(GetType().FullName);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (_disposed || disposing == false)
                 return;
@@ -128,10 +146,10 @@ namespace Byndyusoft.Data.Relational
         {
             ThrowIfDisposed();
 
-            if (_connection.State == ConnectionState.Open)
-                return;
-
-            await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            if (_connection.State == ConnectionState.Closed)
+            {
+                await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            }
 
             if (_isolationLevel.HasValue)
             {
@@ -154,6 +172,8 @@ namespace Byndyusoft.Data.Relational
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync().ConfigureAwait(false);
             var items = await QueryAsync<TSource>(sql, param, commandTimeout, commandType).ConfigureAwait(false);
             foreach (var item in items)
@@ -168,6 +188,8 @@ namespace Byndyusoft.Data.Relational
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
+            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+
             await EnsureOpenedAsync().ConfigureAwait(false);
             var items = await QueryAsync(sql, param, commandTimeout, commandType).ConfigureAwait(false);
             foreach (var item in items)
@@ -178,9 +200,14 @@ namespace Byndyusoft.Data.Relational
 
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            if (_disposed)
-                return;
+            await DisposeAsync(true);
+        }
 
+        protected virtual async ValueTask DisposeAsync(bool disposing)
+        {
+            if (_disposed || disposing == false)
+                return;
+            
             if (_transaction != null)
             {
                 await _transaction.DisposeAsync();
@@ -193,7 +220,7 @@ namespace Byndyusoft.Data.Relational
                 _connection = null;
             }
 
-            ((IDisposable) this).Dispose();
+            ((IDisposable)this).Dispose();
         }
     }
 #endif
