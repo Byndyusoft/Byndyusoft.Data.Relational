@@ -30,6 +30,7 @@
         {
             GC.SuppressFinalize(this);
             Dispose(true);
+            _disposed = true;
         }
 
         public DbConnection Connection
@@ -138,7 +139,6 @@
             _connection?.Dispose();
             _connection = null;
 
-            _disposed = true;
             DbSessionAccessor.DbSession = null;
         }
 
@@ -200,7 +200,9 @@
 
         async ValueTask IAsyncDisposable.DisposeAsync()
         {
-            await DisposeAsync(true);
+            GC.SuppressFinalize(this);
+            await DisposeAsync(true).ConfigureAwait(false);
+            _disposed = true;
         }
 
         protected virtual async ValueTask DisposeAsync(bool disposing)
@@ -210,17 +212,17 @@
             
             if (_transaction != null)
             {
-                await _transaction.DisposeAsync();
+                await _transaction.DisposeAsync().ConfigureAwait(false);
                 _transaction = null;
             }
 
             if (_connection != null)
             {
-                await _connection.DisposeAsync();
+                await _connection.DisposeAsync().ConfigureAwait(false);
                 _connection = null;
             }
 
-            ((IDisposable)this).Dispose();
+            Dispose(true);
         }
     }
 #endif
