@@ -1,7 +1,9 @@
 [![(License)](https://img.shields.io/github/license/Byndyusoft/Byndyusoft.Data.Relational.Abstractions.svg)](LICENSE.txt)
-[![Nuget](http://img.shields.io/nuget/v/Byndyusoft.Data.Relational.Abstractions.svg?maxAge=10800)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) [![NuGet downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) 
-[![Nuget](http://img.shields.io/nuget/v/Byndyusoft.Data.Relational.svg?maxAge=10800)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) [![NuGet downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) 
 
+
+| [Byndyusoft.Data.Relational.Abstractions](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) |
+| ------- | ------------ | --------- |
+| [**Byndyusoft.Data.Relational**](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) |
 
 # Byndyusoft.Data.Relational.Abstractions
 Relational abstractions for Byndyusoft.Data.Relational.
