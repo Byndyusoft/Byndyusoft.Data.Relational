@@ -10,8 +10,12 @@
 
         void Commit();
 
+        void Rollback();
+
 #if NETSTANDARD2_1
-        ValueTask CommitAsync(CancellationToken cancellationToken = default);
+        Task CommitAsync(CancellationToken cancellationToken = default);
+
+        Task RollbackAsync(CancellationToken cancellationToken = default);
 #endif
     }
 }
