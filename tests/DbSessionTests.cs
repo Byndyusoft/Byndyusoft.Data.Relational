@@ -11,12 +11,10 @@
     public class DbSessionTests
     {
         private readonly DbConnection _connection;
-        private readonly CancellationToken _cancellationToken;
-
+        
         public DbSessionTests()
         {
             _connection = new Mock<DbConnection> { CallBase = true }.Object;
-            _cancellationToken = new CancellationTokenSource().Token;
         }
 
         [Fact]
@@ -96,6 +94,8 @@
         }
 
 #if NETCOREAPP3_1
+
+        private readonly CancellationToken _cancellationToken = new CancellationTokenSource().Token;
 
         [Fact]
         public async ValueTask DisposeAsync_CanBeDisposedTwice()
