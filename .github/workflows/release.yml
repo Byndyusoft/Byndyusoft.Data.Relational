@@ -1,9 +1,9 @@
 name: publish
 on:
   release:
-    types: [created]
+    types: [published]
     branches:
-      - master # Default release branch
+      - master
 jobs:
   publish:
     runs-on: ubuntu-latest
