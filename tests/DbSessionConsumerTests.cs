@@ -3,25 +3,24 @@ using Xunit;
 
 namespace Byndyusoft.Data.Relational
 {
-    public class DbRepositoryBaseTests
+    public class DbSessionConsumerTests
     {
         private readonly IDbSessionAccessor _sessionAccessor;
-        private readonly DbRepositoryImpl _repository;
+        private readonly DbSessionConsumerImpl _repository;
 
-        private class DbRepositoryImpl : DbRepositoryBase
+        private class DbSessionConsumerImpl : DbSessionConsumer
         {
-            public DbRepositoryImpl(IDbSessionAccessor sessionAccessor) : base(sessionAccessor)
+            public DbSessionConsumerImpl(IDbSessionAccessor sessionAccessor) : base(sessionAccessor)
             {
             }
 
-            public new IDbSession Session => base.Session;
+            public new IDbSession DbSession => base.DbSession;
         }
 
-
-        public DbRepositoryBaseTests()
+        public DbSessionConsumerTests()
         {
             _sessionAccessor = Mock.Of<IDbSessionAccessor>();
-            _repository = new DbRepositoryImpl(_sessionAccessor);
+            _repository = new DbSessionConsumerImpl(_sessionAccessor);
         }
 
         [Fact]
@@ -32,7 +31,7 @@ namespace Byndyusoft.Data.Relational
             Mock.Get(_sessionAccessor).SetupGet(x => x.DbSession).Returns(session);
 
             // Act
-            var result = _repository.Session;
+            var result = _repository.DbSession;
 
             // Assert
             Assert.Same(session, result);
