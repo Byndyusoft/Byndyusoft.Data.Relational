@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
@@ -18,9 +17,9 @@ namespace Byndyusoft.Data.Relational.Example
             await File.Create(file).DisposeAsync();
 
             var serviceProvider =
-                    new ServiceCollection()
-                        .AddRelationalDb(SqliteFactory.Instance, $"data source={file}")
-                        .BuildServiceProvider();
+                new ServiceCollection()
+                    .AddRelationalDb(SqliteFactory.Instance, $"data source={file}")
+                    .BuildServiceProvider();
 
             await WriteAsync(serviceProvider);
 
@@ -30,7 +29,7 @@ namespace Byndyusoft.Data.Relational.Example
         private static async Task WriteAsync(IServiceProvider serviceProvider)
         {
             var sessionFactory = serviceProvider.GetService<IDbSessionFactory>();
-            await using var session = await sessionFactory.CreateSessionAsync(IsolationLevel.Unspecified);
+            await using var session = await sessionFactory.CreateCommittableSessionAsync();
             await session.ExecuteAsync("CREATE TABLE test (id PRIMARY KEY ASC, name TEXT)");
 
             await session.ExecuteAsync("INSERT INTO test (name) VALUES ('test1');");
@@ -42,12 +41,9 @@ namespace Byndyusoft.Data.Relational.Example
         private static async Task ReadAsync(IServiceProvider serviceProvider)
         {
             var sessionFactory = serviceProvider.GetService<IDbSessionFactory>();
-            await using var session = await sessionFactory.CreateSessionAsync(IsolationLevel.Unspecified);
+            await using var session = await sessionFactory.CreateSessionAsync();
             var result = session.Query("SELECT id, name FROM test");
-            await foreach (var row in result)
-            {
-                Console.WriteLine(JsonConvert.SerializeObject(row));
-            }
+            await foreach (var row in result) Console.WriteLine(JsonConvert.SerializeObject(row));
         }
     }
 }

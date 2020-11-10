@@ -1,15 +1,14 @@
-﻿namespace Byndyusoft.Data.Relational
+﻿using System;
+using System.Data.Common;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Dapper;
+using Microsoft.Data.Sqlite;
+using Xunit;
+
+namespace Byndyusoft.Data.Relational
 {
-    using System;
-    using System.Linq;
-    using System.Data.Common;
-    using System.IO;
-    using System.Threading.Tasks;
-    using Dapper;
-    using Microsoft.Data.Sqlite;
-    using Xunit;
-
-
     public class DbSessionQueriesTests : IAsyncLifetime
     {
         private class Row
@@ -265,7 +264,9 @@
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (2, 'test2');");
 
             // Act
-            var result = await _session.QueryMultipleAsync("SELECT id, name FROM test WHERE id = 1; SELECT id, name FROM test WHERE id = 2;");
+            var result =
+                await _session.QueryMultipleAsync(
+                    "SELECT id, name FROM test WHERE id = 1; SELECT id, name FROM test WHERE id = 2;");
 
             // Assert
             var set1 = await result.ReadAsync<Row>();
@@ -308,7 +309,6 @@
         }
 
 #if NETCOREAPP3_1
-
         [Theory]
         [InlineData(null)]
         [InlineData("")]
@@ -351,7 +351,7 @@
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
 
             // Act
-            var rows = await _session.Query("SELECT id, name FROM test WHERE id = @id", new{id=1}).ToArrayAsync();
+            var rows = await _session.Query("SELECT id, name FROM test WHERE id = @id", new{id = 1}).ToArrayAsync();
 
             // Assert
             var row = Assert.Single(rows);

@@ -1,20 +1,20 @@
-﻿namespace Byndyusoft.Data.Relational
+﻿using System;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
+using Moq;
+using Moq.Protected;
+using Xunit;
+
+namespace Byndyusoft.Data.Relational
 {
-    using System;
-    using System.Data.Common;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Moq;
-    using Moq.Protected;
-    using Xunit;
-    
     public class DbSessionTests
     {
         private readonly DbConnection _connection;
-        
+
         public DbSessionTests()
         {
-            _connection = new Mock<DbConnection> { CallBase = true }.Object;
+            _connection = new Mock<DbConnection> {CallBase = true}.Object;
         }
 
         [Fact]
@@ -44,7 +44,9 @@
         {
             // Arrange
             var session = new DbSession(_connection);
-            using (session) { }
+            using (session)
+            {
+            }
 
             // Act
             var exception = Assert.Throws<ObjectDisposedException>(() => session.Connection);
@@ -59,7 +61,9 @@
         {
             // Arrange
             var session = new DbSession(_connection);
-            using (session) { }
+            using (session)
+            {
+            }
 
             // Act
             var exception = Assert.Throws<ObjectDisposedException>(() => session.Transaction);
@@ -76,8 +80,13 @@
             var session = new DbSession(_connection);
 
             // Act
-            using (session) { }
-            using (session) { }
+            using (session)
+            {
+            }
+
+            using (session)
+            {
+            }
         }
 
         [Fact]
@@ -87,14 +96,15 @@
             var session = new DbSession(_connection);
 
             // Act
-            using (session) { }
+            using (session)
+            {
+            }
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[]{true});
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
 #if NETCOREAPP3_1
-
         private readonly CancellationToken _cancellationToken = new CancellationTokenSource().Token;
 
         [Fact]
@@ -121,7 +131,6 @@
             // Assert
             Mock.Get(_connection).Verify(x => x.DisposeAsync(), Times.Once);
         }
-
 #endif
     }
 }

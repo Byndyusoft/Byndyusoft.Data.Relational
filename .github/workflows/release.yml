@@ -35,7 +35,7 @@ jobs:
           # Filepath of the project to be packaged, relative to root of repository
           PROJECT_FILE_PATH: src/Byndyusoft.Data.Relational.Abstractions/Byndyusoft.Data.Relational.Abstractions.csproj
            # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
-          VERSION_FILE_PATH: src/Common.props
+          VERSION_FILE_PATH: Directory.Build.props
           # API key to authenticate with NuGet server
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           # Flag to toggle pushing symbols along with nuget package to the server, disabled by default
@@ -47,7 +47,7 @@ jobs:
           # Filepath of the project to be packaged, relative to root of repository
           PROJECT_FILE_PATH: src/Byndyusoft.Data.Relational/Byndyusoft.Data.Relational.csproj
           # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
-          VERSION_FILE_PATH: src/Common.props
+          VERSION_FILE_PATH: Directory.Build.props
           # API key to authenticate with NuGet server
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           # Flag to toggle pushing symbols along with nuget package to the server, disabled by default

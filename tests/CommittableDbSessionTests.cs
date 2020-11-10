@@ -1,14 +1,14 @@
-﻿namespace Byndyusoft.Data.Relational
+﻿using System;
+using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
+using Moq;
+using Moq.Protected;
+using Xunit;
+
+namespace Byndyusoft.Data.Relational
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Moq;
-    using Moq.Protected;
-    using Xunit;
-    
     public class CommittableDbSessionTests
     {
         private readonly IsolationLevel _isolationLevel;
@@ -19,11 +19,12 @@
         public CommittableDbSessionTests()
         {
             _isolationLevel = IsolationLevel.Chaos;
-            _transaction = new Mock<DbTransaction>{CallBase = true}.Object;
-            _connection = new Mock<DbConnection>{CallBase = true}.Object;
+            _transaction = new Mock<DbTransaction> {CallBase = true}.Object;
+            _connection = new Mock<DbConnection> {CallBase = true}.Object;
             _cancellationToken = new CancellationTokenSource().Token;
 
-            Mock.Get(_connection).Protected().Setup<DbTransaction>("BeginDbTransaction", _isolationLevel).Returns(_transaction).Verifiable();
+            Mock.Get(_connection).Protected().Setup<DbTransaction>("BeginDbTransaction", _isolationLevel)
+                .Returns(_transaction).Verifiable();
         }
 
         [Fact]
@@ -53,7 +54,9 @@
         {
             // Arrange
             var session = new CommittableDbSession(_connection, _isolationLevel);
-            using (session) {}
+            using (session)
+            {
+            }
 
             // Act
             var exception = Assert.Throws<ObjectDisposedException>(() => session.Commit());
@@ -90,6 +93,33 @@
         }
 
         [Fact]
+        public void Rollback_SkipsIfNoTransaction()
+        {
+            // Arrange
+            var session = new CommittableDbSession(_connection, _isolationLevel);
+
+            // Act
+            session.Rollback();
+
+            // Assert
+            Mock.Get(_transaction).VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async ValueTask Commit_RollbacksTransaction()
+        {
+            // Arrange
+            var session = new CommittableDbSession(_connection, _isolationLevel);
+            await session.EnsureOpenedAsync(_cancellationToken);
+
+            // Act
+            session.Rollback();
+
+            // Assert
+            Mock.Get(_transaction).Verify(x => x.Rollback(), Times.Once);
+        }
+
+        [Fact]
         public async ValueTask Dispose_DisposesTransaction()
         {
             // Arrange
@@ -98,14 +128,15 @@
 
             // Act
             // ReSharper disable once UseAwaitUsing
-            using (session) { }
+            using (session)
+            {
+            }
 
             // Assert
-            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
 #if NETCOREAPP3_1
-
         [Fact]
         public async ValueTask CommitAsync_Disposed_ThrowsException()
         {
@@ -144,7 +175,34 @@
             await session.CommitAsync(_cancellationToken);
 
             // Assert
-            Mock.Get(_transaction).Verify(x => x.CommitAsync(It.IsAny<CancellationToken>()), Times.Once);
+            Mock.Get(_transaction).Verify(x => x.CommitAsync(_cancellationToken), Times.Once);
+        }
+
+        [Fact]
+        public async ValueTask RollbackAsync_SkipsIfNoTransaction()
+        {
+            // Arrange
+            var session = new CommittableDbSession(_connection, _isolationLevel);
+
+            // Act
+            await session.RollbackAsync(_cancellationToken);
+
+            // Assert
+            Mock.Get(_transaction).VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async ValueTask RollbackAsync_CommitsTransaction()
+        {
+            // Arrange
+            var session = new CommittableDbSession(_connection, _isolationLevel);
+            await session.EnsureOpenedAsync(_cancellationToken);
+
+            // Act
+            await session.RollbackAsync(_cancellationToken);
+
+            // Assert
+            Mock.Get(_transaction).Verify(x => x.RollbackAsync(_cancellationToken), Times.Once);
         }
 
         [Fact]

@@ -1,10 +1,13 @@
 ﻿namespace Byndyusoft.Data.Relational
 {
-    public abstract class DbRepository
+    /// <summary>
+    ///     A base class for an database repository.
+    /// </summary>
+    public abstract class DbRepositoryBase
     {
         private readonly IDbSessionAccessor _sessionAccessor;
 
-        protected DbRepository(IDbSessionAccessor sessionAccessor)
+        protected DbRepositoryBase(IDbSessionAccessor sessionAccessor)
         {
             _sessionAccessor = sessionAccessor;
         }

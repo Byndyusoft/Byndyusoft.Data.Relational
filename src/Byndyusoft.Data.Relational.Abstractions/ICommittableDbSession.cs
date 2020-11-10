@@ -1,9 +1,9 @@
-﻿namespace Byndyusoft.Data.Relational
-{
-    using System.Data;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace Byndyusoft.Data.Relational
+{
     public interface ICommittableDbSession : IDbSession
     {
         IsolationLevel IsolationLevel { get; }

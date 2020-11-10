@@ -1,14 +1,16 @@
 ﻿// ReSharper disable once CheckNamespace
+
+using System;
+using System.Data.Common;
+using Byndyusoft.Data.Relational;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 namespace Microsoft.Extensions.DependencyInjection
 {
-    using System;
-    using System.Data.Common;
-    using Byndyusoft.Data.Relational;
-    using Extensions;
-
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddRelationalDb(this IServiceCollection services, DbProviderFactory dbProviderFactory, string connectionString)
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            DbProviderFactory dbProviderFactory, string connectionString)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));
@@ -20,7 +22,8 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddRelationalDb(this IServiceCollection services, DbProviderFactory dbProviderFactory, Func<string> connectionStringFunc)
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            DbProviderFactory dbProviderFactory, Func<string> connectionStringFunc)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));

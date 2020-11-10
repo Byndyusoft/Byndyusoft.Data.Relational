@@ -1,11 +1,11 @@
-﻿namespace Byndyusoft.Data.Relational.DependencyInjection
-{
-    using System;
-    using System.Data.Common;
-    using Microsoft.Extensions.DependencyInjection;
-    using Moq;
-    using Xunit;
+﻿using System;
+using System.Data.Common;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using Xunit;
 
+namespace Byndyusoft.Data.Relational.DependencyInjection
+{
     public class ServiceCollectionTests
     {
         private readonly string _connectionString;
@@ -123,7 +123,8 @@
         {
             // Act
             var exception =
-                Assert.Throws<ArgumentNullException>(() => _services.AddRelationalDb(_dbProviderFactory, null as Func<string>));
+                Assert.Throws<ArgumentNullException>(() =>
+                    _services.AddRelationalDb(_dbProviderFactory, null as Func<string>));
 
             // Assert
             Assert.Equal("connectionStringFunc", exception.ParamName);
@@ -169,7 +170,7 @@
 
             // Assert
             Assert.NotNull(service);
-            var sessionFactory =  Assert.IsType<DbSessionFactory>(service);
+            var sessionFactory = Assert.IsType<DbSessionFactory>(service);
             Assert.Equal(_dbProviderFactory, sessionFactory.DbProviderFactory);
             Assert.Equal(_connectionString, sessionFactory.ConnectionString);
         }
