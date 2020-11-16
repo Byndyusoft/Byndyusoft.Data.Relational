@@ -28,6 +28,11 @@ jobs:
         with:
           dotnet-version: 3.1.x
 
+      - name: install dotnet 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+
       - name: install packages
         run: dotnet restore
 
@@ -38,3 +43,4 @@ jobs:
         run: |
           dotnet test --framework netcoreapp2.1
           dotnet test --framework netcoreapp3.1
+          dotnet test --framework net5.0
