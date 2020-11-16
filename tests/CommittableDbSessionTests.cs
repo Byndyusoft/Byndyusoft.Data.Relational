@@ -136,7 +136,7 @@ namespace Byndyusoft.Data.Relational
             Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
-#if NETCOREAPP3_1
+#if !NETCOREAPP2_1
         [Fact]
         public async ValueTask CommitAsync_Disposed_ThrowsException()
         {

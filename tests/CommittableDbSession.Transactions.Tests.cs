@@ -136,7 +136,8 @@ namespace Byndyusoft.Data.Relational
             Assert.True(true);
         }
 
-#if NETCOREAPP3_1
+#if !NETCOREAPP2_1
+
         [Fact]
         public async Task CommitAsync()
         {

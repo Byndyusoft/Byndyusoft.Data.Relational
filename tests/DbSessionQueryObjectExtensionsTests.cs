@@ -276,7 +276,7 @@ namespace Byndyusoft.Data.Relational
             Assert.Equal("test2", row2.Name);
         }
 
-#if NETCOREAPP3_1 || NET5_0
+#if !NETCOREAPP2_1
 
         [Fact]
         public async Task Query_NullQueryObject_ThrowsException()

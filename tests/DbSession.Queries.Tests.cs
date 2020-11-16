@@ -308,7 +308,7 @@ namespace Byndyusoft.Data.Relational
             Assert.Equal("test2", row2.Name);
         }
 
-#if NETCOREAPP3_1
+#if !NETCOREAPP2_1
         [Theory]
         [InlineData(null)]
         [InlineData("")]

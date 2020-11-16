@@ -104,7 +104,7 @@ namespace Byndyusoft.Data.Relational
             Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
-#if NETCOREAPP3_1
+#if !NETCOREAPP2_1
         private readonly CancellationToken _cancellationToken = new CancellationTokenSource().Token;
 
         [Fact]
