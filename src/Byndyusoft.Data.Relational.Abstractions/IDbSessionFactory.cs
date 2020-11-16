@@ -1,12 +1,18 @@
-﻿namespace Byndyusoft.Data.Relational
-{
-    using System.Data;
-    using System.Threading.Tasks;
+﻿using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace Byndyusoft.Data.Relational
+{
     public interface IDbSessionFactory
     {
         Task<IDbSession> CreateSessionAsync();
 
-        Task<ICommittableDbSession> CreateSessionAsync(IsolationLevel isolationLevel);
+        Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken);
+
+        Task<ICommittableDbSession> CreateCommittableSessionAsync();
+
+        Task<ICommittableDbSession> CreateCommittableSessionAsync(IsolationLevel isolationLevel,
+            CancellationToken cancellationToken);
     }
 }

@@ -1,12 +1,13 @@
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
+using Moq;
+using Xunit;
+
 namespace Byndyusoft.Data.Relational
 {
-    using System;
-    using System.Data;
-    using System.Data.Common;
-    using System.Threading.Tasks;
-    using Moq;
-    using Xunit;
-    
     public class DbSessionFactoryTests
     {
         private readonly string _connectionString;
@@ -21,7 +22,7 @@ namespace Byndyusoft.Data.Relational
 
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(Mock.Of<DbConnection>());
         }
-        
+
         [Fact]
         public void Constructor_WithProviderAndConnectionString()
         {
@@ -50,7 +51,8 @@ namespace Byndyusoft.Data.Relational
         public void Constructor_NullConnectionString_ThrowsException(string connectionString)
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(_dbProviderFactory, connectionString));
+            var exception =
+                Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(_dbProviderFactory, connectionString));
 
             // Assert
             Assert.NotNull(exception);
@@ -97,18 +99,18 @@ namespace Byndyusoft.Data.Relational
         }
 
         [Fact]
-        public async ValueTask CreateSessionAsync_Commitable_ProviderCreatesNullConnection_ThrowsException()
+        public async ValueTask CreateCommittableSessionAsync_Commitable_ProviderCreatesNullConnection_ThrowsException()
         {
             // Arrange
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(null as DbConnection);
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await Assert.ThrowsAsync<InvalidOperationException>(() => factory.CreateSessionAsync(IsolationLevel.Chaos));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => factory.CreateCommittableSessionAsync());
         }
 
         [Fact]
-        public async ValueTask CreateSessionAsync_Commitable_CreatesSession()
+        public async ValueTask CreateCommittableSessionAsync_Commitable_CreatesSession()
         {
             // Arrange
             var isolationLevel = IsolationLevel.Unspecified;
@@ -117,7 +119,7 @@ namespace Byndyusoft.Data.Relational
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            var session = await factory.CreateSessionAsync(isolationLevel);
+            var session = await factory.CreateCommittableSessionAsync(isolationLevel, CancellationToken.None);
 
             // Assert
             Assert.Equal(connection, session.Connection);
@@ -126,11 +128,11 @@ namespace Byndyusoft.Data.Relational
         }
 
         [Fact]
-        public async ValueTask CreateSessionAsync_Commitable_SetsSessionToAccessor()
+        public async ValueTask CreateCommittableSessionAsync_Commitable_SetsSessionToAccessor()
         {
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            var session = await factory.CreateSessionAsync(IsolationLevel.Unspecified);
+            var session = await factory.CreateCommittableSessionAsync();
 
             // Assert
             Assert.NotNull(_sessionAccessor.DbSession);

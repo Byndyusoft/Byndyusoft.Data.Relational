@@ -1,29 +1,25 @@
-﻿namespace Byndyusoft.Data.Relational
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 
-    public partial class DbSession : IDbSession
+namespace Byndyusoft.Data.Relational
+{
+    public class DbSession : IDbSession
     {
-        private bool _disposed;
         private DbConnection _connection;
-        private DbTransaction _transaction;
+        private bool _disposed;
         private IsolationLevel? _isolationLevel;
+        private DbTransaction _transaction;
 
         public DbSession(DbConnection connection, IsolationLevel? isolationLevel = default)
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             _isolationLevel = isolationLevel;
-        }
-
-        ~DbSession()
-        {
-            Dispose(false);
         }
 
         void IDisposable.Dispose()
@@ -115,6 +111,11 @@
             return await Connection.QueryMultipleAsync(command).ConfigureAwait(false);
         }
 
+        ~DbSession()
+        {
+            Dispose(false);
+        }
+
         private CommandDefinition CreateCommand(string sql, object param,
             int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken)
         {
@@ -146,10 +147,10 @@
         {
             ThrowIfDisposed();
 
-            if (_connection.State == ConnectionState.Closed)
-            {
-                await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-            }
+            if (_connection.State != ConnectionState.Closed)
+                return;
+
+            await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             if (_isolationLevel.HasValue)
             {
@@ -161,23 +162,22 @@
 #endif
             }
         }
-    }
 
 #if NETSTANDARD2_1
-    public partial class DbSession
-    {
         public async IAsyncEnumerable<TSource> Query<TSource>(
             string sql,
             object param = null,
             int? commandTimeout = null,
-            CommandType? commandType = null)
+            CommandType? commandType = null, 
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 
-            await EnsureOpenedAsync().ConfigureAwait(false);
-            var items = await QueryAsync<TSource>(sql, param, commandTimeout, commandType).ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
+            var items = await QueryAsync<TSource>(sql, param, commandTimeout, commandType, cancellationToken).ConfigureAwait(false);
             foreach (var item in items)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return item;
             }
         }
@@ -186,14 +186,16 @@
             string sql,
             object param = null,
             int? commandTimeout = null,
-            CommandType? commandType = null)
+            CommandType? commandType = null,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 
-            await EnsureOpenedAsync().ConfigureAwait(false);
-            var items = await QueryAsync(sql, param, commandTimeout, commandType).ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
+            var items = await QueryAsync(sql, param, commandTimeout, commandType, cancellationToken).ConfigureAwait(false);
             foreach (var item in items)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return item;
             }
         }
@@ -224,6 +226,6 @@
 
             Dispose(true);
         }
-    }
 #endif
+    }
 }

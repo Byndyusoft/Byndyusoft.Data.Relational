@@ -1,3 +1,10 @@
+[![(License)](https://img.shields.io/github/license/Byndyusoft/Byndyusoft.Data.Relational.Abstractions.svg)](LICENSE.txt)
+
+
+| [Byndyusoft.Data.Relational.Abstractions](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) |
+| ------- | ------------ | --------- |
+| [**Byndyusoft.Data.Relational**](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) |
+
 # Byndyusoft.Data.Relational.Abstractions
 Relational abstractions for Byndyusoft.Data.Relational.
 
@@ -28,7 +35,7 @@ A detailed overview on how to contribute can be found in the [contributing guide
 Make sure you have installed all of the following prerequisites on your development machine:
 
 - Git - [Download & Install Git](https://git-scm.com/downloads). OSX and Linux machines typically have this already installed.
-- .NET Core (version 3.1 or higher) - [Download & Install .NET Core](https://dotnet.microsoft.com/download/dotnet-core/3.1).
+- .NET Core (version 5.0 or higher) - [Download & Install .NET Core](https://dotnet.microsoft.com/download/dotnet/5.0).
 
 ## General folders layout
 

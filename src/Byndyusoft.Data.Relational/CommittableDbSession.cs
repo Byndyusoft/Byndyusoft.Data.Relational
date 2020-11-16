@@ -1,10 +1,10 @@
-﻿namespace Byndyusoft.Data.Relational
-{
-    using System.Data;
-    using System.Data.Common;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace Byndyusoft.Data.Relational
+{
     public class CommittableDbSession : DbSession, ICommittableDbSession
     {
         private bool _completed;

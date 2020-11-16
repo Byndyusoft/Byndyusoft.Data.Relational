@@ -1,16 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../Common.props" />
-
-  <PropertyGroup>
+ <PropertyGroup>
     <PackageId>Byndyusoft.Data.Relational.Abstractions</PackageId>
     <Title>Byndyusoft.Data.Relational.Abstractions</Title>
     <Description>
       Relational abstractions for Byndyusoft.Data.Relational.
 
       Commonly Used Types:
-      Byndyusoft.Data.Relational.IDbSession
-      Byndyusoft.Data.Relational.QueryObject
+        Byndyusoft.Data.Relational.IDbSession
+        Byndyusoft.Data.Relational.QueryObject
+        Byndyusoft.Data.Relational.DbSessionConsumer
     </Description>
   </PropertyGroup>
 

@@ -1,7 +1,7 @@
-﻿namespace Byndyusoft.Data.Relational
-{
-    using System;
+﻿using System;
 
+namespace Byndyusoft.Data.Relational
+{
     public readonly struct QueryObject : IQueryObject
     {
         public QueryObject(string sql, object queryParams = null)

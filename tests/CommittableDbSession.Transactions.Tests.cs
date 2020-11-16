@@ -14,7 +14,7 @@ namespace Byndyusoft.Data.Relational
         private CommittableDbSession _session;
         private DbConnection _connection;
         private readonly string _file = $"{Guid.NewGuid()}.db";
-        
+
         public async Task InitializeAsync()
         {
             _connection = new SqliteConnection($"Data Source={_file}");
@@ -105,7 +105,7 @@ namespace Byndyusoft.Data.Relational
             using (_session)
             {
             }
-            
+
             // Arrange
             var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
             Assert.Null(row);
@@ -136,7 +136,7 @@ namespace Byndyusoft.Data.Relational
             Assert.True(true);
         }
 
-#if NETCOREAPP3_1
+#if !NETCOREAPP2_1
 
         [Fact]
         public async Task CommitAsync()
