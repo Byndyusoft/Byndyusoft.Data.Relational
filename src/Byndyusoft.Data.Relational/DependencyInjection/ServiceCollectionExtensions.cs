@@ -1,10 +1,9 @@
-﻿// ReSharper disable once CheckNamespace
-
-using System;
+﻿using System;
 using System.Data.Common;
 using Byndyusoft.Data.Relational;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions

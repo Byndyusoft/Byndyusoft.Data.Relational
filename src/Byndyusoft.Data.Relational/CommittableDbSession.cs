@@ -1,8 +1,7 @@
-﻿using System.Data.Common;
+﻿using System.Data;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
-using IsolationLevel = System.Data.IsolationLevel;
 
 namespace Byndyusoft.Data.Relational
 {

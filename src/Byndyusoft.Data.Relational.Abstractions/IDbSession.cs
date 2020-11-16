@@ -1,13 +1,13 @@
-﻿namespace Byndyusoft.Data.Relational
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Data;
-    using System.Data.Common;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 
+namespace Byndyusoft.Data.Relational
+{
     public partial interface IDbSession : IDisposable
     {
         DbConnection Connection { get; }

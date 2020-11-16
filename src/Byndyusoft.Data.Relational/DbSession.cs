@@ -148,7 +148,7 @@ namespace Byndyusoft.Data.Relational
 
             if (_connection.State != ConnectionState.Closed)
                 return;
-                
+
             await _connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             if (_isolationLevel.HasValue)

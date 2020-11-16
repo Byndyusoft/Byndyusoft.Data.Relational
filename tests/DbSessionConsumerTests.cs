@@ -5,17 +5,8 @@ namespace Byndyusoft.Data.Relational
 {
     public class DbSessionConsumerTests
     {
-        private readonly IDbSessionAccessor _sessionAccessor;
         private readonly DbSessionConsumerImpl _repository;
-
-        private class DbSessionConsumerImpl : DbSessionConsumer
-        {
-            public DbSessionConsumerImpl(IDbSessionAccessor sessionAccessor) : base(sessionAccessor)
-            {
-            }
-
-            public new IDbSession DbSession => base.DbSession;
-        }
+        private readonly IDbSessionAccessor _sessionAccessor;
 
         public DbSessionConsumerTests()
         {
@@ -35,6 +26,15 @@ namespace Byndyusoft.Data.Relational
 
             // Assert
             Assert.Same(session, result);
+        }
+
+        private class DbSessionConsumerImpl : DbSessionConsumer
+        {
+            public DbSessionConsumerImpl(IDbSessionAccessor sessionAccessor) : base(sessionAccessor)
+            {
+            }
+
+            public new IDbSession DbSession => base.DbSession;
         }
     }
 }
