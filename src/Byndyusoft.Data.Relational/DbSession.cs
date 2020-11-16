@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
@@ -167,14 +168,16 @@ namespace Byndyusoft.Data.Relational
             string sql,
             object param = null,
             int? commandTimeout = null,
-            CommandType? commandType = null)
+            CommandType? commandType = null, 
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 
-            await EnsureOpenedAsync().ConfigureAwait(false);
-            var items = await QueryAsync<TSource>(sql, param, commandTimeout, commandType).ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
+            var items = await QueryAsync<TSource>(sql, param, commandTimeout, commandType, cancellationToken).ConfigureAwait(false);
             foreach (var item in items)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return item;
             }
         }
@@ -183,14 +186,16 @@ namespace Byndyusoft.Data.Relational
             string sql,
             object param = null,
             int? commandTimeout = null,
-            CommandType? commandType = null)
+            CommandType? commandType = null,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 
-            await EnsureOpenedAsync().ConfigureAwait(false);
-            var items = await QueryAsync(sql, param, commandTimeout, commandType).ConfigureAwait(false);
+            await EnsureOpenedAsync(cancellationToken).ConfigureAwait(false);
+            var items = await QueryAsync(sql, param, commandTimeout, commandType, cancellationToken).ConfigureAwait(false);
             foreach (var item in items)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 yield return item;
             }
         }

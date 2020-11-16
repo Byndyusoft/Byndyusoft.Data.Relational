@@ -1,4 +1,7 @@
 <Project>
+
+  <Import Project="../Directory.Build.props" />
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>Byndyusoft.Data.Relational</RootNamespace>

@@ -64,13 +64,15 @@ namespace Byndyusoft.Data.Relational
             string sql,
             object param = null,
             int? commandTimeout = null,
-            CommandType? commandType = null);
+            CommandType? commandType = null,
+            CancellationToken cancellationToken = default);
 
         IAsyncEnumerable<dynamic> Query(
             string sql,
             object param = null,
             int? commandTimeout = null,
-            CommandType? commandType = null);
+            CommandType? commandType = null,
+            CancellationToken cancellationToken = default);
     }
 #endif
 }
