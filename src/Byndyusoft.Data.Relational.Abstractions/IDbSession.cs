@@ -57,7 +57,7 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default);
     }
 
-#if NETSTANDARD2_1
+#if !NETSTANDARD2_0
     public partial interface IDbSession : IAsyncDisposable
     {
         IAsyncEnumerable<TSource> Query<TSource>(

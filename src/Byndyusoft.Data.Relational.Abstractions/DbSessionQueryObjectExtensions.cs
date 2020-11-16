@@ -93,7 +93,7 @@ namespace Byndyusoft.Data.Relational
                 cancellationToken).ConfigureAwait(false);
         }
 
-#if NETSTANDARD2_1
+#if !NETSTANDARD2_0
         public static IAsyncEnumerable<TSource> Query<TSource>(
             this IDbSession session,
             IQueryObject queryObject,
@@ -104,7 +104,7 @@ namespace Byndyusoft.Data.Relational
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
 
-            return session.Query<TSource>(queryObject.Sql, queryObject.QueryParams, commandTimeout, commandType);
+            return session.Query<TSource>(queryObject.Sql, queryObject.QueryParams, commandTimeout, commandType, cancellationToken);
         }
 
         public static IAsyncEnumerable<dynamic> Query(
@@ -117,7 +117,7 @@ namespace Byndyusoft.Data.Relational
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
 
-            return session.Query(queryObject.Sql, queryObject.QueryParams, commandTimeout, commandType);
+            return session.Query(queryObject.Sql, queryObject.QueryParams, commandTimeout, commandType, cancellationToken);
         }
 #endif
     }

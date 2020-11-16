@@ -12,7 +12,7 @@ namespace Byndyusoft.Data.Relational
 
         void Rollback();
 
-#if NETSTANDARD2_1
+#if !NETSTANDARD2_0
         Task CommitAsync(CancellationToken cancellationToken = default);
 
         Task RollbackAsync(CancellationToken cancellationToken = default);
