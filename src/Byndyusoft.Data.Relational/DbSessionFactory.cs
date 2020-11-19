@@ -20,12 +20,7 @@ namespace Byndyusoft.Data.Relational
 
         public DbProviderFactory DbProviderFactory { get; }
 
-        public Task<IDbSession> CreateSessionAsync()
-        {
-            return CreateSessionAsync(CancellationToken.None);
-        }
-
-        public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken)
+        public Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             var connection = DbProviderFactory.CreateConnection();
             if (connection == null) throw new InvalidOperationException();
@@ -35,13 +30,14 @@ namespace Byndyusoft.Data.Relational
             return Task.FromResult<IDbSession>(session);
         }
 
-        public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync()
+        public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
+            CancellationToken cancellationToken = default)
         {
-            return CreateCommittableSessionAsync(IsolationLevel.Unspecified, CancellationToken.None);
+            return CreateCommittableSessionAsync(IsolationLevel.Unspecified, cancellationToken);
         }
 
         public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
-            IsolationLevel isolationLevel, CancellationToken cancellationToken)
+            IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
             var connection = DbProviderFactory.CreateConnection();
             if (connection == null) throw new InvalidOperationException();

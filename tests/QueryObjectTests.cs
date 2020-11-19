@@ -16,7 +16,7 @@ namespace Byndyusoft.Data.Relational
 
             // Assert
             Assert.Equal(sql, queryObject.Sql);
-            Assert.Null(queryObject.QueryParams);
+            Assert.Null(queryObject.Params);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Byndyusoft.Data.Relational
 
             // Assert
             Assert.Equal(sql, queryObject.Sql);
-            Assert.Equal(parameters, queryObject.QueryParams);
+            Assert.Equal(parameters, queryObject.Params);
         }
     }
 }

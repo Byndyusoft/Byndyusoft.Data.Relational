@@ -38,62 +38,6 @@ namespace Byndyusoft.Data.Relational
             return Task.CompletedTask;
         }
 
-        [Fact]
-        public async Task Commit()
-        {
-            // Arrange
-            await _session.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test')");
-
-            // Act
-            _session.Commit();
-
-            // Arrange
-            var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
-            Assert.NotNull(row);
-            Assert.Equal(1, row.id);
-            Assert.Equal("test", row.name);
-        }
-
-        [Fact]
-        public async Task Commit_AllowsDoubleCall()
-        {
-            // Arrange
-            await _session.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test')");
-
-            // Act
-            _session.Commit();
-            _session.Commit();
-
-            // Arrange
-            var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
-            Assert.NotNull(row);
-            Assert.Equal(1, row.id);
-            Assert.Equal("test", row.name);
-        }
-
-        [Fact]
-        public void Commit_NoChanges()
-        {
-            // Act
-            _session.Commit();
-
-            // Arrange
-            Assert.True(true);
-        }
-
-        [Fact]
-        public async Task Rollback()
-        {
-            // Arrange
-            await _session.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test')");
-
-            // Act
-            _session.Rollback();
-
-            // Arrange
-            var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
-            Assert.Null(row);
-        }
 
         [Fact]
         public async Task Dispose_Do_Rollback()
@@ -111,32 +55,6 @@ namespace Byndyusoft.Data.Relational
             Assert.Null(row);
         }
 
-        [Fact]
-        public async Task Rollback_AllowDoubleCall()
-        {
-            // Arrange
-            await _session.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test')");
-
-            // Act
-            _session.Rollback();
-            _session.Rollback();
-
-            // Arrange
-            var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
-            Assert.Null(row);
-        }
-
-        [Fact]
-        public void Rollback_NoChanges()
-        {
-            // Act
-            _session.Rollback();
-
-            // Arrange
-            Assert.True(true);
-        }
-
-#if !NETCOREAPP2_1
 
         [Fact]
         public async Task CommitAsync()
@@ -196,22 +114,6 @@ namespace Byndyusoft.Data.Relational
         }
 
         [Fact]
-        public async Task DisposeAsync_Do_Rollback()
-        {
-            // Arrange
-            await _session.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test')");
-
-            // Act
-            await using (_session)
-            {
-            }
-
-            // Arrange
-            var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
-            Assert.Null(row);
-        }
-
-        [Fact]
         public async Task RollbackAsync_AllowDoubleCall()
         {
             // Arrange
@@ -236,6 +138,22 @@ namespace Byndyusoft.Data.Relational
             Assert.True(true);
         }
 
+#if !NETCOREAPP2_1
+        [Fact]
+        public async Task DisposeAsync_Do_Rollback()
+        {
+            // Arrange
+            await _session.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test')");
+
+            // Act
+            await using (_session)
+            {
+            }
+
+            // Arrange
+            var row = await _connection.QueryFirstOrDefaultAsync("SELECT id, name FROM test");
+            Assert.Null(row);
+        }
 #endif
     }
 }

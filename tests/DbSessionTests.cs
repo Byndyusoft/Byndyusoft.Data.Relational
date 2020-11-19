@@ -104,29 +104,30 @@ namespace Byndyusoft.Data.Relational
             Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
+        [Fact]
+        public async Task DisposeAsync_CanBeDisposedTwice()
+        {
+            // Arrange
+            IAsyncDisposable session = new DbSession(_connection);
+
+            // Act
+            await session.DisposeAsync();
+            await session.DisposeAsync();
+        }
+
 #if !NETCOREAPP2_1
+
         private readonly CancellationToken _cancellationToken = new CancellationTokenSource().Token;
 
         [Fact]
-        public async ValueTask DisposeAsync_CanBeDisposedTwice()
-        {
-            // Arrange
-            var session = new DbSession(_connection);
-
-            // Act
-            await using (session) { }
-            await using (session) { }
-        }
-
-        [Fact]
-        public async ValueTask DisposeAsync_DisposesConnection()
+        public async Task DisposeAsync_DisposesConnection()
         {
             // Arrange
             var session = new DbSession(_connection);
             await session.EnsureOpenedAsync(_cancellationToken);
 
             // Act
-            await using (session) { }
+            await ((IAsyncDisposable) session).DisposeAsync();
 
             // Assert
             Mock.Get(_connection).Verify(x => x.DisposeAsync(), Times.Once);

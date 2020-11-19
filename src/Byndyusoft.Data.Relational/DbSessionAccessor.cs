@@ -5,15 +5,14 @@ namespace Byndyusoft.Data.Relational
 {
     public class DbSessionAccessor : IDbSessionAccessor
     {
-        // ReSharper disable once InconsistentNaming
-        private static readonly AsyncLocal<IDbSession> _session = new AsyncLocal<IDbSession>();
+        private static readonly AsyncLocal<IDbSession> Session = new AsyncLocal<IDbSession>();
 
         internal static IDbSession DbSession
         {
-            set => _session.Value = value;
+            set => Session.Value = value;
         }
 
         IDbSession IDbSessionAccessor.DbSession =>
-            _session.Value ?? throw new InvalidOperationException("No current session specified");
+            Session.Value ?? throw new InvalidOperationException("No current session specified");
     }
 }

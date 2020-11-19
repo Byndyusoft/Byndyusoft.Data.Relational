@@ -11,14 +11,9 @@ namespace Byndyusoft.Data.Relational
 {
     public class DbSessionQueriesTests : IAsyncLifetime
     {
-        private class Row
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-        }
+        private DbConnection _connection;
 
         private DbSession _session;
-        private DbConnection _connection;
 
         public async Task InitializeAsync()
         {
@@ -308,7 +303,6 @@ namespace Byndyusoft.Data.Relational
             Assert.Equal("test2", row2.Name);
         }
 
-#if !NETCOREAPP2_1
         [Theory]
         [InlineData(null)]
         [InlineData("")]
@@ -351,7 +345,7 @@ namespace Byndyusoft.Data.Relational
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
 
             // Act
-            var rows = await _session.Query("SELECT id, name FROM test WHERE id = @id", new{id = 1}).ToArrayAsync();
+            var rows = await _session.Query("SELECT id, name FROM test WHERE id = @id", new {id = 1}).ToArrayAsync();
 
             // Assert
             var row = Assert.Single(rows);
@@ -411,6 +405,11 @@ namespace Byndyusoft.Data.Relational
             Assert.Equal(1, row.Id);
             Assert.Equal("test1", row.Name);
         }
-#endif
+
+        private class Row
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
     }
 }

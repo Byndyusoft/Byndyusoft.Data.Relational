@@ -11,10 +11,10 @@ namespace Byndyusoft.Data.Relational
 {
     public class CommittableDbSessionTests
     {
-        private readonly IsolationLevel _isolationLevel;
-        private readonly DbConnection _connection;
-        private readonly DbTransaction _transaction;
         private readonly CancellationToken _cancellationToken;
+        private readonly DbConnection _connection;
+        private readonly IsolationLevel _isolationLevel;
+        private readonly DbTransaction _transaction;
 
         public CommittableDbSessionTests()
         {
@@ -50,76 +50,6 @@ namespace Byndyusoft.Data.Relational
         }
 
         [Fact]
-        public void Commit_Disposed_ThrowsException()
-        {
-            // Arrange
-            var session = new CommittableDbSession(_connection, _isolationLevel);
-            using (session)
-            {
-            }
-
-            // Act
-            var exception = Assert.Throws<ObjectDisposedException>(() => session.Commit());
-
-            // Assert
-            Assert.Equal(typeof(CommittableDbSession).FullName, exception.ObjectName);
-        }
-
-        [Fact]
-        public void Commit_SkipsIfNoTransaction()
-        {
-            // Arrange
-            var session = new CommittableDbSession(_connection, _isolationLevel);
-
-            // Act
-            session.Commit();
-
-            // Assert
-            Mock.Get(_transaction).VerifyNoOtherCalls();
-        }
-
-        [Fact]
-        public async ValueTask Commit_CommitsTransaction()
-        {
-            // Arrange
-            var session = new CommittableDbSession(_connection, _isolationLevel);
-            await session.EnsureOpenedAsync(_cancellationToken);
-
-            // Act
-            session.Commit();
-
-            // Assert
-            Mock.Get(_transaction).Verify(x => x.Commit(), Times.Once);
-        }
-
-        [Fact]
-        public void Rollback_SkipsIfNoTransaction()
-        {
-            // Arrange
-            var session = new CommittableDbSession(_connection, _isolationLevel);
-
-            // Act
-            session.Rollback();
-
-            // Assert
-            Mock.Get(_transaction).VerifyNoOtherCalls();
-        }
-
-        [Fact]
-        public async ValueTask Commit_RollbacksTransaction()
-        {
-            // Arrange
-            var session = new CommittableDbSession(_connection, _isolationLevel);
-            await session.EnsureOpenedAsync(_cancellationToken);
-
-            // Act
-            session.Rollback();
-
-            // Assert
-            Mock.Get(_transaction).Verify(x => x.Rollback(), Times.Once);
-        }
-
-        [Fact]
         public async ValueTask Dispose_DisposesTransaction()
         {
             // Arrange
@@ -136,16 +66,17 @@ namespace Byndyusoft.Data.Relational
             Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
-#if !NETCOREAPP2_1
+
         [Fact]
         public async ValueTask CommitAsync_Disposed_ThrowsException()
         {
             // Arrange
             var session = new CommittableDbSession(_connection, _isolationLevel);
-            await using (session) { }
+            await ((IAsyncDisposable) session).DisposeAsync();
 
             // Act
-            var exception = Assert.Throws<ObjectDisposedException>(() => session.Commit());
+            var exception =
+                await Assert.ThrowsAsync<ObjectDisposedException>(() => session.CommitAsync(_cancellationToken));
 
             // Assert
             Assert.Equal(typeof(CommittableDbSession).FullName, exception.ObjectName);
@@ -213,12 +144,10 @@ namespace Byndyusoft.Data.Relational
             await session.EnsureOpenedAsync(_cancellationToken);
 
             // Act
-            await using (session) { }
+            await ((IAsyncDisposable) session).DisposeAsync();
 
             // Assert
             Mock.Get(_transaction).Verify(x => x.DisposeAsync(), Times.Exactly(3));
         }
-
-#endif
     }
 }

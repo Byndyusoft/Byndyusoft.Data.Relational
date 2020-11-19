@@ -17,25 +17,27 @@ namespace Byndyusoft.Data.Relational
 
         public IsolationLevel IsolationLevel { get; }
 
-        public void Commit()
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
 
             if (Transaction == null || _completed)
                 return;
 
-            Transaction.Commit();
+            await Transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+
             _completed = true;
         }
 
-        public void Rollback()
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
 
             if (Transaction == null || _completed)
                 return;
 
-            Transaction.Rollback();
+            await Transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+
             _completed = true;
         }
 
@@ -48,29 +50,6 @@ namespace Byndyusoft.Data.Relational
             _completed = true;
 
             base.Dispose(true);
-        }
-
-#if NETSTANDARD2_1
-        public async Task CommitAsync(CancellationToken cancellationToken = default)
-        {
-            ThrowIfDisposed();
-
-            if (Transaction == null || _completed)
-                return;
-
-            await Transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
-            _completed = true;
-        }
-
-        public async Task RollbackAsync(CancellationToken cancellationToken = default)
-        {
-            ThrowIfDisposed();
-
-            if (Transaction == null || _completed)
-                return;
-
-            await Transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
-            _completed = true;
         }
 
         protected override async ValueTask DisposeAsync(bool disposing)
@@ -86,6 +65,5 @@ namespace Byndyusoft.Data.Relational
 
             await base.DisposeAsync(true);
         }
-#endif
     }
 }

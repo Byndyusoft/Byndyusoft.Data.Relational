@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Data.Sqlite;
@@ -62,7 +62,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync<Row>((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync<Row>((QueryObject) null));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -73,7 +73,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
 
             // Act
             var rows = (await _session.QueryAsync<Row>(query)).ToArray();
@@ -101,7 +101,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync((QueryObject) null));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -129,7 +129,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession)null).ExecuteAsync(_queryObject));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession) null).ExecuteAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -140,7 +140,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteAsync((IQueryObject)null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteAsync((QueryObject) null));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -150,7 +150,8 @@ namespace Byndyusoft.Data.Relational
         public async Task ExecuteAsync()
         {
             // Arrange
-            var queryObject = new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name);", new { id = 1, name = "name" });
+            var queryObject = new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name);",
+                new {id = 1, name = "name"});
 
             // Act
             var result = await _session.ExecuteAsync(queryObject);
@@ -164,7 +165,8 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession)null).ExecuteScalarAsync(_queryObject));
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    ((IDbSession) null).ExecuteScalarAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -175,7 +177,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteScalarAsync((IQueryObject)null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteScalarAsync((QueryObject) null));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -185,7 +187,9 @@ namespace Byndyusoft.Data.Relational
         public async Task ExecuteScalarAsync()
         {
             // Arrange
-            var queryObject = new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();", new { id = 1, name = "name" });
+            var queryObject =
+                new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();",
+                    new {id = 1, name = "name"});
 
             // Act
             var id = await _session.ExecuteScalarAsync(queryObject);
@@ -199,7 +203,8 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession)null).ExecuteScalarAsync<int>(_queryObject));
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    ((IDbSession) null).ExecuteScalarAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -210,7 +215,8 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteScalarAsync<int>((IQueryObject)null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    _session.ExecuteScalarAsync<int>((QueryObject) null));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -220,7 +226,9 @@ namespace Byndyusoft.Data.Relational
         public async Task ExecuteScalarAsync_Generic()
         {
             // Arrange
-            var queryObject = new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();", new { id = 1, name = "name" });
+            var queryObject =
+                new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();",
+                    new {id = 1, name = "name"});
 
             // Act
             var id = await _session.ExecuteScalarAsync<int>(queryObject);
@@ -234,7 +242,8 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession)null).QueryMultipleAsync(_queryObject));
+                await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    ((IDbSession) null).QueryMultipleAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -245,7 +254,7 @@ namespace Byndyusoft.Data.Relational
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryMultipleAsync((IQueryObject)null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryMultipleAsync((QueryObject) null));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -257,7 +266,9 @@ namespace Byndyusoft.Data.Relational
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (2, 'test2');");
-            var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id1; SELECT id, name FROM test WHERE id = @id2", new{id1 = 1, id2=2});
+            var queryObject =
+                new QueryObject("SELECT id, name FROM test WHERE id = @id1; SELECT id, name FROM test WHERE id = @id2",
+                    new {id1 = 1, id2 = 2});
 
             // Act
             var result = await _session.QueryMultipleAsync(queryObject);
@@ -277,14 +288,13 @@ namespace Byndyusoft.Data.Relational
         }
 
 #if !NETCOREAPP2_1
-
         [Fact]
         public async Task Query_NullQueryObject_ThrowsException()
         {
             // Act
             try
             {
-                await _session.Query((IQueryObject)null).ToArrayAsync();
+                await _session.Query((QueryObject)null).ToArrayAsync();
                 Assert.False(true);
             }
             catch (ArgumentNullException exception)
@@ -333,7 +343,7 @@ namespace Byndyusoft.Data.Relational
             // Act
             try
             {
-                await _session.Query<Row>((IQueryObject)null).ToArrayAsync();
+                await _session.Query<Row>((QueryObject)null).ToArrayAsync();
                 Assert.False(true);
             }
             catch (ArgumentNullException exception)
@@ -378,6 +388,5 @@ namespace Byndyusoft.Data.Relational
 
 
 #endif
-
     }
 }

@@ -1,0 +1,516 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Byndyusoft.Data.Relational.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Byndyusoft.Data.Relational.DbSessionConsumer">
+            <summary>
+                Abstract class that consumes <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.
+            </summary>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionConsumer.#ctor(Byndyusoft.Data.Relational.IDbSessionAccessor)">
+            <summary>
+                Initializes a new instance of <see cref="T:Byndyusoft.Data.Relational.DbSessionConsumer"/> with specified <paramref name="sessionAccessor"/>.
+            </summary>
+            <param name="sessionAccessor">An instance of <see cref="T:Byndyusoft.Data.Relational.IDbSessionAccessor"/>.</param>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.DbSessionConsumer.DbSession">
+            <summary>
+                Gets the current <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.
+            </summary>
+        </member>
+        <member name="T:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions">
+            <summary>
+                Extensions to work with <see cref="T:Byndyusoft.Data.Relational.IDbSession"/> via <see cref="T:Byndyusoft.Data.Relational.QueryObject"/>.
+            </summary>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryAsync``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query asynchronously using Task.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QuerySingleAsync``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QuerySingleAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QuerySingleOrDefaultAsync``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QuerySingleOrDefaultAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryFirstAsync``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryFirstAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryFirstOrDefaultAsync``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryFirstOrDefaultAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.ExecuteAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a command asynchronously using Task.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.ExecuteScalarAsync``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously execute SQL that selects a single value.
+            </summary>
+            <typeparam name="T">The type to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>The first cell returned, as <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.ExecuteScalarAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously execute SQL that selects a single value.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>The first cell returned.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.QueryMultipleAsync(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously execute a command that returns multiple result sets, and access each in turn.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>Multiple result set.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.Query``1(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query and returns asynchronous stream.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> representing the asynchronous stream.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.DbSessionQueryObjectExtensions.Query(Byndyusoft.Data.Relational.IDbSession,Byndyusoft.Data.Relational.QueryObject,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query and returns asynchronous stream.
+            </summary>
+            <param name="session">The session to query on.</param>
+            <param name="queryObject">The query object to execute.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> representing the asynchronous stream.</returns>
+        </member>
+        <member name="T:Byndyusoft.Data.Relational.ICommittableDbSession">
+            <summary>
+                Represents a commitable database session.
+            </summary>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.ICommittableDbSession.IsolationLevel">
+            <summary>
+                 Gets the isolation level for this <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/>.
+            </summary>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.ICommittableDbSession.CommitAsync(System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously commits the <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/>.
+            </summary>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.ICommittableDbSession.RollbackAsync(System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously rolls back the <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/>.
+            </summary>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="T:Byndyusoft.Data.Relational.IDbSession">
+            <summary>
+                Represents a database session - object that aggregates connection and transaction.
+            </summary>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.IDbSession.Connection">
+            <summary>
+                Gets the <see cref="T:System.Data.Common.DbConnection"/> used by this <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.
+            </summary>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.IDbSession.Transaction">
+            <summary>
+                Gets the <see cref="T:System.Data.Common.DbTransaction"/> used by this <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.
+            </summary>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.IDbSession.Data">
+            <summary>
+                Gets a collection of key/value pairs that provide additional information about the <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.
+            </summary>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryAsync``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query asynchronously using Task.
+            </summary>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QuerySingleAsync``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QuerySingleAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QuerySingleOrDefaultAsync``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QuerySingleOrDefaultAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryFirstAsync``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryFirstAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryFirstOrDefaultAsync``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryFirstOrDefaultAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a single-row query asynchronously using Task.
+            </summary>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.ExecuteAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a command asynchronously using Task.
+            </summary>
+            <param name="sql">The SQL to execute for this query.</param>
+            <param name="param">The parameters to use for this query.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.ExecuteScalarAsync``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously execute SQL that selects a single value.
+            </summary>
+            <typeparam name="T">The type to return.</typeparam>
+            <param name="sql">The SQL to execute.</param>
+            <param name="param">The parameters to use for this command.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>The first cell returned, as <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.ExecuteScalarAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously execute SQL that selects a single value.
+            </summary>
+            <param name="sql">The SQL to execute.</param>
+            <param name="param">The parameters to use for this command.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>The first cell returned.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.QueryMultipleAsync(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Asynchronously execute a command that returns multiple result sets, and access each in turn.
+            </summary>
+            <param name="sql">The SQL to execute for this query.</param>
+            <param name="param">The parameters to use for this query.</param>
+            <param name="commandTimeout">Number of seconds before command execution timeout.</param>
+            <param name="commandType">Is it a stored proc or a batch?</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>Multiple result set.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.Query``1(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query and returns asynchronous stream.
+            </summary>
+            <typeparam name="T">The type of result to return.</typeparam>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> representing the asynchronous stream.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSession.Query(System.String,System.Object,System.Nullable{System.Int32},System.Nullable{System.Data.CommandType},System.Threading.CancellationToken)">
+            <summary>
+                Execute a query and returns asynchronous stream.
+            </summary>
+            <param name="sql">The SQL to execute for the query.</param>
+            <param name="param">The parameters to pass, if any.</param>
+            <param name="commandTimeout">The command timeout (in seconds).</param>
+            <param name="commandType">The type of command to execute.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/> representing the asynchronous stream.</returns>
+        </member>
+        <member name="T:Byndyusoft.Data.Relational.IDbSessionAccessor">
+            <summary>
+            Provides access to the current <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>, if one is available.
+            </summary>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.IDbSessionAccessor.DbSession">
+            <summary>
+                Gets the current <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>. Returns null if there is no active <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.
+            </summary>
+        </member>
+        <member name="T:Byndyusoft.Data.Relational.IDbSessionFactory">
+            <summary>
+                Represents a set of methods for creating instances of database sessions.
+            </summary>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSessionFactory.CreateSessionAsync(System.Threading.CancellationToken)">
+            <summary>
+                Returns a new instance of the database session's class that implements the <see cref="T:Byndyusoft.Data.Relational.IDbSession"/> interface.
+            </summary>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A new instance of <see cref="T:Byndyusoft.Data.Relational.IDbSession"/>.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSessionFactory.CreateCommittableSessionAsync(System.Threading.CancellationToken)">
+            <summary>
+                Returns a new instance of the commitable database session's class that implements the <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/> interface.
+            </summary>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A new instance of <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/>.</returns>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.IDbSessionFactory.CreateCommittableSessionAsync(System.Data.IsolationLevel,System.Threading.CancellationToken)">
+            <summary>
+                Returns a new instance of the commitable database session's class that implements the <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/> interface with specified <see cref="T:System.Data.IsolationLevel"/>.
+            </summary>
+            <param name="isolationLevel">One of the enumeration values that specifies the isolation level for the transaction to use.</param>
+            <param name="cancellationToken">An optional token to cancel the asynchronous operation. The default value is <see cref="P:System.Threading.CancellationToken.None"/>.</param>
+            <returns>A new instance of <see cref="T:Byndyusoft.Data.Relational.ICommittableDbSession"/>.</returns>
+        </member>
+        <member name="T:Byndyusoft.Data.Relational.QueryObject">
+            <summary>
+                An object that represents a database query.
+            </summary>
+            <see href="https://martinfowler.com/eaaCatalog/queryObject.html" />
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.QueryObject.#ctor(System.String,System.Object)">
+            <summary>
+                Initializes a new instance of the <see cref="T:Byndyusoft.Data.Relational.QueryObject" /> class.
+            </summary>
+            <param name="sql">Database query sql text.</param>
+            <param name="parameters">Database query parameters.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.QueryObject.Sql">
+            <summary>
+                Database query sql text.
+            </summary>
+        </member>
+        <member name="P:Byndyusoft.Data.Relational.QueryObject.Params">
+            <summary>
+                Database query parameters.
+            </summary>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.QueryObject.Deconstruct(System.String@,System.Object@)">
+            <summary>
+                Deconstructs the current <see cref="T:Byndyusoft.Data.Relational.QueryObject" />.
+            </summary>
+            <param name="sql">Database query sql text.</param>
+            <param name="parameters">Database query parameters.</param>
+        </member>
+        <member name="M:Byndyusoft.Data.Relational.QueryObject.Create(System.String,System.Object)">
+            <summary>
+                Creates a new instance of the <see cref="T:Byndyusoft.Data.Relational.QueryObject" />class.
+            </summary>
+            <param name="sql">Database query sql text.</param>
+            <param name="parameters">Database query parameters.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
+            <returns>A new instance of the <see cref="T:Byndyusoft.Data.Relational.QueryObject" /> class.</returns>
+        </member>
+    </members>
+</doc>
