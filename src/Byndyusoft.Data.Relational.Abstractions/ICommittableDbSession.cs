@@ -8,14 +8,8 @@ namespace Byndyusoft.Data.Relational
     {
         IsolationLevel IsolationLevel { get; }
 
-        void Commit();
-
-        void Rollback();
-
-#if !NETSTANDARD2_0
         Task CommitAsync(CancellationToken cancellationToken = default);
 
         Task RollbackAsync(CancellationToken cancellationToken = default);
-#endif
     }
 }

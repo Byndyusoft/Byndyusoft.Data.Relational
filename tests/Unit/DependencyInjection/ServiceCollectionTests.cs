@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
 
-namespace Byndyusoft.Data.Relational.DependencyInjection
+namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
 {
     public class ServiceCollectionTests
     {
@@ -87,7 +87,7 @@ namespace Byndyusoft.Data.Relational.DependencyInjection
             // Assert
             Assert.NotNull(service);
             var sessionFactory = Assert.IsType<DbSessionFactory>(service);
-            Assert.Equal(_dbProviderFactory, sessionFactory.DbProviderFactory);
+            Assert.Equal(_dbProviderFactory, sessionFactory.ProviderFactory);
             Assert.Equal(_connectionString, sessionFactory.ConnectionString);
         }
 
@@ -171,7 +171,7 @@ namespace Byndyusoft.Data.Relational.DependencyInjection
             // Assert
             Assert.NotNull(service);
             var sessionFactory = Assert.IsType<DbSessionFactory>(service);
-            Assert.Equal(_dbProviderFactory, sessionFactory.DbProviderFactory);
+            Assert.Equal(_dbProviderFactory, sessionFactory.ProviderFactory);
             Assert.Equal(_connectionString, sessionFactory.ConnectionString);
         }
     }

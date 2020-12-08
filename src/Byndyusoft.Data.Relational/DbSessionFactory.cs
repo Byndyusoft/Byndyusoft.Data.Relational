@@ -13,42 +13,64 @@ namespace Byndyusoft.Data.Relational
             if (string.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException(nameof(connectionString));
 
             ConnectionString = connectionString;
-            DbProviderFactory = dbProviderFactory ?? throw new ArgumentNullException(nameof(dbProviderFactory));
+            ProviderFactory = dbProviderFactory ?? throw new ArgumentNullException(nameof(dbProviderFactory));
         }
+
+        public DbProviderFactory ProviderFactory { get; }
 
         public string ConnectionString { get; }
 
-        public DbProviderFactory DbProviderFactory { get; }
-
-        public Task<IDbSession> CreateSessionAsync()
+        public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            return CreateSessionAsync(CancellationToken.None);
+            var session = new DbSession();
+            try
+            {
+                return CreateSessionAsyncCore(session, cancellationToken);
+            }
+            catch
+            {
+                session.Dispose();
+                throw;
+            }
         }
 
-        public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken)
+        public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
         {
-            var connection = DbProviderFactory.CreateConnection();
-            if (connection == null) throw new InvalidOperationException();
-            connection.ConnectionString = ConnectionString;
-            var session = new DbSession(connection, null);
-            DbSessionAccessor.DbSession = session;
-            return Task.FromResult<IDbSession>(session);
-        }
-
-        public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync()
-        {
-            return CreateCommittableSessionAsync(IsolationLevel.Unspecified, CancellationToken.None);
+            return CreateCommittableSessionAsync(IsolationLevel.Unspecified, cancellationToken);
         }
 
         public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
-            IsolationLevel isolationLevel, CancellationToken cancellationToken)
+            IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
-            var connection = DbProviderFactory.CreateConnection();
+            var session = new DbSession();
+            try
+            {
+                return CreateCommittableSessionAsync(session, isolationLevel, cancellationToken);
+            }
+            catch
+            {
+                session.Dispose();
+                throw;
+            }
+        }
+
+        private async Task<IDbSession> CreateSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
+        {
+            var connection = session.Connection = ProviderFactory.CreateConnection();
             if (connection == null) throw new InvalidOperationException();
             connection.ConnectionString = ConnectionString;
-            var session = new CommittableDbSession(connection, isolationLevel);
-            DbSessionAccessor.DbSession = session;
-            return Task.FromResult<ICommittableDbSession>(session);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+            return session;
+        }
+
+        private async Task<ICommittableDbSession> CreateCommittableSessionAsync(DbSession session, IsolationLevel isolationLevel,
+            CancellationToken cancellationToken)
+        {
+            await CreateSessionAsyncCore(session, cancellationToken)
+                .ConfigureAwait(false);
+            session.Transaction = await session.Connection.BeginTransactionAsync(isolationLevel, cancellationToken)
+                .ConfigureAwait(false);
+            return session;
         }
     }
 }
