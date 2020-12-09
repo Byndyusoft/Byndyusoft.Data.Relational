@@ -19,18 +19,12 @@ namespace Byndyusoft.Data.Relational
         {
             Current = this;
         }
-        
+
         internal DbSession(DbConnection connection, DbTransaction transaction = null)
             : this()
         {
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
             _transaction = transaction;
-        }
-
-        ~DbSession()
-        {
-            Dispose(false);
-            Current = null;
         }
 
         public async ValueTask DisposeAsync()
@@ -113,6 +107,12 @@ namespace Byndyusoft.Data.Relational
 
             await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
             _completed = true;
+        }
+
+        ~DbSession()
+        {
+            Dispose(false);
+            Current = null;
         }
 
         private void Dispose(bool disposing)

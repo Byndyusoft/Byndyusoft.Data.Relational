@@ -63,7 +63,8 @@ namespace Byndyusoft.Data.Relational
             return session;
         }
 
-        private async Task<ICommittableDbSession> CreateCommittableSessionAsync(DbSession session, IsolationLevel isolationLevel,
+        private async Task<ICommittableDbSession> CreateCommittableSessionAsync(DbSession session,
+            IsolationLevel isolationLevel,
             CancellationToken cancellationToken)
         {
             await CreateSessionAsyncCore(session, cancellationToken)

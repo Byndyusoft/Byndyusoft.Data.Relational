@@ -70,6 +70,7 @@ namespace Byndyusoft.Data.Relational.Functional
                 var row = await _service.QueryAsync();
                 Assert.Null(row);
             }
+
             // ReSharper enable UseAwaitUsing
         }
 

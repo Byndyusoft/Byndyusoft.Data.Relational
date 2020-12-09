@@ -14,9 +14,7 @@ namespace Byndyusoft.Data.Relational
             {
                 var wrapper = _current.Value ??= new Wrapper();
                 if (value != null && wrapper.Value != null)
-                {
                     throw new InvalidOperationException("DbSession already exists");
-                }
 
                 wrapper.Value = value;
             }

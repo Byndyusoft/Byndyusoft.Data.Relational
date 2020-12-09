@@ -153,7 +153,7 @@ namespace Byndyusoft.Data.Relational.Unit
             await session.DisposeAsync();
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
         [Fact]
@@ -161,13 +161,13 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             await using var session = new DbSession(_connection, _transaction);
-            Mock.Get(_transaction).Protected().Setup("Dispose", new object[] { true }).Verifiable();
+            Mock.Get(_transaction).Protected().Setup("Dispose", new object[] {true}).Verifiable();
 
             // Act
             await session.DisposeAsync();
 
             // Assert
-            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
         [Fact]
