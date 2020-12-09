@@ -6,6 +6,7 @@
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>Byndyusoft.Data.Relational</RootNamespace>
     <PackageIcon>icon.png</PackageIcon>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\icon.png" Pack="true" PackagePath="icon.png" />

@@ -4,15 +4,46 @@ using System.Threading.Tasks;
 
 namespace Byndyusoft.Data.Relational
 {
+    /// <summary>
+    ///     Represents a set of methods for creating instances of database sessions.
+    /// </summary>
     public interface IDbSessionFactory
     {
-        Task<IDbSession> CreateSessionAsync();
+        /// <summary>
+        ///     Returns a new instance of the database session's class that implements the <see cref="IDbSession" /> interface.
+        /// </summary>
+        /// <param name="cancellationToken">
+        ///     An optional token to cancel the asynchronous operation. The default value is
+        ///     <see cref="CancellationToken.None" />.
+        /// </param>
+        /// <returns>A new instance of <see cref="IDbSession" />.</returns>
+        Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default);
 
-        Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken);
+        /// <summary>
+        ///     Returns a new instance of the commitable database session's class that implements the
+        ///     <see cref="ICommittableDbSession" /> interface.
+        /// </summary>
+        /// <param name="cancellationToken">
+        ///     An optional token to cancel the asynchronous operation. The default value is
+        ///     <see cref="CancellationToken.None" />.
+        /// </param>
+        /// <returns>A new instance of <see cref="ICommittableDbSession" />.</returns>
+        Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default);
 
-        Task<ICommittableDbSession> CreateCommittableSessionAsync();
-
+        /// <summary>
+        ///     Returns a new instance of the commitable database session's class that implements the
+        ///     <see cref="ICommittableDbSession" /> interface with specified <see cref="IsolationLevel" />.
+        /// </summary>
+        /// <param name="isolationLevel">
+        ///     One of the enumeration values that specifies the isolation level for the transaction to
+        ///     use.
+        /// </param>
+        /// <param name="cancellationToken">
+        ///     An optional token to cancel the asynchronous operation. The default value is
+        ///     <see cref="CancellationToken.None" />.
+        /// </param>
+        /// <returns>A new instance of <see cref="ICommittableDbSession" />.</returns>
         Task<ICommittableDbSession> CreateCommittableSessionAsync(IsolationLevel isolationLevel,
-            CancellationToken cancellationToken);
+            CancellationToken cancellationToken = default);
     }
 }

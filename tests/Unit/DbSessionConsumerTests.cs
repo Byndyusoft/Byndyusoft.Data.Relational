@@ -1,7 +1,7 @@
 ﻿using Moq;
 using Xunit;
 
-namespace Byndyusoft.Data.Relational
+namespace Byndyusoft.Data.Relational.Unit
 {
     public class DbSessionConsumerTests
     {
@@ -18,7 +18,7 @@ namespace Byndyusoft.Data.Relational
         public void Session_CallsAccessor()
         {
             // Arrange
-            var session = Mock.Of<IDbSession>();
+            using var session = Mock.Of<IDbSession>();
             Mock.Get(_sessionAccessor).SetupGet(x => x.DbSession).Returns(session);
 
             // Act
