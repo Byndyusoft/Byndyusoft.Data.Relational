@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Data.Diagnostics;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -23,15 +24,7 @@ namespace Byndyusoft.Data.Relational
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             var session = new DbSession();
-            try
-            {
-                return CreateSessionAsyncCore(session, cancellationToken);
-            }
-            catch
-            {
-                session.Dispose();
-                throw;
-            }
+            return CreateSessionAsyncCore(session, cancellationToken);
         }
 
         public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
@@ -43,35 +36,42 @@ namespace Byndyusoft.Data.Relational
             IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
             var session = new DbSession();
+            return CreateCommittableSessionAsync(session, isolationLevel, cancellationToken);
+        }
+        
+        private async Task<IDbSession> CreateSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
+        {
             try
             {
-                return CreateCommittableSessionAsync(session, isolationLevel, cancellationToken);
+                var connection = session.Connection = ProviderFactory.CreateConnection()?.AddDiagnosting();
+                if (connection == null) throw new InvalidOperationException();
+                connection.ConnectionString = ConnectionString;
+                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+                return session;
             }
             catch
             {
-                session.Dispose();
+                await session.DisposeAsync();
                 throw;
             }
         }
 
-        private async Task<IDbSession> CreateSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
-        {
-            var connection = session.Connection = ProviderFactory.CreateConnection();
-            if (connection == null) throw new InvalidOperationException();
-            connection.ConnectionString = ConnectionString;
-            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-            return session;
-        }
-
         private async Task<ICommittableDbSession> CreateCommittableSessionAsync(DbSession session,
-            IsolationLevel isolationLevel,
-            CancellationToken cancellationToken)
+            IsolationLevel isolationLevel, CancellationToken cancellationToken)
         {
-            await CreateSessionAsyncCore(session, cancellationToken)
-                .ConfigureAwait(false);
-            session.Transaction = await session.Connection.BeginTransactionAsync(isolationLevel, cancellationToken)
-                .ConfigureAwait(false);
-            return session;
+            try
+            {
+                await CreateSessionAsyncCore(session, cancellationToken)
+                    .ConfigureAwait(false);
+                session.Transaction = await session.Connection.BeginTransactionAsync(isolationLevel, cancellationToken)
+                    .ConfigureAwait(false);
+                return session;
+            }
+            catch
+            {
+                await session.DisposeAsync();
+                throw;
+            }
         }
     }
 }

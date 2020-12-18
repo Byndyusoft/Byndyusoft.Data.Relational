@@ -70,7 +70,7 @@ namespace Byndyusoft.Data.Relational.Unit
             await using var session = await factory.CreateSessionAsync(_cancellationToken);
 
             // Assert
-            Assert.Equal(_connection, session.Connection);
+            Assert.Equal(session.Connection, _connection);
             Mock.Get(_connection).VerifyAll();
         }
 
@@ -83,6 +83,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await Assert.ThrowsAsync<InvalidOperationException>(() => factory.CreateSessionAsync(_cancellationToken));
+            Assert.Null(_sessionAccessor.DbSession);
         }
 
         [Fact]
@@ -119,6 +120,7 @@ namespace Byndyusoft.Data.Relational.Unit
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 factory.CreateCommittableSessionAsync(_cancellationToken));
+            Assert.Null(_sessionAccessor.DbSession);
         }
 
         [Fact]
@@ -128,16 +130,15 @@ namespace Byndyusoft.Data.Relational.Unit
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
             Mock.Get(_connection).SetupSet(x => x.ConnectionString = _connectionString);
             Mock.Get(_connection).Protected().Setup<DbTransaction>("BeginDbTransaction", _isolationLevel)
-                .Returns(_transaction).Verifiable();
+                .Returns(_transaction);
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await using var session = await factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken);
 
             // Assert
-            Assert.Same(_connection, session.Connection);
-            Assert.Same(_transaction, session.Transaction);
-            Mock.Get(_connection).VerifyAll();
+            Assert.Equal(session.Connection,_connection);
+            Assert.Equal(session.Transaction, _transaction);
         }
 
         [Fact]
@@ -149,7 +150,7 @@ namespace Byndyusoft.Data.Relational.Unit
 
             // Assert
             Assert.NotNull(_sessionAccessor.DbSession);
-            Assert.Same(session, _sessionAccessor.DbSession);
+            Assert.Equal(session, _sessionAccessor.DbSession);
         }
 
         [Fact]
@@ -164,21 +165,27 @@ namespace Byndyusoft.Data.Relational.Unit
                 factory.CreateCommittableSessionAsync(_cancellationToken));
         }
 
-        [Fact(Skip = "Moq.Throws isn't working")]
+        [Fact]
         public async Task CreateCommittableSessionAsync_CanNotBeginTransaction_DisposesConnection()
         {
             // Arrange
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
             Mock.Get(_connection).SetupSet(x => x.ConnectionString = _connectionString);
+#if NETCOREAPP2_1
             Mock.Get(_connection).Protected().Setup<DbTransaction>("BeginDbTransaction", _isolationLevel)
                 .Throws(new DataException());
+#else
+           Mock.Get(_connection).Protected().Setup<ValueTask<DbTransaction>>("BeginDbTransactionAsync", _isolationLevel, _cancellationToken)
+                .Throws(new DataException());
+#endif
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await Assert.ThrowsAsync<DataException>(() => factory.CreateCommittableSessionAsync(_cancellationToken));
+            await Assert.ThrowsAsync<DataException>(() => factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[]{true});
+            Assert.Null(_sessionAccessor.DbSession);
         }
     }
 }
