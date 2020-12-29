@@ -22,6 +22,6 @@ namespace Byndyusoft.Data.Relational
         /// <summary>
         ///     Gets a collection of key/value pairs that provide additional information about the <see cref="IDbSession" />.
         /// </summary>
-        IDictionary<string, object> Data { get; }
+        IDictionary<string, object> Items { get; }
     }
 }

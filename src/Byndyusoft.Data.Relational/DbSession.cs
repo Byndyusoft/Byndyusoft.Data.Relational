@@ -11,7 +11,7 @@ namespace Byndyusoft.Data.Relational
     {
         private bool _completed;
         private DbConnection _connection;
-        private DbSessionData _data;
+        private DbSessionItems _items;
         private bool _disposed;
         private DbTransaction _transaction;
 
@@ -78,12 +78,12 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
-        public IDictionary<string, object> Data
+        public IDictionary<string, object> Items
         {
             get
             {
                 ThrowIfDisposed();
-                return _data ??= new DbSessionData();
+                return _items ??= new DbSessionItems();
             }
         }
 
@@ -125,8 +125,8 @@ namespace Byndyusoft.Data.Relational
             _connection?.Dispose();
             _connection = null;
             
-            _data?.Dispose();
-            _data = null;
+            _items?.Dispose();
+            _items = null;
         }
 
         private async Task DisposeAsyncCore()
@@ -143,10 +143,10 @@ namespace Byndyusoft.Data.Relational
                 _connection = null;
             }
 
-            if (_data != null)
+            if (_items != null)
             {
-                await _data.DisposeAsync();
-                _data = null;
+                await _items.DisposeAsync();
+                _items = null;
             }
         }
 

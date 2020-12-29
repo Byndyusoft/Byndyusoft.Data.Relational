@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Byndyusoft.Data.Relational
 {
-    internal class DbSessionData : Dictionary<string, object>, IDisposable, IAsyncDisposable
+    internal class DbSessionItems : Dictionary<string, object>, IDisposable, IAsyncDisposable
     {
         public void Dispose()
         {

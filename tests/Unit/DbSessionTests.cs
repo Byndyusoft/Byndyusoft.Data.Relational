@@ -133,13 +133,13 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public void Dispose_DisposesDataValue()
+        public void Dispose_DisposesItemsValue()
         {
             // Arrange
             var disposable = Mock.Of<IDisposable>();
             
             using var session = new DbSession(_connection, _transaction);
-            session.Data.Add("key", disposable);
+            session.Items.Add("key", disposable);
 
             // Act
             session.Dispose();
@@ -187,13 +187,13 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task DisposeAsync_DisposesDataValue()
+        public async Task DisposeAsync_DisposesItemsValue()
         {
             // Arrange
             var disposable = Mock.Of<IAsyncDisposable>();
 
             await using var session = new DbSession(_connection, _transaction);
-            session.Data.Add("key", disposable);
+            session.Items.Add("key", disposable);
 
             // Act
             await session.DisposeAsync();
@@ -272,15 +272,15 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public void Data_Test()
+        public void Items_Test()
         {
             // Arrange
             var value = new object();
             using var session = new DbSession(_connection, _transaction);
 
             // Act
-            session.Data.Add("key", value);
-            var result = session.Data["key"];
+            session.Items.Add("key", value);
+            var result = session.Items["key"];
 
             // Assert
             Assert.Same(value, result);
