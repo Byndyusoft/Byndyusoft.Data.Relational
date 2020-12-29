@@ -11,7 +11,7 @@ namespace Byndyusoft.Data.Relational
         /// <summary>
         ///     De-serializes a object from the given row.
         /// </summary>
-        /// <param name="row">The row represented as <see cref="IDictionary{string, object}" /></param>
+        /// <param name="row">The row represented as <see cref="IDictionary{K,V}" >IDictionary{string,object}</see></param>
         /// <returns>The deserialized element.</returns>
         T Deserialize(IDictionary<string, object> row);
     }
