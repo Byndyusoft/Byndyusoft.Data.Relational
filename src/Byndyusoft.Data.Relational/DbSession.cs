@@ -133,19 +133,19 @@ namespace Byndyusoft.Data.Relational
         {
             if (_transaction != null)
             {
-                await _transaction.DisposeAsync();
+                await _transaction.DisposeAsync().ConfigureAwait(false);
                 _transaction = null;
             }
 
             if (_connection != null)
             {
-                await _connection.DisposeAsync();
+                await _connection.DisposeAsync().ConfigureAwait(false);
                 _connection = null;
             }
 
             if (_items != null)
             {
-                await _items.DisposeAsync();
+                await _items.DisposeAsync().ConfigureAwait(false);
                 _items = null;
             }
         }
