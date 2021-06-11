@@ -24,7 +24,7 @@ namespace Byndyusoft.Data.Relational
             foreach (var value in Values)
             {
                 if (value is IAsyncDisposable asyncDisposable)
-                    await asyncDisposable.DisposeAsync();
+                    await asyncDisposable.DisposeAsync().ConfigureAwait(false);
                 else if (value is IDisposable disposable)
                     disposable.Dispose();
             }
