@@ -33,9 +33,9 @@ namespace Byndyusoft.Data.Relational
                 return;
 
             await DisposeAsyncCore().ConfigureAwait(false);
-            GC.SuppressFinalize(this);
             _disposed = true;
             Current = null;
+            GC.SuppressFinalize(this);
         }
 
         public void Dispose()
@@ -44,9 +44,9 @@ namespace Byndyusoft.Data.Relational
                 return;
 
             Dispose(true);
-            GC.SuppressFinalize(this);
             _disposed = true;
             Current = null;
+            GC.SuppressFinalize(this);
         }
 
         public DbConnection Connection
