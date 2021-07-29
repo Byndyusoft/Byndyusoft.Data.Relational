@@ -29,7 +29,7 @@ namespace Byndyusoft.Data.Relational.Example
         private static async Task WriteAsync(IServiceProvider serviceProvider)
         {
             var sessionFactory = serviceProvider.GetRequiredService<IDbSessionFactory>();
-            using var session = await sessionFactory.CreateCommittableSessionAsync();
+            await using var session = await sessionFactory.CreateCommittableSessionAsync();
             await session.ExecuteAsync("CREATE TABLE test (id PRIMARY KEY ASC, name TEXT)");
 
             await session.ExecuteAsync("INSERT INTO test (name) VALUES ('test1');");
@@ -41,7 +41,7 @@ namespace Byndyusoft.Data.Relational.Example
         private static async Task ReadAsync(IServiceProvider serviceProvider)
         {
             var sessionFactory = serviceProvider.GetRequiredService<IDbSessionFactory>();
-            using var session = await sessionFactory.CreateSessionAsync();
+            await using var session = await sessionFactory.CreateSessionAsync();
             var result = session.Query("SELECT id, name FROM test");
             await foreach (var row in result) Console.WriteLine(JsonConvert.SerializeObject(row));
         }
