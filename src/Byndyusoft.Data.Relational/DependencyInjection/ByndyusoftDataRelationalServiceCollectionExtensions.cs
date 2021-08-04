@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class ByndyusoftDataRelationalServiceCollectionExtensions
     {
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
             DbProviderFactory dbProviderFactory, string connectionString)
