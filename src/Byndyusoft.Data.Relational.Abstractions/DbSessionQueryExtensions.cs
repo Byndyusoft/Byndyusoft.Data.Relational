@@ -537,7 +537,7 @@ namespace Byndyusoft.Data.Relational
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
-            
+
             using var reader = await session.Connection.ExecuteReaderAsync(command);
             var rowParser = reader.GetRowParser<dynamic>();
 

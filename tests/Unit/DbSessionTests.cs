@@ -137,7 +137,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             var disposable = Mock.Of<IDisposable>();
-            
+
             using var session = new DbSession(_connection, _transaction);
             session.Items.Add("key", disposable);
 

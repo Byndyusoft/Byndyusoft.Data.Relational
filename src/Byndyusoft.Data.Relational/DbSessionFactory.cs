@@ -38,7 +38,7 @@ namespace Byndyusoft.Data.Relational
             var session = new DbSession();
             return CreateCommittableSessionAsync(session, isolationLevel, cancellationToken);
         }
-        
+
         private async Task<IDbSession> CreateSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
         {
             try

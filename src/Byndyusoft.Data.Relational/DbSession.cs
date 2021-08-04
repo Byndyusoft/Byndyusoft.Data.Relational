@@ -11,8 +11,8 @@ namespace Byndyusoft.Data.Relational
     {
         private bool _completed;
         private DbConnection _connection;
-        private DbSessionItems _items;
         private bool _disposed;
+        private DbSessionItems _items;
         private DbTransaction _transaction;
 
         internal DbSession()
@@ -124,7 +124,7 @@ namespace Byndyusoft.Data.Relational
 
             _connection?.Dispose();
             _connection = null;
-            
+
             _items?.Dispose();
             _items = null;
         }

@@ -137,7 +137,7 @@ namespace Byndyusoft.Data.Relational.Unit
             await using var session = await factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken);
 
             // Assert
-            Assert.Equal(session.Connection,_connection);
+            Assert.Equal(session.Connection, _connection);
             Assert.Equal(session.Transaction, _transaction);
         }
 
@@ -181,10 +181,11 @@ namespace Byndyusoft.Data.Relational.Unit
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await Assert.ThrowsAsync<DataException>(() => factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
+            await Assert.ThrowsAsync<DataException>(() =>
+                factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[]{true});
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
             Assert.Null(_sessionAccessor.DbSession);
         }
     }
