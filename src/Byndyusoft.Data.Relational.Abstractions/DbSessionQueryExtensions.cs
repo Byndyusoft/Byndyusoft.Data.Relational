@@ -487,13 +487,27 @@ namespace Byndyusoft.Data.Relational
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 
-            var items = await session
-                .QueryAsync(sql, param, commandTimeout, commandType, typeDeserializer, cancellationToken)
-                .ConfigureAwait(false);
-            foreach (var item in items)
+            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+                cancellationToken);
+
+            using var reader = await session.Connection.ExecuteReaderAsync(command);
+            if (typeDeserializer == null)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                yield return item;
+                var rowParser = reader.GetRowParser<T>();
+                while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return rowParser(reader);
+                }
+            }
+            else
+            {
+                var rowParser = reader.GetRowParser<dynamic>();
+                while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    yield return typeDeserializer.Deserialize(rowParser(reader) as IDictionary<string, object>);
+                }
             }
         }
 
@@ -521,12 +535,16 @@ namespace Byndyusoft.Data.Relational
             if (session == null) throw new ArgumentNullException(nameof(session));
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 
-            var items = await session.QueryAsync(sql, param, commandTimeout, commandType, cancellationToken)
-                .ConfigureAwait(false);
-            foreach (var item in items)
+            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+                cancellationToken);
+            
+            using var reader = await session.Connection.ExecuteReaderAsync(command);
+            var rowParser = reader.GetRowParser<dynamic>();
+
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                yield return item;
+                yield return rowParser(reader);
             }
         }
 
