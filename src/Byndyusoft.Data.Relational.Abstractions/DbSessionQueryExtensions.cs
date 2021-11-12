@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Dapper;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -31,10 +31,10 @@ namespace Byndyusoft.Data.Relational
         public static async Task<IEnumerable<T>> QueryAsync<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -64,7 +64,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<IEnumerable<dynamic>> QueryAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -95,10 +95,10 @@ namespace Byndyusoft.Data.Relational
         public static async Task<T> QuerySingleAsync<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -129,7 +129,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<dynamic> QuerySingleAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -160,10 +160,10 @@ namespace Byndyusoft.Data.Relational
         public static async Task<T> QuerySingleOrDefaultAsync<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -194,7 +194,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<dynamic> QuerySingleOrDefaultAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -225,10 +225,10 @@ namespace Byndyusoft.Data.Relational
         public static async Task<T> QueryFirstAsync<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -259,7 +259,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<dynamic> QueryFirstAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -290,10 +290,10 @@ namespace Byndyusoft.Data.Relational
         public static async Task<T> QueryFirstOrDefaultAsync<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -324,7 +324,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<dynamic> QueryFirstOrDefaultAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -353,7 +353,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<int> ExecuteAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -384,10 +384,10 @@ namespace Byndyusoft.Data.Relational
         public static async Task<T> ExecuteScalarAsync<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -418,7 +418,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<dynamic> ExecuteScalarAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -447,7 +447,7 @@ namespace Byndyusoft.Data.Relational
         public static async Task<SqlMapper.GridReader> QueryMultipleAsync(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -478,10 +478,10 @@ namespace Byndyusoft.Data.Relational
         public static async IAsyncEnumerable<T> Query<T>(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T> typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             if (session == null) throw new ArgumentNullException(nameof(session));
@@ -527,7 +527,7 @@ namespace Byndyusoft.Data.Relational
         public static async IAsyncEnumerable<dynamic> Query(
             this IDbSession session,
             string sql,
-            object param = null,
+            object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -548,7 +548,7 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
-        private static CommandDefinition CreateCommand(string sql, object param, IDbTransaction transaction,
+        private static CommandDefinition CreateCommand(string sql, object? param, IDbTransaction? transaction,
             int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken)
         {
             return new CommandDefinition(sql, param, transaction, commandTimeout, commandType, CommandFlags.Buffered,

@@ -19,6 +19,6 @@
         /// <summary>
         ///     Gets the current <see cref="IDbSession" />.
         /// </summary>
-        protected IDbSession DbSession => _sessionAccessor.DbSession;
+        protected IDbSession? DbSession => _sessionAccessor.DbSession;
     }
 }

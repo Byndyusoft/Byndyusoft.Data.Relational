@@ -14,7 +14,7 @@ namespace Byndyusoft.Data.Relational
         /// <param name="sql">Database query sql text.</param>
         /// <param name="parameters">Database query parameters.</param>
         /// <exception cref="ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
-        public QueryObject(string sql, object parameters = null)
+        public QueryObject(string sql, object? parameters = null)
         {
             Sql = !string.IsNullOrWhiteSpace(sql) ? sql : throw new ArgumentNullException(nameof(sql));
             Params = parameters;
@@ -28,14 +28,14 @@ namespace Byndyusoft.Data.Relational
         /// <summary>
         ///     Database query parameters.
         /// </summary>
-        public object Params { get; }
+        public object? Params { get; }
 
         /// <summary>
         ///     Deconstructs the current <see cref="QueryObject" />.
         /// </summary>
         /// <param name="sql">Database query sql text.</param>
         /// <param name="parameters">Database query parameters.</param>
-        public void Deconstruct(out string sql, out object parameters)
+        public void Deconstruct(out string sql, out object? parameters)
         {
             sql = Sql;
             parameters = Params;
@@ -48,7 +48,7 @@ namespace Byndyusoft.Data.Relational
         /// <param name="parameters">Database query parameters.</param>
         /// <exception cref="ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
         /// <returns>A new instance of the <see cref="QueryObject" /> class.</returns>
-        public static QueryObject Create(string sql, object parameters = null)
+        public static QueryObject Create(string sql, object? parameters = null)
         {
             if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
 

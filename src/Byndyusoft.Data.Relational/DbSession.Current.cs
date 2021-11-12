@@ -8,7 +8,7 @@ namespace Byndyusoft.Data.Relational
         // ReSharper disable once InconsistentNaming
         private static readonly AsyncLocal<Wrapper> _current = new AsyncLocal<Wrapper>();
 
-        internal static DbSession Current
+        internal static DbSession? Current
         {
             private set
             {
@@ -23,7 +23,7 @@ namespace Byndyusoft.Data.Relational
 
         private class Wrapper
         {
-            public DbSession Value { get; set; }
+            public DbSession? Value { get; set; }
         }
     }
 }
