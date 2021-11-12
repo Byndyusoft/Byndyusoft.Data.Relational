@@ -28,7 +28,6 @@ namespace Byndyusoft.Data.Relational
             Current = this;
 
             _activity = ActivitySource.StartActivity(nameof(DbSession));
-            _activity?.SetTag("component", "dbsession");
         }
 
         internal DbSession(DbConnection connection, DbTransaction? transaction = null)
