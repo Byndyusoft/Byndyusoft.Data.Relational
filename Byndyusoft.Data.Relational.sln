@@ -1,10 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30621.155
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB5CC894-9D24-4C18-B59A-EAAEDD86DACC}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 		CONTRIBUTING.md = CONTRIBUTING.md
 		Directory.Build.props = Directory.Build.props
@@ -39,6 +41,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "example", "example", "{7565
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational.Example", "example\Byndyusoft.Data.Relational.Example.csproj", "{089DDD0A-38DD-456D-A137-A1506C45DF6A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Byndyusoft.Data.Relational.OpenTelemetry", "src\Byndyusoft.Data.Relational.OpenTelemetry\Byndyusoft.Data.Relational.OpenTelemetry.csproj", "{ECC9AAA5-970E-4D97-A245-42CCB9C46848}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{089DDD0A-38DD-456D-A137-A1506C45DF6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{089DDD0A-38DD-456D-A137-A1506C45DF6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{089DDD0A-38DD-456D-A137-A1506C45DF6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECC9AAA5-970E-4D97-A245-42CCB9C46848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC9AAA5-970E-4D97-A245-42CCB9C46848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC9AAA5-970E-4D97-A245-42CCB9C46848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC9AAA5-970E-4D97-A245-42CCB9C46848}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +79,7 @@ Global
 		{9CF5DBEC-3A47-4187-AC6C-871B2AAC26B3} = {5161DEF3-EAA7-4B22-8971-CE8A70062C25}
 		{C91BC70E-01E4-46E7-9FDE-685BFE34755D} = {961A329D-C08A-4505-B037-30BBEE1285EA}
 		{089DDD0A-38DD-456D-A137-A1506C45DF6A} = {7565BF62-7578-4D64-ACB1-5496184BF068}
+		{ECC9AAA5-970E-4D97-A245-42CCB9C46848} = {5161DEF3-EAA7-4B22-8971-CE8A70062C25}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8722EB16-9BEE-4F1A-9218-494BA9C1E369}

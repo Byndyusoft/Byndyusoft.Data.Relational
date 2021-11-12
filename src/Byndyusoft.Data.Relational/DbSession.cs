@@ -12,10 +12,9 @@ namespace Byndyusoft.Data.Relational
     public sealed partial class DbSession : ICommittableDbSession
     {
         private static readonly AssemblyName AssemblyName = typeof(DbSession).Assembly.GetName();
-        public static readonly string ActivitySourceName = AssemblyName.Name!;
         private static readonly Version Version = AssemblyName.Version!;
         private static readonly ActivitySource ActivitySource =
-            new ActivitySource(ActivitySourceName, Version.ToString());
+            new ActivitySource(DbSessionTracingOptions.ActivitySourceName, Version.ToString());
 
         private bool _completed;
         private DbConnection? _connection;
@@ -29,6 +28,7 @@ namespace Byndyusoft.Data.Relational
             Current = this;
 
             _activity = ActivitySource.StartActivity(nameof(DbSession));
+            _activity?.SetTag("component", "dbsession");
         }
 
         internal DbSession(DbConnection connection, DbTransaction? transaction = null)

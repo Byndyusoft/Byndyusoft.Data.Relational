@@ -1,0 +1,20 @@
+﻿using System;
+using Byndyusoft.Data.Relational;
+
+// ReSharper disable once CheckNamespace
+namespace OpenTelemetry.Trace
+{
+    /// <summary>
+    /// Extension method for setting up DbSession OpenTelemetry tracing.
+    /// </summary>
+    public static class TracerProviderBuilderExtensions
+    {
+        /// <summary>
+        /// Subscribes to the Npgsql activity source to enable OpenTelemetry tracing.
+        /// </summary>
+        public static TracerProviderBuilder AddDbSessions(
+            this TracerProviderBuilder builder,
+            Action<DbSessionTracingOptions>? options = null)
+            => builder.AddSource(DbSessionTracingOptions.ActivitySourceName);
+    }
+}
