@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
@@ -23,7 +23,7 @@ namespace Byndyusoft.Data.Relational
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
             var session = new DbSession();
-            return CreateSessionAsyncCore(session, cancellationToken);
+            return StartSessionAsyncCore(session, cancellationToken);
         }
 
         public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
@@ -35,12 +35,12 @@ namespace Byndyusoft.Data.Relational
             IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
             var session = new DbSession();
-            return CreateCommittableSessionAsync(session, isolationLevel, cancellationToken);
+            return StartCommittableSessionAsyncCore(session, isolationLevel, cancellationToken);
         }
 
-        private async Task<IDbSession> CreateSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
+        private async Task<IDbSession> StartSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
         {
-            await session.StartAsync(cancellationToken).ConfigureAwait(false);
+            session.Start();
 
             try
             {
@@ -57,12 +57,12 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
-        private async Task<ICommittableDbSession> CreateCommittableSessionAsync(DbSession session,
+        private async Task<ICommittableDbSession> StartCommittableSessionAsyncCore(DbSession session,
             IsolationLevel isolationLevel, CancellationToken cancellationToken)
         {
             try
             {
-                await CreateSessionAsyncCore(session, cancellationToken)
+                await StartSessionAsyncCore(session, cancellationToken)
                     .ConfigureAwait(false);
                 session.Transaction = await session.Connection.BeginTransactionAsync(isolationLevel, cancellationToken)
                     .ConfigureAwait(false);

@@ -1,5 +1,5 @@
-﻿using System;
-using Byndyusoft.Data.Relational;
+﻿using Byndyusoft.Data.Relational;
+using System;
 
 // ReSharper disable once CheckNamespace
 namespace OpenTelemetry.Trace

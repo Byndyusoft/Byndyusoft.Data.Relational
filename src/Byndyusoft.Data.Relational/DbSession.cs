@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -43,8 +43,8 @@ namespace Byndyusoft.Data.Relational
             if (_disposed)
                 return;
 
-            await DisposeAsyncCore().ConfigureAwait(false);
-            Dispose();
+            await DisposeAsyncCore();
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
@@ -53,11 +53,7 @@ namespace Byndyusoft.Data.Relational
             if (_disposed)
                 return;
 
-            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Dispose));
-
             Dispose(true);
-            _disposed = true;
-            Current = null;
             GC.SuppressFinalize(this);
         }
 
@@ -99,10 +95,15 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
-        public ValueTask StartAsync(CancellationToken _ = default)
+        private void Stop()
+        {
+            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Stop));
+            Current = null;
+        }
+
+        internal void Start()
         {
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Start));
-            return new ValueTask();
         }
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
@@ -139,18 +140,20 @@ namespace Byndyusoft.Data.Relational
 
         private void Dispose(bool disposing)
         {
-            if (!disposing) return;
+            if (disposing)
+            {
+                Stop();
 
-            _transaction?.Dispose();
+                _transaction?.Dispose();
+                _connection?.Dispose();
+                _items?.Dispose();
+                _activity?.Dispose();
+                _disposed = true;
+            }
+
             _transaction = null;
-
-            _connection?.Dispose();
             _connection = null;
-
-            _items?.Dispose();
             _items = null;
-
-            _activity?.Dispose();
             _activity = null;
         }
 
@@ -159,20 +162,21 @@ namespace Byndyusoft.Data.Relational
             if (_transaction != null)
             {
                 await _transaction.DisposeAsync().ConfigureAwait(false);
-                _transaction = null;
             }
 
             if (_connection != null)
             {
                 await _connection.DisposeAsync().ConfigureAwait(false);
-                _connection = null;
             }
 
             if (_items != null)
             {
                 await _items.DisposeAsync().ConfigureAwait(false);
-                _items = null;
             }
+
+            _transaction = null;
+            _connection = null;
+            _items = null;
         }
 
         private void ThrowIfDisposed()
