@@ -11,10 +11,15 @@ namespace Byndyusoft.Data.Relational
             GC.SuppressFinalize(this);
 
             foreach (var value in Values)
-                if (value is IAsyncDisposable asyncDisposable)
-                    await asyncDisposable.DisposeAsync().ConfigureAwait(false);
-                else if (value is IDisposable disposable)
-                    disposable.Dispose();
+                switch (value)
+                {
+                    case IAsyncDisposable asyncDisposable:
+                        await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+                        break;
+                    case IDisposable disposable:
+                        disposable.Dispose();
+                        break;
+                }
         }
 
         public void Dispose()

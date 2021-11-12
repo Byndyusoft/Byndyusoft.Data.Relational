@@ -1,9 +1,9 @@
-﻿using System.Data.Common;
+﻿using Dapper;
+using Microsoft.Data.Sqlite;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using Microsoft.Data.Sqlite;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Functional
@@ -35,7 +35,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var rows = (await _session.QueryAsync<Row>(query)).ToArray();
@@ -52,7 +52,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var rows = (await _session.QueryAsync(query)).ToArray();
@@ -69,7 +69,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QueryFirstAsync<Row>(query);
@@ -85,7 +85,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QueryFirstAsync(query);
@@ -101,7 +101,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QueryFirstOrDefaultAsync<Row>(query);
@@ -117,7 +117,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QueryFirstOrDefaultAsync(query);
@@ -134,7 +134,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QuerySingleAsync<Row>(query);
@@ -150,7 +150,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QuerySingleAsync(query);
@@ -166,7 +166,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QuerySingleOrDefaultAsync<Row>(query);
@@ -182,7 +182,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new {id = 1});
+            var query = new QueryObject("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
 
             // Act
             var row = await _session.QuerySingleOrDefaultAsync(query);
@@ -199,7 +199,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             var queryObject = new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name);",
-                new {id = 1, name = "name"});
+                new { id = 1, name = "name" });
 
             // Act
             var result = await _session.ExecuteAsync(queryObject);
@@ -214,7 +214,7 @@ namespace Byndyusoft.Data.Relational.Functional
             // Arrange
             var queryObject =
                 new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();",
-                    new {id = 1, name = "name"});
+                    new { id = 1, name = "name" });
 
             // Act
             var id = await _session.ExecuteScalarAsync(queryObject);
@@ -229,7 +229,7 @@ namespace Byndyusoft.Data.Relational.Functional
             // Arrange
             var queryObject =
                 new QueryObject("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();",
-                    new {id = 1, name = "name"});
+                    new { id = 1, name = "name" });
 
             // Act
             var id = await _session.ExecuteScalarAsync<int>(queryObject);
@@ -246,7 +246,7 @@ namespace Byndyusoft.Data.Relational.Functional
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (2, 'test2');");
             var queryObject =
                 new QueryObject("SELECT id, name FROM test WHERE id = @id1; SELECT id, name FROM test WHERE id = @id2",
-                    new {id1 = 1, id2 = 2});
+                    new { id1 = 1, id2 = 2 });
 
             // Act
             var result = await _session.QueryMultipleAsync(queryObject);
@@ -270,7 +270,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id", new {id = 1});
+            var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id", new { id = 1 });
 
             // Act
             var rows = await _session.Query(queryObject).ToArrayAsync();
@@ -287,7 +287,7 @@ namespace Byndyusoft.Data.Relational.Functional
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
-            var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id", new {id = 1});
+            var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id", new { id = 1 });
 
             // Act
             var rows = await _session.Query<Row>(queryObject).ToArrayAsync();

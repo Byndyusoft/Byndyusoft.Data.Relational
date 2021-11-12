@@ -1,7 +1,7 @@
-﻿using System;
-using System.Data.Common;
-using Byndyusoft.Data.Relational;
+﻿using Byndyusoft.Data.Relational;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Data.Common;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection

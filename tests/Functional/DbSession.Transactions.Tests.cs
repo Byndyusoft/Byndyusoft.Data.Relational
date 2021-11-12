@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Dapper;
+using Microsoft.Data.Sqlite;
+using System;
 using System.Data.Common;
 using System.IO;
 using System.Threading.Tasks;
-using Dapper;
-using Microsoft.Data.Sqlite;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Functional

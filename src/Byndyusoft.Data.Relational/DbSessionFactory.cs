@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Data.Diagnostics;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -41,9 +40,11 @@ namespace Byndyusoft.Data.Relational
 
         private async Task<IDbSession> CreateSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
         {
+            await session.StartAsync(cancellationToken).ConfigureAwait(false);
+
             try
             {
-                var connection = session.Connection = ProviderFactory.CreateConnection()?.AddDiagnosting();
+                var connection = session.Connection = ProviderFactory.CreateConnection()!;
                 if (connection == null) throw new InvalidOperationException();
                 connection.ConnectionString = ConnectionString;
                 await connection.OpenAsync(cancellationToken).ConfigureAwait(false);

@@ -1,10 +1,10 @@
+using Moq;
+using Moq.Protected;
 using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Moq;
-using Moq.Protected;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit
@@ -26,9 +26,9 @@ namespace Byndyusoft.Data.Relational.Unit
             _connectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;";
             _sessionAccessor = new DbSessionAccessor();
 
-            _dbProviderFactory = new Mock<DbProviderFactory> {CallBase = true}.Object;
-            _connection = new Mock<DbConnection> {CallBase = true}.Object;
-            _transaction = new Mock<DbTransaction> {CallBase = true}.Object;
+            _dbProviderFactory = new Mock<DbProviderFactory> { CallBase = true }.Object;
+            _connection = new Mock<DbConnection> { CallBase = true }.Object;
+            _transaction = new Mock<DbTransaction> { CallBase = true }.Object;
 
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
         }
@@ -175,8 +175,8 @@ namespace Byndyusoft.Data.Relational.Unit
             Mock.Get(_connection).Protected().Setup<DbTransaction>("BeginDbTransaction", _isolationLevel)
                 .Throws(new DataException());
 #else
-           Mock.Get(_connection).Protected().Setup<ValueTask<DbTransaction>>("BeginDbTransactionAsync", _isolationLevel, _cancellationToken)
-                .Throws(new DataException());
+            Mock.Get(_connection).Protected().Setup<ValueTask<DbTransaction>>("BeginDbTransactionAsync", _isolationLevel, _cancellationToken)
+                 .Throws(new DataException());
 #endif
 
             // Act
@@ -185,7 +185,7 @@ namespace Byndyusoft.Data.Relational.Unit
                 factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] { true });
             Assert.Null(_sessionAccessor.DbSession);
         }
     }
