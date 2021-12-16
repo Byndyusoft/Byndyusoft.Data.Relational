@@ -1,14 +1,16 @@
 <Project>
 
-  <Import Project="../Directory.Build.props" />
+	<Import Project="../Directory.Build.props" />
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net5.0</TargetFrameworks>
-    <RootNamespace>Byndyusoft.Data.Relational</RootNamespace>
-    <PackageIcon>icon.png</PackageIcon>
-    <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="..\..\icon.png" Pack="true" PackagePath="icon.png" />
-  </ItemGroup>
+	<PropertyGroup>
+		<Nullable>enable</Nullable>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+		<RootNamespace>Byndyusoft.Data.Relational</RootNamespace>
+		<PackageIcon>icon.png</PackageIcon>
+		<LangVersion>8.0</LangVersion>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\icon.png" Pack="true" PackagePath="icon.png" />
+	</ItemGroup>
 </Project>

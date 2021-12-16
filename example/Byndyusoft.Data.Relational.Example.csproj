@@ -1,18 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.7" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Microsoft.Data.Sqlite" Version="5.0.12" />
+		<PackageReference Include="OpenTelemetry.Api" Version="1.2.0-beta1" />
+		<PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.2.0-beta1" />
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc8" />
+		<PackageReference Include="OpenTelemetry" Version="1.2.0-beta1" />
+		<PackageReference Include="OpenTelemetry.Exporter.Jaeger" Version="1.2.0-beta1" />
+		<PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.2.0-beta1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\src\Byndyusoft.Data.Relational.OpenTelemetry\Byndyusoft.Data.Relational.OpenTelemetry.csproj" />
+		<ProjectReference Include="..\src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
+	</ItemGroup>
 
 </Project>

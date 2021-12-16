@@ -17,7 +17,7 @@ namespace Byndyusoft.Data.Relational
         /// <summary>
         ///     Gets the <see cref="DbTransaction" /> used by this <see cref="IDbSession" />.
         /// </summary>
-        DbTransaction Transaction { get; }
+        DbTransaction? Transaction { get; }
 
         /// <summary>
         ///     Gets a collection of key/value pairs that provide additional information about the <see cref="IDbSession" />.

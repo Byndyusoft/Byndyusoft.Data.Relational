@@ -2,6 +2,6 @@
 {
     public class DbSessionAccessor : IDbSessionAccessor
     {
-        IDbSession IDbSessionAccessor.DbSession => DbSession.Current;
+        IDbSession? IDbSessionAccessor.DbSession => DbSession.Current;
     }
 }

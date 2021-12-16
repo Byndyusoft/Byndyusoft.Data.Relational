@@ -8,6 +8,6 @@
         /// <summary>
         ///     Gets the current <see cref="IDbSession" />. Returns null if there is no active <see cref="IDbSession" />.
         /// </summary>
-        IDbSession DbSession { get; }
+        IDbSession? DbSession { get; }
     }
 }

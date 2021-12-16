@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data.Common;
-using Byndyusoft.Data.Relational;
+﻿using Byndyusoft.Data.Relational;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
+using System.Data.Common;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class ByndyusoftDataRelationalServiceCollectionExtensions
     {
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
             DbProviderFactory dbProviderFactory, string connectionString)

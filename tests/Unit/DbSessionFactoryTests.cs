@@ -1,10 +1,10 @@
+using Moq;
+using Moq.Protected;
 using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using Moq;
-using Moq.Protected;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit
@@ -26,9 +26,9 @@ namespace Byndyusoft.Data.Relational.Unit
             _connectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;";
             _sessionAccessor = new DbSessionAccessor();
 
-            _dbProviderFactory = new Mock<DbProviderFactory> {CallBase = true}.Object;
-            _connection = new Mock<DbConnection> {CallBase = true}.Object;
-            _transaction = new Mock<DbTransaction> {CallBase = true}.Object;
+            _dbProviderFactory = new Mock<DbProviderFactory> { CallBase = true }.Object;
+            _connection = new Mock<DbConnection> { CallBase = true }.Object;
+            _transaction = new Mock<DbTransaction> { CallBase = true }.Object;
 
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
         }
@@ -137,7 +137,7 @@ namespace Byndyusoft.Data.Relational.Unit
             await using var session = await factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken);
 
             // Assert
-            Assert.Equal(session.Connection,_connection);
+            Assert.Equal(session.Connection, _connection);
             Assert.Equal(session.Transaction, _transaction);
         }
 
@@ -158,7 +158,10 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
+
             await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
+
+
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
@@ -175,16 +178,17 @@ namespace Byndyusoft.Data.Relational.Unit
             Mock.Get(_connection).Protected().Setup<DbTransaction>("BeginDbTransaction", _isolationLevel)
                 .Throws(new DataException());
 #else
-           Mock.Get(_connection).Protected().Setup<ValueTask<DbTransaction>>("BeginDbTransactionAsync", _isolationLevel, _cancellationToken)
-                .Throws(new DataException());
+            Mock.Get(_connection).Protected().Setup<ValueTask<DbTransaction>>("BeginDbTransactionAsync", _isolationLevel, _cancellationToken)
+                 .Throws(new DataException());
 #endif
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await Assert.ThrowsAsync<DataException>(() => factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
+            await Assert.ThrowsAsync<DataException>(() =>
+                factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[]{true});
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] { true });
             Assert.Null(_sessionAccessor.DbSession);
         }
     }

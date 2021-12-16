@@ -1,7 +1,7 @@
-﻿using System;
-using System.Data.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using System;
+using System.Data.Common;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
@@ -29,7 +29,7 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
             // ReSharper disable once ExpressionIsAlwaysNull
             var exception =
                 Assert.Throws<ArgumentNullException>(() =>
-                    services.AddRelationalDb(_dbProviderFactory, _connectionString));
+                    services!.AddRelationalDb(_dbProviderFactory, _connectionString));
 
             // Assert
             Assert.Equal("services", exception.ParamName);
@@ -40,7 +40,7 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         {
             // Act
             var exception =
-                Assert.Throws<ArgumentNullException>(() => _services.AddRelationalDb(null, _connectionString));
+                Assert.Throws<ArgumentNullException>(() => _services.AddRelationalDb(null!, _connectionString));
 
             // Assert
             Assert.Equal("dbProviderFactory", exception.ParamName);
@@ -101,7 +101,7 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
             // ReSharper disable once ExpressionIsAlwaysNull
             var exception =
                 Assert.Throws<ArgumentNullException>(() =>
-                    services.AddRelationalDb(_dbProviderFactory, () => _connectionString));
+                    services!.AddRelationalDb(_dbProviderFactory, () => _connectionString));
 
             // Assert
             Assert.Equal("services", exception.ParamName);
@@ -112,7 +112,7 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         {
             // Act
             var exception =
-                Assert.Throws<ArgumentNullException>(() => _services.AddRelationalDb(null, () => _connectionString));
+                Assert.Throws<ArgumentNullException>(() => _services.AddRelationalDb(null!, () => _connectionString));
 
             // Assert
             Assert.Equal("dbProviderFactory", exception.ParamName);
@@ -124,7 +124,7 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
             // Act
             var exception =
                 Assert.Throws<ArgumentNullException>(() =>
-                    _services.AddRelationalDb(_dbProviderFactory, null as Func<string>));
+                    _services.AddRelationalDb(_dbProviderFactory, (null as Func<string>)!));
 
             // Assert
             Assert.Equal("connectionStringFunc", exception.ParamName);

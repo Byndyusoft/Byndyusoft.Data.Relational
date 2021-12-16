@@ -15,6 +15,6 @@
         /// <summary>
         ///     Database query parameters.
         /// </summary>
-        object Params { get; }
+        object? Params { get; }
     }
 }

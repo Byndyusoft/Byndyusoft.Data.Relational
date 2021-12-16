@@ -18,11 +18,6 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: install dotnet 2.1
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 2.1.x
-
       - name: install dotnet 3.1
         uses: actions/setup-dotnet@v1
         with:
@@ -33,6 +28,11 @@ jobs:
         with:
           dotnet-version: 5.0.x
 
+      - name: install dotnet 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
       - name: install packages
         run: dotnet restore
 
@@ -41,6 +41,6 @@ jobs:
 
       - name: test
         run: |
-          dotnet test --framework netcoreapp2.1
           dotnet test --framework netcoreapp3.1
           dotnet test --framework net5.0
+          dotnet test --framework net6.0

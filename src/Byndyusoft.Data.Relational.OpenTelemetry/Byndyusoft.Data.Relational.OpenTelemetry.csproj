@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<PackageReference Include="OpenTelemetry.Api" Version="1.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
+	</ItemGroup>
+
+</Project>
