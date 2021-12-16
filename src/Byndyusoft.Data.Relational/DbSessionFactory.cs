@@ -22,8 +22,8 @@ namespace Byndyusoft.Data.Relational
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            var session = new DbSession();
-            return StartSessionAsyncCore(session, cancellationToken);
+            var session = new DbSession(ProviderFactory, ConnectionString);
+            return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
         public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
@@ -34,43 +34,21 @@ namespace Byndyusoft.Data.Relational
         public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
             IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
-            var session = new DbSession();
-            return StartCommittableSessionAsyncCore(session, isolationLevel, cancellationToken);
+            var session = new DbSession(ProviderFactory, ConnectionString, isolationLevel);
+            return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
         }
 
-        private async Task<IDbSession> StartSessionAsyncCore(DbSession session, CancellationToken cancellationToken)
-        {
-            session.Start();
-
-            try
-            {
-                var connection = session.Connection = ProviderFactory.CreateConnection()!;
-                if (connection == null) throw new InvalidOperationException();
-                connection.ConnectionString = ConnectionString;
-                await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
-                return session;
-            }
-            catch
-            {
-                await session.DisposeAsync();
-                throw;
-            }
-        }
-
-        private async Task<ICommittableDbSession> StartCommittableSessionAsyncCore(DbSession session,
-            IsolationLevel isolationLevel, CancellationToken cancellationToken)
+        private static async Task<T> StartAsyncCore<T>(DbSession session, CancellationToken cancellationToken)
+            where T : IDbSession
         {
             try
             {
-                await StartSessionAsyncCore(session, cancellationToken)
-                    .ConfigureAwait(false);
-                session.Transaction = await session.Connection.BeginTransactionAsync(isolationLevel, cancellationToken)
-                    .ConfigureAwait(false);
-                return session;
+                await session.StartAsync(cancellationToken).ConfigureAwait(false);
+                return (T)(IDbSession)session;
             }
             catch
             {
-                await session.DisposeAsync();
+                await session.DisposeAsync().ConfigureAwait(false); ;
                 throw;
             }
         }

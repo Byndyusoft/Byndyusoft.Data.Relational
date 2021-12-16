@@ -6,11 +6,12 @@ namespace Byndyusoft.Data.Relational
     public partial class DbSession
     {
         // ReSharper disable once InconsistentNaming
-        private static readonly AsyncLocal<Wrapper> _current = new AsyncLocal<Wrapper>();
+        private static readonly AsyncLocal<Wrapper?> _current = new AsyncLocal<Wrapper?>();
 
         internal static DbSession? Current
         {
-            private set
+            //private set
+            set
             {
                 var wrapper = _current.Value ??= new Wrapper();
                 if (value != null && wrapper.Value != null)

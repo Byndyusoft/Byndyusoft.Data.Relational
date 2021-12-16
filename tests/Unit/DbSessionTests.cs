@@ -1,4 +1,4 @@
-﻿using Moq;
+using Moq;
 using Moq.Protected;
 using System;
 using System.Data;
@@ -36,7 +36,7 @@ namespace Byndyusoft.Data.Relational.Unit
         public void Constructor_NullConnection_ThrowsException()
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => new DbSession(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => new DbSession(null!));
 
             // Assert
             Assert.NotNull(exception);
@@ -52,16 +52,6 @@ namespace Byndyusoft.Data.Relational.Unit
             // Assert
             Assert.Equal(_connection, session.Connection);
             Assert.Equal(_transaction, session.Transaction);
-        }
-
-        [Fact]
-        public void Constructor_ActiveOneAlreadyExists_ThrowsException()
-        {
-            // Arrange
-            using var session = new DbSession(_connection, _transaction);
-
-            // Act
-            Assert.Throws<InvalidOperationException>(() => new DbSession(_connection, _transaction));
         }
 
         [Fact]

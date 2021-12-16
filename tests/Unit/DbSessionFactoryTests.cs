@@ -158,7 +158,10 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
+
             await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
+
+
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() =>

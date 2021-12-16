@@ -1,7 +1,8 @@
-﻿using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -9,26 +10,47 @@ namespace Byndyusoft.Data.Relational.Example
 {
     public static class Program
     {
-        public static async Task Main()
+        private static readonly ActivitySource Activity = new ActivitySource(nameof(Program));
+        private const string FileName = "test.db";
+
+        static Program()
         {
-            var file = "test.db";
-
-            File.Delete(file);
-            await File.Create(file).DisposeAsync();
-
-            var serviceProvider =
-                new ServiceCollection()
-                    .AddRelationalDb(SqliteFactory.Instance, $"data source={file}")
-                    .BuildServiceProvider();
-
-            await WriteAsync(serviceProvider);
-
-            await ReadAsync(serviceProvider);
+            System.Diagnostics.Activity.DefaultIdFormat = ActivityIdFormat.W3C;
         }
 
-        private static async Task WriteAsync(IServiceProvider serviceProvider)
+        public static async Task Main(string[] args)
         {
-            var sessionFactory = serviceProvider.GetRequiredService<IDbSessionFactory>();
+            File.Delete(FileName);
+            await File.Create(FileName).DisposeAsync();
+
+            using var host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices((context, services) => new Startup().ConfigureServices(services, FileName))
+                .Build();
+
+            await host.StartAsync();
+
+            using (var activity = Activity.StartActivity(nameof(Main)))
+            {
+                Console.WriteLine(activity?.SpanId);
+
+                try
+                {
+                    await WriteAsync(host.Services);
+                    await ReadAsync(host.Services);
+                }
+                catch (Exception)
+                {
+                    activity?.SetTag("error", true);
+                    activity?.SetStatus(ActivityStatusCode.Error);
+                }
+            }
+
+            await host.StopAsync();
+        }
+
+        private static async Task WriteAsync(IServiceProvider services)
+        {
+            var sessionFactory = services.GetRequiredService<IDbSessionFactory>();
             await using var session = await sessionFactory.CreateCommittableSessionAsync();
             await session.ExecuteAsync("CREATE TABLE test (id PRIMARY KEY ASC, name TEXT)");
 
@@ -38,9 +60,9 @@ namespace Byndyusoft.Data.Relational.Example
             await session.CommitAsync();
         }
 
-        private static async Task ReadAsync(IServiceProvider serviceProvider)
+        private static async Task ReadAsync(IServiceProvider services)
         {
-            var sessionFactory = serviceProvider.GetRequiredService<IDbSessionFactory>();
+            var sessionFactory = services.GetRequiredService<IDbSessionFactory>();
             await using var session = await sessionFactory.CreateSessionAsync();
             var result = session.Query("SELECT id, name FROM test");
             await foreach (var row in result) Console.WriteLine(JsonConvert.SerializeObject(row));

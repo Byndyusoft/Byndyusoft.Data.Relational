@@ -1,4 +1,4 @@
-﻿using Byndyusoft.Data.Relational;
+using Byndyusoft.Data.Relational;
 using System;
 
 // ReSharper disable once CheckNamespace
@@ -10,7 +10,7 @@ namespace OpenTelemetry.Trace
     public static class TracerProviderBuilderExtensions
     {
         /// <summary>
-        /// Subscribes to the Npgsql activity source to enable OpenTelemetry tracing.
+        /// Subscribes to the DbSession activity source to enable OpenTelemetry tracing.
         /// </summary>
         public static TracerProviderBuilder AddDbSessions(
             this TracerProviderBuilder builder,
