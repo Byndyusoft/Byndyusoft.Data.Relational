@@ -4,6 +4,7 @@
 | [Byndyusoft.Data.Relational.Abstractions](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.Abstractions.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.Abstractions/) |
 | ------- | ------------ | --------- |
 | [**Byndyusoft.Data.Relational**](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational/) |
+| [**Byndyusoft.Data.Relational.OpenTelemetry**](https://www.nuget.org/packages/Byndyusoft.Data.Relational.OpenTelemetry/) | [![Nuget](https://img.shields.io/nuget/v/Byndyusoft.Data.Relational.OpenTelemetry.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.OpenTelemetry/) | [![Downloads](https://img.shields.io/nuget/dt/Byndyusoft.Data.Relational.OpenTelemetry.svg)](https://www.nuget.org/packages/Byndyusoft.Data.Relational.OpenTelemetry/) |
 
 # Byndyusoft.Data.Relational.Abstractions
 Relational abstractions for Byndyusoft.Data.Relational.
