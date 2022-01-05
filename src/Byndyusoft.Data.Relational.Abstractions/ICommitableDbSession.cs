@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,15 +7,15 @@ namespace Byndyusoft.Data.Relational
     /// <summary>
     ///     Represents a commitable database session.
     /// </summary>
-    public interface ICommittableDbSession : IDbSession
+    public interface ICommitableDbSession : IDbSession
     {
         /// <summary>
-        ///     Gets the isolation level for this <see cref="ICommittableDbSession" />.
+        ///     Gets the isolation level for this <see cref="ICommitableDbSession" />.
         /// </summary>
         IsolationLevel IsolationLevel { get; }
 
         /// <summary>
-        ///     Asynchronously commits the <see cref="ICommittableDbSession" />.
+        ///     Asynchronously commits the <see cref="ICommitableDbSession" />.
         /// </summary>
         /// <param name="cancellationToken">
         ///     An optional token to cancel the asynchronous operation. The default value is
@@ -25,7 +25,7 @@ namespace Byndyusoft.Data.Relational
         Task CommitAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Asynchronously rolls back the <see cref="ICommittableDbSession" />.
+        ///     Asynchronously rolls back the <see cref="ICommitableDbSession" />.
         /// </summary>
         /// <param name="cancellationToken">
         ///     An optional token to cancel the asynchronous operation. The default value is

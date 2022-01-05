@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Byndyusoft.Data.Relational
 {
-    public partial class DbSession : ICommittableDbSession
+    public partial class DbSession : ICommitableDbSession
     {
         private readonly DbProviderFactory _providerFactory = default!;
         private readonly string _connectionString = default!;
@@ -239,7 +239,7 @@ namespace Byndyusoft.Data.Relational
 
             if (_items != null)
             {
-                _items?.DisposeAsync().ConfigureAwait(false);
+                await _items.DisposeAsync().ConfigureAwait(false);
                 _items = null;
             }
         }
