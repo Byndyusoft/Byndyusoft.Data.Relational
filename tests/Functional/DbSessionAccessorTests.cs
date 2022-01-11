@@ -1,4 +1,5 @@
-﻿using Dapper;
+using System;
+using Dapper;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System.Threading.Tasks;
@@ -8,16 +9,16 @@ namespace Byndyusoft.Data.Relational.Functional
 {
     public class DbSessionAccessorTests : IAsyncLifetime
     {
+        private readonly string _file = $"{Guid.NewGuid()}.db";
+
         private Service _service;
         private DbSessionFactory _sessionFactory;
 
         public async Task InitializeAsync()
         {
-            File.Delete("queries.db");
+            var connectionString = $"Data Source={_file};Pooling=false";
 
-            var connectionString = "Data Source=queries.db";
-
-            using var connection = new SqliteConnection(connectionString);
+            await using var connection = new SqliteConnection(connectionString);
             await connection.ExecuteAsync("CREATE TABLE test (id INT, name TEXT)");
 
             _sessionFactory = new DbSessionFactory(SqliteFactory.Instance, connectionString);
@@ -26,6 +27,8 @@ namespace Byndyusoft.Data.Relational.Functional
 
         public Task DisposeAsync()
         {
+            File.Delete(_file);
+
             return Task.CompletedTask;
         }
 

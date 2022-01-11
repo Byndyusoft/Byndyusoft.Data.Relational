@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Data.Common;
@@ -16,21 +16,21 @@ namespace Byndyusoft.Data.Relational.Functional
 
         public async Task InitializeAsync()
         {
-            _connection = new SqliteConnection($"Data Source={_file}");
+            _connection = new SqliteConnection($"Data Source={_file};Pooling=false");
             await _connection.OpenAsync();
             await _connection.ExecuteAsync("CREATE TABLE test (id INT, name TEXT)");
 
-            var transaction = _connection.BeginTransaction();
+            var transaction = await _connection.BeginTransactionAsync();
 
             _session = new DbSession(_connection, transaction);
         }
 
-        public Task DisposeAsync()
+        public async Task DisposeAsync()
         {
-            _session.Dispose();
+            await _session.DisposeAsync();
+            await _connection.DisposeAsync();
 
             File.Delete(_file);
-            return Task.CompletedTask;
         }
 
         [Fact]

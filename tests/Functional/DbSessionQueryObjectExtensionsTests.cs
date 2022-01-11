@@ -1,4 +1,5 @@
-﻿using Dapper;
+using System;
+using Dapper;
 using Microsoft.Data.Sqlite;
 using System.Data.Common;
 using System.IO;
@@ -10,24 +11,25 @@ namespace Byndyusoft.Data.Relational.Functional
 {
     public class DbSessionQueryObjectExtensionsTests : IAsyncLifetime
     {
-        private DbConnection _connection;
+        private readonly string _file = $"{Guid.NewGuid()}.db";
 
+        private DbConnection _connection;
         private DbSession _session;
 
         public async Task InitializeAsync()
         {
-            File.Delete("query_object.db");
-
-            _connection = new SqliteConnection("Data Source=query_object.db");
+            _connection = new SqliteConnection($"Data Source={_file}.db;Pooling=false");
             await _connection.ExecuteAsync("CREATE TABLE test (id INT, name TEXT)");
 
             _session = new DbSession(_connection);
         }
 
-        public Task DisposeAsync()
+        public async Task DisposeAsync()
         {
-            _session.Dispose();
-            return Task.CompletedTask;
+            await _session.DisposeAsync();
+            await _connection.DisposeAsync();
+
+            File.Delete(_file);
         }
 
         [Fact]
