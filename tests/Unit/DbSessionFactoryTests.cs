@@ -111,7 +111,7 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task CreateCommitableSessionAsync_ProviderCreatesNullConnection_ThrowsException()
+        public async Task CreateCommittableSessionAsync_ProviderCreatesNullConnection_ThrowsException()
         {
             // Arrange
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(null as DbConnection);
@@ -119,12 +119,12 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                factory.CreateCommitableSessionAsync(_cancellationToken));
+                factory.CreateCommittableSessionAsync(_cancellationToken));
             Assert.Null(_sessionAccessor.DbSession);
         }
 
         [Fact]
-        public async Task CreateCommitableSessionAsync_CreatesSession()
+        public async Task CreateCommittableSessionAsync_CreatesSession()
         {
             // Arrange
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
@@ -134,7 +134,7 @@ namespace Byndyusoft.Data.Relational.Unit
 
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateCommitableSessionAsync(_isolationLevel, _cancellationToken);
+            await using var session = await factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken);
 
             // Assert
             Assert.Equal(session.Connection, _connection);
@@ -142,11 +142,11 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task CreateCommitableSessionAsync_SetsSessionToAccessor()
+        public async Task CreateCommittableSessionAsync_SetsSessionToAccessor()
         {
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateCommitableSessionAsync(_cancellationToken);
+            await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
 
             // Assert
             Assert.NotNull(_sessionAccessor.DbSession);
@@ -154,22 +154,22 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task CreateCommitableSessionAsync_AlreadyExists_ThrowsException()
+        public async Task CreateCommittableSessionAsync_AlreadyExists_ThrowsException()
         {
             // Arrange
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
 
-            await using var session = await factory.CreateCommitableSessionAsync(_cancellationToken);
+            await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
 
 
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                factory.CreateCommitableSessionAsync(_cancellationToken));
+                factory.CreateCommittableSessionAsync(_cancellationToken));
         }
 
         [Fact]
-        public async Task CreateCommitableSessionAsync_CanNotBeginTransaction_DisposesConnection()
+        public async Task CreateCommittableSessionAsync_CanNotBeginTransaction_DisposesConnection()
         {
             // Arrange
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
@@ -185,7 +185,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await Assert.ThrowsAsync<DataException>(() =>
-                factory.CreateCommitableSessionAsync(_isolationLevel, _cancellationToken));
+                factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
 
             // Assert
             Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] { true });

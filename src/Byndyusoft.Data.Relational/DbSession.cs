@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Byndyusoft.Data.Relational
 {
-    public partial class DbSession : ICommitableDbSession
+    public partial class DbSession : ICommittableDbSession
     {
         private readonly DbProviderFactory _providerFactory = default!;
         private readonly string _connectionString = default!;

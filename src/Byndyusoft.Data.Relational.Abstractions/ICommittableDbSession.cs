@@ -7,15 +7,15 @@ namespace Byndyusoft.Data.Relational
     /// <summary>
     ///     Represents a commitable database session.
     /// </summary>
-    public interface ICommitableDbSession : IDbSession
+    public interface ICommittableDbSession : IDbSession
     {
         /// <summary>
-        ///     Gets the isolation level for this <see cref="ICommitableDbSession" />.
+        ///     Gets the isolation level for this <see cref="ICommittableDbSession" />.
         /// </summary>
         IsolationLevel IsolationLevel { get; }
 
         /// <summary>
-        ///     Asynchronously commits the <see cref="ICommitableDbSession" />.
+        ///     Asynchronously commits the <see cref="ICommittableDbSession" />.
         /// </summary>
         /// <param name="cancellationToken">
         ///     An optional token to cancel the asynchronous operation. The default value is
@@ -25,7 +25,7 @@ namespace Byndyusoft.Data.Relational
         Task CommitAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Asynchronously rolls back the <see cref="ICommitableDbSession" />.
+        ///     Asynchronously rolls back the <see cref="ICommittableDbSession" />.
         /// </summary>
         /// <param name="cancellationToken">
         ///     An optional token to cancel the asynchronous operation. The default value is

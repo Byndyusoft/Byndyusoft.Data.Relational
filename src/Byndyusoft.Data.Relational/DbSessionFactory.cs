@@ -26,16 +26,16 @@ namespace Byndyusoft.Data.Relational
             return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
-        public Task<ICommitableDbSession> CreateCommitableSessionAsync(CancellationToken cancellationToken = default)
+        public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
         {
-            return CreateCommitableSessionAsync(IsolationLevel.Unspecified, cancellationToken);
+            return CreateCommittableSessionAsync(IsolationLevel.Unspecified, cancellationToken);
         }
 
-        public virtual Task<ICommitableDbSession> CreateCommitableSessionAsync(
+        public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
             IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
             var session = new DbSession(ProviderFactory, ConnectionString, isolationLevel);
-            return StartAsyncCore<ICommitableDbSession>(session, cancellationToken);
+            return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
         }
 
         private static async Task<T> StartAsyncCore<T>(DbSession session, CancellationToken cancellationToken)

@@ -51,7 +51,7 @@ namespace Byndyusoft.Data.Relational.Example
         private static async Task WriteAsync(IServiceProvider services)
         {
             var sessionFactory = services.GetRequiredService<IDbSessionFactory>();
-            await using var session = await sessionFactory.CreateCommitableSessionAsync();
+            await using var session = await sessionFactory.CreateCommittableSessionAsync();
             await session.ExecuteAsync("CREATE TABLE test (id PRIMARY KEY ASC, name TEXT)");
 
             await session.ExecuteAsync("INSERT INTO test (name) VALUES ('test1');");
