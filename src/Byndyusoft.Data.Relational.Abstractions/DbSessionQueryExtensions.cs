@@ -1,5 +1,4 @@
-﻿using Dapper;
-using System;
+using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -37,8 +36,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -69,8 +68,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -101,8 +100,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -134,8 +133,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -166,8 +165,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -199,8 +198,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -231,8 +230,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -264,8 +263,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -296,8 +295,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -329,8 +328,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -358,8 +357,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -390,8 +389,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -423,8 +422,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -452,8 +451,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -484,8 +483,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -532,8 +531,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);

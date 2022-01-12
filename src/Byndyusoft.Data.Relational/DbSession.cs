@@ -24,13 +24,12 @@ namespace Byndyusoft.Data.Relational
 
         private DbSession()
         {
-            _current.Value ??= new Wrapper();
         }
 
         internal DbSession(DbConnection connection, DbTransaction? transaction = null)
             : this()
         {
-            _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+            _connection = Guard.NotNull(connection, nameof(connection));
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
         }
@@ -148,8 +147,6 @@ namespace Byndyusoft.Data.Relational
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
-
-            Current = this;
 
             _activity = ActivitySource.StartActivity(nameof(DbSession));
             _activity?.SetTag("provider", _providerFactory.GetType().Name);

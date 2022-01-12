@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 
 namespace Byndyusoft.Data.Relational
@@ -15,7 +15,7 @@ namespace Byndyusoft.Data.Relational
             {
                 var wrapper = _current.Value ??= new Wrapper();
                 if (value != null && wrapper.Value != null)
-                    throw new InvalidOperationException("DbSession already exists");
+                    throw new InvalidOperationException($"{nameof(DbSession)} already exists");
 
                 wrapper.Value = value;
             }

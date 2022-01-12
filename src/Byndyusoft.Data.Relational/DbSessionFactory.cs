@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
@@ -10,10 +9,8 @@ namespace Byndyusoft.Data.Relational
     {
         public DbSessionFactory(DbProviderFactory dbProviderFactory, string connectionString)
         {
-            if (string.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException(nameof(connectionString));
-
-            ConnectionString = connectionString;
-            ProviderFactory = dbProviderFactory ?? throw new ArgumentNullException(nameof(dbProviderFactory));
+            ConnectionString = Guard.NotNullOrWhiteSpace(connectionString, nameof(connectionString));
+            ProviderFactory = Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
         }
 
         public DbProviderFactory ProviderFactory { get; }
@@ -22,7 +19,7 @@ namespace Byndyusoft.Data.Relational
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            var session = new DbSession(ProviderFactory, ConnectionString);
+            var session = DbSession.Current = new DbSession(ProviderFactory, ConnectionString);
             return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
@@ -34,7 +31,7 @@ namespace Byndyusoft.Data.Relational
         public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
             IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
-            var session = new DbSession(ProviderFactory, ConnectionString, isolationLevel);
+            var session = DbSession.Current = new DbSession(ProviderFactory, ConnectionString, isolationLevel);
             return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
         }
 
@@ -48,7 +45,7 @@ namespace Byndyusoft.Data.Relational
             }
             catch
             {
-                await session.DisposeAsync().ConfigureAwait(false); ;
+                await session.DisposeAsync().ConfigureAwait(false);
                 throw;
             }
         }

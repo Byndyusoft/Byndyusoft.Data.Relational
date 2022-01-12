@@ -161,8 +161,6 @@ namespace Byndyusoft.Data.Relational.Unit
 
             await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
 
-
-
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
                 factory.CreateCommittableSessionAsync(_cancellationToken));

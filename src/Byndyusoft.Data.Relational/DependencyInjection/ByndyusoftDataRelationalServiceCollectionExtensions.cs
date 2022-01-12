@@ -1,4 +1,4 @@
-﻿using Byndyusoft.Data.Relational;
+using Byndyusoft.Data.Relational;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Data.Common;
@@ -11,9 +11,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
             DbProviderFactory dbProviderFactory, string connectionString)
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-            if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));
-            if (string.IsNullOrWhiteSpace(connectionString)) throw new ArgumentNullException(nameof(connectionString));
+            Guard.NotNull(services, nameof(services));
+            Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.NotNullOrWhiteSpace(connectionString, nameof(connectionString));
 
             services.TryAddTransient<IDbSessionAccessor, DbSessionAccessor>();
             services.TryAddTransient<IDbSessionFactory>(x => new DbSessionFactory(dbProviderFactory, connectionString));
@@ -24,9 +24,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
             DbProviderFactory dbProviderFactory, Func<string> connectionStringFunc)
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
-            if (dbProviderFactory == null) throw new ArgumentNullException(nameof(dbProviderFactory));
-            if (connectionStringFunc == null) throw new ArgumentNullException(nameof(connectionStringFunc));
+            Guard.NotNull(services, nameof(services));
+            Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.NotNull(connectionStringFunc, nameof(connectionStringFunc));
 
             return services.AddRelationalDb(dbProviderFactory, connectionStringFunc());
         }

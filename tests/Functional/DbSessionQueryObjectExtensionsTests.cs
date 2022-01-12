@@ -1,6 +1,6 @@
-using System;
 using Dapper;
 using Microsoft.Data.Sqlite;
+using System;
 using System.Data.Common;
 using System.IO;
 using System.Linq;

@@ -1,4 +1,5 @@
-﻿using Moq;
+using Moq;
+using System;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit
@@ -15,7 +16,7 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public void Session_CallsAccessor()
+        public void DbSession_CallsAccessor()
         {
             // Arrange
             using var session = Mock.Of<IDbSession>();
@@ -26,6 +27,20 @@ namespace Byndyusoft.Data.Relational.Unit
 
             // Assert
             Assert.Same(session, result);
+        }
+
+
+        [Fact]
+        public void DbSession_NoCurrentOne_ThrowsException()
+        {
+            // Arrange
+            Mock.Get(_sessionAccessor).SetupGet(x => x.DbSession).Returns(null as IDbSession);
+
+            // Act
+            var exception = Assert.Throws<InvalidOperationException>(() => _repository.DbSession);
+
+            // Assert
+            Assert.Equal($"There is no current {nameof(DbSession)}", exception.Message);
         }
 
         private class DbSessionConsumerImpl : DbSessionConsumer
