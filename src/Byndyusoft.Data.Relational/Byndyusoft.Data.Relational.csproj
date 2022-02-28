@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageId>Byndyusoft.Data.Relational</PackageId>
@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj" />
+		<ProjectReference Include="$(SolutionDir)src\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>
