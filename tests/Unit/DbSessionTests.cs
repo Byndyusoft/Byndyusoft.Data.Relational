@@ -1,10 +1,10 @@
-using Moq;
-using Moq.Protected;
 using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using Moq;
+using Moq.Protected;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit
@@ -17,8 +17,8 @@ namespace Byndyusoft.Data.Relational.Unit
 
         public DbSessionTests()
         {
-            _transaction = new Mock<DbTransaction> { CallBase = true }.Object;
-            _connection = new Mock<DbConnection> { CallBase = true }.Object;
+            _transaction = new Mock<DbTransaction> {CallBase = true}.Object;
+            _connection = new Mock<DbConnection> {CallBase = true}.Object;
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace Byndyusoft.Data.Relational.Unit
             session.Dispose();
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
         [Fact]
@@ -113,13 +113,13 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             using var session = new DbSession(_connection, _transaction);
-            Mock.Get(_transaction).Protected().Setup("Dispose", new object[] { true }).Verifiable();
+            Mock.Get(_transaction).Protected().Setup("Dispose", new object[] {true}).Verifiable();
 
             // Act
             session.Dispose();
 
             // Assert
-            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace Byndyusoft.Data.Relational.Unit
             await session.DisposeAsync();
 
             // Assert
-            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
         [Fact]
@@ -167,13 +167,13 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             await using var session = new DbSession(_connection, _transaction);
-            Mock.Get(_transaction).Protected().Setup("Dispose", new object[] { true }).Verifiable();
+            Mock.Get(_transaction).Protected().Setup("Dispose", new object[] {true}).Verifiable();
 
             // Act
             await session.DisposeAsync();
 
             // Assert
-            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] { true });
+            Mock.Get(_transaction).Protected().Verify("Dispose", Times.Once(), new object[] {true});
         }
 
         [Fact]

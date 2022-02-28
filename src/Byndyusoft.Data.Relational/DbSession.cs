@@ -10,17 +10,17 @@ namespace Byndyusoft.Data.Relational
 {
     public partial class DbSession : ICommittableDbSession
     {
-        private readonly DbProviderFactory _providerFactory = default!;
+        private static readonly ActivitySource ActivitySource = DbSessionInstrumentationOptions.CreateActivitySource();
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
-        private static readonly ActivitySource ActivitySource = DbSessionInstrumentationOptions.CreateActivitySource();
+        private readonly DbProviderFactory _providerFactory = default!;
+        private Activity? _activity;
 
         private bool _completed;
         private DbConnection? _connection;
         private bool _disposed;
         private DbSessionItems? _items;
         private DbTransaction? _transaction;
-        private Activity? _activity;
 
         private DbSession()
         {
@@ -100,6 +100,38 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
+        public async Task CommitAsync(CancellationToken cancellationToken = default)
+        {
+            ThrowIfDisposed();
+
+            if (_completed)
+                return;
+
+            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Committing));
+
+            if (_transaction != null) await _transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+
+            _completed = true;
+
+            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Commited));
+        }
+
+        public async Task RollbackAsync(CancellationToken cancellationToken = default)
+        {
+            ThrowIfDisposed();
+
+            if (_completed)
+                return;
+
+            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RollingBack));
+
+            if (_transaction != null) await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+
+            _completed = true;
+
+            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RolledBack));
+        }
+
         public void Finish()
         {
             ThrowIfDisposed();
@@ -158,44 +190,6 @@ namespace Byndyusoft.Data.Relational
             _transaction = await BeginTransactionAsync(_connection, cancellationToken).ConfigureAwait(false);
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Started));
-        }
-
-        public async Task CommitAsync(CancellationToken cancellationToken = default)
-        {
-            ThrowIfDisposed();
-
-            if (_completed)
-                return;
-
-            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Committing));
-
-            if (_transaction != null)
-            {
-                await _transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
-            }
-
-            _completed = true;
-
-            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Commited));
-        }
-
-        public async Task RollbackAsync(CancellationToken cancellationToken = default)
-        {
-            ThrowIfDisposed();
-
-            if (_completed)
-                return;
-
-            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RollingBack));
-
-            if (_transaction != null)
-            {
-                await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
-            }
-
-            _completed = true;
-
-            _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RolledBack));
         }
 
         ~DbSession()

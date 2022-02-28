@@ -1,5 +1,5 @@
-using Moq;
 using System;
+using Moq;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit

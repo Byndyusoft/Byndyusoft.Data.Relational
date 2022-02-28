@@ -1,9 +1,9 @@
-using Dapper;
 using System.Collections.Generic;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace Byndyusoft.Data.Relational
 {

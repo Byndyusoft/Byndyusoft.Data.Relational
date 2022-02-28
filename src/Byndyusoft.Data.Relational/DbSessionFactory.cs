@@ -41,7 +41,7 @@ namespace Byndyusoft.Data.Relational
             try
             {
                 await session.StartAsync(cancellationToken).ConfigureAwait(false);
-                return (T)(IDbSession)session;
+                return (T) (IDbSession) session;
             }
             catch
             {

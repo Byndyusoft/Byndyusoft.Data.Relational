@@ -1,17 +1,17 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 namespace Byndyusoft.Data.Relational.Example
 {
     public static class Program
     {
-        private static readonly ActivitySource Activity = new ActivitySource(nameof(Program));
         private const string FileName = "test.db";
+        private static readonly ActivitySource Activity = new ActivitySource(nameof(Program));
 
         static Program()
         {

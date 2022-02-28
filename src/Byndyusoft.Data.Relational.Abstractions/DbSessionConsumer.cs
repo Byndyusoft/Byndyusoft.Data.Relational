@@ -21,6 +21,8 @@ namespace Byndyusoft.Data.Relational
         /// <summary>
         ///     Gets the current <see cref="IDbSession" />.
         /// </summary>
-        protected IDbSession DbSession => _sessionAccessor.DbSession ?? throw new InvalidOperationException($"There is no current {nameof(DbSession)}");
+        protected IDbSession DbSession => _sessionAccessor.DbSession ??
+                                          throw new InvalidOperationException(
+                                              $"There is no current {nameof(DbSession)}");
     }
 }
