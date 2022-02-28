@@ -16,7 +16,7 @@ namespace Byndyusoft.Data.Relational.Example
                 builder
                     .SetSampler(new AlwaysOnSampler())
                     .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(typeof(Startup).Assembly.GetName().Name))
-                    .AddDbSessions()
+                    .AddDbSessionInstrumentation()
                     .AddConsoleExporter()
                     .AddSource(nameof(Program))
                     .AddJaegerExporter(jaeger =>

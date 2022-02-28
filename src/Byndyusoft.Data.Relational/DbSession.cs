@@ -13,7 +13,7 @@ namespace Byndyusoft.Data.Relational
         private readonly DbProviderFactory _providerFactory = default!;
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
-        private static readonly ActivitySource ActivitySource = DbSessionTracingOptions.CreateActivitySource();
+        private static readonly ActivitySource ActivitySource = DbSessionInstrumentationOptions.CreateActivitySource();
 
         private bool _completed;
         private DbConnection? _connection;

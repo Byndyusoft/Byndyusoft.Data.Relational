@@ -7,7 +7,7 @@ namespace Byndyusoft.Data.Relational
     /// Options to configure DbSession's support for OpenTelemetry tracing.
     /// Currently no options are available.
     /// </summary>
-    public class DbSessionTracingOptions
+    public class DbSessionInstrumentationOptions
     {
         private static readonly AssemblyName AssemblyName = typeof(DbSession).Assembly.GetName();
         private static readonly string Version = AssemblyName.Version!.ToString();

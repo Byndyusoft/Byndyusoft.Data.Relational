@@ -12,9 +12,15 @@ namespace OpenTelemetry.Trace
         /// <summary>
         /// Subscribes to the DbSession activity source to enable OpenTelemetry tracing.
         /// </summary>
+        [Obsolete("Use AddDbSessionInstrumentation")]
         public static TracerProviderBuilder AddDbSessions(
             this TracerProviderBuilder builder,
-            Action<DbSessionTracingOptions>? options = null)
-            => builder.AddSource(DbSessionTracingOptions.ActivitySourceName);
+            Action<DbSessionInstrumentationOptions>? options = null) =>
+            AddDbSessionInstrumentation(builder, options);
+
+        public static TracerProviderBuilder AddDbSessionInstrumentation(
+            this TracerProviderBuilder builder,
+            Action<DbSessionInstrumentationOptions>? options = null)
+            => builder.AddSource(DbSessionInstrumentationOptions.ActivitySourceName);
     }
 }
