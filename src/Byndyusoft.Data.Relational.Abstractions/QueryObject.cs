@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -16,7 +16,7 @@ namespace Byndyusoft.Data.Relational
         /// <exception cref="ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
         public QueryObject(string sql, object? parameters = null)
         {
-            Sql = !string.IsNullOrWhiteSpace(sql) ? sql : throw new ArgumentNullException(nameof(sql));
+            Sql = Guard.NotNullOrWhiteSpace(sql, nameof(sql));
             Params = parameters;
         }
 
@@ -50,8 +50,6 @@ namespace Byndyusoft.Data.Relational
         /// <returns>A new instance of the <see cref="QueryObject" /> class.</returns>
         public static QueryObject Create(string sql, object? parameters = null)
         {
-            if (string.IsNullOrWhiteSpace(sql)) throw new ArgumentNullException(nameof(sql));
-
             return new QueryObject(sql, parameters);
         }
     }

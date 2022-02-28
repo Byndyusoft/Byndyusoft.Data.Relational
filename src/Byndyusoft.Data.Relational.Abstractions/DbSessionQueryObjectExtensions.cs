@@ -1,9 +1,8 @@
-﻿using Dapper;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -31,11 +30,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.QueryAsync(queryObject.Sql, queryObject.Params, commandTimeout,
                 commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
@@ -60,8 +59,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.QueryAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
                 cancellationToken).ConfigureAwait(false);
@@ -86,11 +85,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session
                 .QuerySingleAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
@@ -116,8 +115,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session
                 .QuerySingleAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType, cancellationToken)
@@ -143,11 +142,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.QuerySingleOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout,
                 commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
@@ -172,8 +171,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session
                 .QuerySingleOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
@@ -199,11 +198,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session
                 .QueryFirstAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
@@ -229,8 +228,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session
                 .QueryFirstAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType, cancellationToken)
@@ -256,11 +255,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.QueryFirstOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout,
                 commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
@@ -285,8 +284,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session
                 .QueryFirstOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
@@ -312,8 +311,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.ExecuteAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
                 cancellationToken).ConfigureAwait(false);
@@ -338,11 +337,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.ExecuteScalarAsync(queryObject.Sql, queryObject.Params, commandTimeout,
                 commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
@@ -367,8 +366,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.ExecuteScalarAsync(queryObject.Sql, queryObject.Params, commandTimeout,
                 commandType,
@@ -394,8 +393,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return await session.QueryMultipleAsync(queryObject.Sql, queryObject.Params, commandTimeout,
                 commandType,
@@ -421,11 +420,11 @@ namespace Byndyusoft.Data.Relational
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-             ITypeDeserializer<T>? typeDeserializer = null,
+            ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return session.Query(queryObject.Sql, queryObject.Params, commandTimeout, commandType, typeDeserializer,
                 cancellationToken);
@@ -450,8 +449,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            if (session == null) throw new ArgumentNullException(nameof(session));
-            if (queryObject == null) throw new ArgumentNullException(nameof(queryObject));
+            Guard.NotNull(session, nameof(session));
+            Guard.NotNull(queryObject, nameof(queryObject));
 
             return session.Query(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
                 cancellationToken);

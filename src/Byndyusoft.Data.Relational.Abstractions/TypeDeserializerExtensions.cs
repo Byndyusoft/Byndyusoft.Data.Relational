@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,14 +17,14 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T> deserializer)
         {
             var rows = await task.ConfigureAwait(false);
-            return rows.Select(row => (T)DeserializeCore<T>(deserializer, row));
+            return rows.Select(row => (T) DeserializeCore<T>(deserializer, row));
         }
 
         private static T DeserializeCore<T>(ITypeDeserializer<T> deserializer, dynamic? row)
         {
             if (row == null)
                 return default!;
-            return deserializer.Deserialize((IDictionary<string, object>)row);
+            return deserializer.Deserialize((IDictionary<string, object>) row);
         }
     }
 }

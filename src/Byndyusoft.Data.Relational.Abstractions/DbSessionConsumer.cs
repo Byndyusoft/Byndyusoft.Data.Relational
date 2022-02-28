@@ -1,4 +1,6 @@
-﻿namespace Byndyusoft.Data.Relational
+using System;
+
+namespace Byndyusoft.Data.Relational
 {
     /// <summary>
     ///     Abstract class that consumes <see cref="IDbSession" />.
@@ -13,12 +15,14 @@
         /// <param name="sessionAccessor">An instance of <see cref="IDbSessionAccessor" />.</param>
         protected DbSessionConsumer(IDbSessionAccessor sessionAccessor)
         {
-            _sessionAccessor = sessionAccessor;
+            _sessionAccessor = Guard.NotNull(sessionAccessor, nameof(sessionAccessor));
         }
 
         /// <summary>
         ///     Gets the current <see cref="IDbSession" />.
         /// </summary>
-        protected IDbSession? DbSession => _sessionAccessor.DbSession;
+        protected IDbSession DbSession => _sessionAccessor.DbSession ??
+                                          throw new InvalidOperationException(
+                                              $"There is no current {nameof(DbSession)}");
     }
 }

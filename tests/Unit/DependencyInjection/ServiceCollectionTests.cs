@@ -1,7 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using System;
 using System.Data.Common;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
