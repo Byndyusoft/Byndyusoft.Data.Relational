@@ -38,10 +38,14 @@ jobs:
         run: dotnet restore
 
       - name: build
-        run: dotnet build
+        run: dotnet build --no-restore
 
       - name: test
-        run: |
-          dotnet test --framework netcoreapp3.1
-          dotnet test --framework net5.0
-          dotnet test --framework net6.0
+        run: dotnet test --no-restore --verbosity normal
+
+      - name: code analysis
+        uses: dotnet/code-analysis@v1
+        if: ${{ matrix.os == 'windows-latest' }}
+        with:
+          build-breaking: true
+          all-categories: all
