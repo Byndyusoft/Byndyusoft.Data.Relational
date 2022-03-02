@@ -41,10 +41,3 @@ jobs:
 
       - name: test
         run: dotnet test --no-restore --verbosity normal
-
-      - name: code analysis
-        uses: dotnet/code-analysis@v1
-        if: ${{ matrix.os == 'windows-latest' }}
-        with:
-          build-breaking: true
-          all-categories: all
