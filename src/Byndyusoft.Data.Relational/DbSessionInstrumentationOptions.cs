@@ -15,7 +15,7 @@ namespace Byndyusoft.Data.Relational
 
         internal static ActivitySource CreateActivitySource()
         {
-            return new ActivitySource(ActivitySourceName, Version);
+            return new(ActivitySourceName, Version);
         }
     }
 }
