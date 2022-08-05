@@ -252,6 +252,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Arrange
             await using var session = new DbSession(_connection, _transaction);
+            await session.StartAsync(_cancellationToken);
             Mock.Get(_transaction).Setup(x => x.Rollback());
 
             // Act

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 
@@ -23,5 +23,15 @@ namespace Byndyusoft.Data.Relational
         ///     Gets a collection of key/value pairs that provide additional information about the <see cref="IDbSession" />.
         /// </summary>
         IDictionary<string, object> Items { get; }
+
+        /// <summary>
+        ///     Occurs when the session becomes finished.
+        /// </summary>
+        event DbSessionFinishedEventHandler Finished;
+
+        /// <summary>
+        ///     Gets a string that describes the state of the <see cref="IDbSession"/>.
+        /// </summary>
+        public DbSessionState State { get; }
     }
 }
