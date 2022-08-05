@@ -1,3 +1,4 @@
+using CommunityToolkit.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -29,7 +30,9 @@ namespace Byndyusoft.Data.Relational
         internal DbSession(DbConnection connection, DbTransaction? transaction = null)
             : this()
         {
-            _connection = Guard.NotNull(connection, nameof(connection));
+            Guard.IsNotNull(connection, nameof(connection));
+
+            _connection = connection;
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
         }

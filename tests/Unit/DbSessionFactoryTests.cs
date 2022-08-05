@@ -45,16 +45,17 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void Constructor_NullConnectionString_ThrowsException(string connectionString)
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentException))]
+        [InlineData(" ", typeof(ArgumentException))]
+        public void Constructor_NullConnectionString_ThrowsException(string connectionString, Type exceptionType)
         {
             // Act
             var exception =
-                Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(_dbProviderFactory, connectionString));
+                Assert.ThrowsAny<ArgumentException>(() => new DbSessionFactory(_dbProviderFactory, connectionString));
 
             // Assert
-            Assert.NotNull(exception);
+            Assert.IsType(exceptionType, exception);
             Assert.Equal("connectionString", exception.ParamName);
         }
 

@@ -1,4 +1,5 @@
 using System;
+using CommunityToolkit.Diagnostics;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -16,7 +17,9 @@ namespace Byndyusoft.Data.Relational
         /// <exception cref="ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
         public QueryObject(string sql, object? parameters = null)
         {
-            Sql = Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+
+            Sql = sql;
             Params = parameters;
         }
 

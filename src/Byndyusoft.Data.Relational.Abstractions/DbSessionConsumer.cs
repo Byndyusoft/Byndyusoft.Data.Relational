@@ -1,4 +1,5 @@
 using System;
+using CommunityToolkit.Diagnostics;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -15,7 +16,9 @@ namespace Byndyusoft.Data.Relational
         /// <param name="sessionAccessor">An instance of <see cref="IDbSessionAccessor" />.</param>
         protected DbSessionConsumer(IDbSessionAccessor sessionAccessor)
         {
-            _sessionAccessor = Guard.NotNull(sessionAccessor, nameof(sessionAccessor));
+            Guard.IsNotNull(sessionAccessor, nameof(sessionAccessor));
+
+            _sessionAccessor = sessionAccessor;
         }
 
         /// <summary>

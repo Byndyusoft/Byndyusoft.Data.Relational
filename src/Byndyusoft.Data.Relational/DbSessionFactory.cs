@@ -2,6 +2,7 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
 
 namespace Byndyusoft.Data.Relational
 {
@@ -9,8 +10,11 @@ namespace Byndyusoft.Data.Relational
     {
         public DbSessionFactory(DbProviderFactory dbProviderFactory, string connectionString)
         {
-            ConnectionString = Guard.NotNullOrWhiteSpace(connectionString, nameof(connectionString));
-            ProviderFactory = Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+
+            ConnectionString = connectionString;
+            ProviderFactory = dbProviderFactory;
         }
 
         public DbProviderFactory ProviderFactory { get; }

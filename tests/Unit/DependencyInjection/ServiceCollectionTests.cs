@@ -47,17 +47,19 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void AddRelationalDb_NullConnectionString_ThrowsException(string connectionString)
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentException))]
+        [InlineData(" ", typeof(ArgumentException))]
+        public void AddRelationalDb_NullConnectionString_ThrowsException(string connectionString, Type exceptionType)
         {
             // Act
             // ReSharper disable once ExpressionIsAlwaysNull
             var exception =
-                Assert.Throws<ArgumentNullException>(() =>
+                Assert.ThrowsAny<ArgumentException>(() =>
                     _services.AddRelationalDb(_dbProviderFactory, connectionString));
 
             // Assert
+            Assert.IsType(exceptionType, exception);
             Assert.Equal("connectionString", exception.ParamName);
         }
 
@@ -131,17 +133,18 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void AddRelationalDb_Func_NullConnectionString_ThrowsException(string connectionString)
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentException))]
+        [InlineData(" ", typeof(ArgumentException))]
+        public void AddRelationalDb_Func_NullConnectionString_ThrowsException(string connectionString, Type exceptionType)
         {
             // Act
-            // ReSharper disable once ExpressionIsAlwaysNull
             var exception =
-                Assert.Throws<ArgumentNullException>(() =>
+                Assert.ThrowsAny<ArgumentException>(() =>
                     _services.AddRelationalDb(_dbProviderFactory, () => connectionString));
 
             // Assert
+            Assert.IsType(exceptionType, exception);
             Assert.Equal("connectionString", exception.ParamName);
         }
 

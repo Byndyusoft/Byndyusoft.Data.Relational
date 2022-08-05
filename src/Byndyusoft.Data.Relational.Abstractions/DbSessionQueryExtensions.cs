@@ -3,6 +3,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
 using Dapper;
 
 namespace Byndyusoft.Data.Relational
@@ -36,8 +37,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -68,8 +69,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -100,8 +101,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -133,8 +134,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -165,8 +166,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -198,8 +199,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -230,8 +231,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -263,8 +264,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -295,8 +296,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -328,8 +329,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -357,8 +358,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -389,8 +390,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -422,8 +423,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -451,8 +452,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -483,8 +484,8 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
@@ -531,8 +532,8 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            Guard.NotNull(session, nameof(session));
-            Guard.NotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
