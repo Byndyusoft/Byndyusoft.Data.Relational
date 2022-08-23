@@ -5,7 +5,6 @@ namespace Byndyusoft.Data.Relational
 {
     public partial class DbSession
     {
-        // ReSharper disable once InconsistentNaming
         private static readonly AsyncLocal<Wrapper?> _current = new();
 
         internal static DbSession? Current

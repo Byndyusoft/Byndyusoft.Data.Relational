@@ -32,6 +32,6 @@ namespace Byndyusoft.Data.Relational
         /// <summary>
         ///     Gets a string that describes the state of the <see cref="IDbSession"/>.
         /// </summary>
-        public DbSessionState State { get; }
+        DbSessionState State { get; }
     }
 }
