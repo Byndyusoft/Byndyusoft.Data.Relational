@@ -67,8 +67,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddOptions();
             services.Configure(name, configureOptions);
 
-            services.TryAddTransient<IDbSessionAccessor, DbSessionAccessor>();
-            services.TryAddTransient<IDbSessionFactory, DbSessionFactory>();
+            services.TryAddSingleton<IDbSessionAccessor, DbSessionAccessor>();
+            services.TryAddSingleton<IDbSessionFactory, DbSessionFactory>();
 
             return services;
         }
