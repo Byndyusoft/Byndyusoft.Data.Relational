@@ -75,6 +75,15 @@ namespace Byndyusoft.Data.Relational
             GC.SuppressFinalize(this);
         }
 
+        public string Name
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _name;
+            }
+        }
+
         public DbConnection Connection
         {
             get

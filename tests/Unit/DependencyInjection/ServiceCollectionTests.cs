@@ -1,6 +1,7 @@
 using System;
 using System.Data.Common;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -81,16 +82,16 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         public void AddRelationalDb_Registers_SessionFactory()
         {
             // Arrange
-            _services.AddRelationalDb(_dbProviderFactory, _connectionString);
+            const string name = "name";
+            _services.AddRelationalDb(name, _dbProviderFactory, _connectionString);
 
             // Act
-            var service = _services.BuildServiceProvider().GetService<IDbSessionFactory>();
+            var options = _services.BuildServiceProvider().GetService<IOptionsMonitor<DbSessionOptions>>();
 
             // Assert
-            Assert.NotNull(service);
-            var sessionFactory = Assert.IsType<DbSessionFactory>(service);
-            Assert.Equal(_dbProviderFactory, sessionFactory.ProviderFactory);
-            Assert.Equal(_connectionString, sessionFactory.ConnectionString);
+            Assert.NotNull(options);
+            Assert.Equal(_dbProviderFactory, options.Get(name).DbProviderFactory);
+            Assert.Equal(_connectionString, options.Get(name).ConnectionString);
         }
 
         [Fact]
@@ -150,16 +151,16 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         public void AddRelationalDb_Func_Registers_SessionFactory()
         {
             // Arrange
-            _services.AddRelationalDb(_dbProviderFactory, () => _connectionString);
+            const string name = "name";
+            _services.AddRelationalDb(name, _dbProviderFactory, () => _connectionString);
 
             // Act
-            var service = _services.BuildServiceProvider().GetService<IDbSessionFactory>();
+            var options = _services.BuildServiceProvider().GetService<IOptionsMonitor<DbSessionOptions>>();
 
             // Assert
-            Assert.NotNull(service);
-            var sessionFactory = Assert.IsType<DbSessionFactory>(service);
-            Assert.Equal(_dbProviderFactory, sessionFactory.ProviderFactory);
-            Assert.Equal(_connectionString, sessionFactory.ConnectionString);
+            Assert.NotNull(options);
+            Assert.Equal(_dbProviderFactory, options.Get(name).DbProviderFactory);
+            Assert.Equal(_connectionString, options.Get(name).ConnectionString);
         }
     }
 }

@@ -1,5 +1,4 @@
 using System.Data;
-using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
@@ -17,10 +16,6 @@ namespace Byndyusoft.Data.Relational
 
             _options = options;
         }
-
-        public DbProviderFactory ProviderFactory => _options.CurrentValue.DbProviderFactory;
-
-        public string ConnectionString => _options.CurrentValue.ConnectionString;
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {

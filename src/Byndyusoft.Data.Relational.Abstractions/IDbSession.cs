@@ -10,6 +10,11 @@ namespace Byndyusoft.Data.Relational
     public interface IDbSession : IDisposable, IAsyncDisposable
     {
         /// <summary>
+        ///     Gets a string that describes the name of the <see cref="IDbSession" />.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         ///     Gets the <see cref="DbConnection" /> used by this <see cref="IDbSession" />.
         /// </summary>
         DbConnection Connection { get; }
