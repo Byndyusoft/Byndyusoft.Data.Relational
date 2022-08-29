@@ -9,6 +9,7 @@ namespace Byndyusoft.Data.Relational
     public abstract class DbSessionConsumer
     {
         private readonly IDbSessionAccessor _sessionAccessor;
+        private SessionIndexer? _sessionIndexer;
 
         /// <summary>
         ///     Initializes a new instance of <see cref="DbSessionConsumer" /> with specified <paramref name="sessionAccessor" />.
@@ -27,5 +28,25 @@ namespace Byndyusoft.Data.Relational
         protected IDbSession DbSession => _sessionAccessor.DbSession ??
                                           throw new InvalidOperationException(
                                               $"There is no current {nameof(DbSession)}");
+
+        /// <summary>
+        ///     Gets the current <see cref="DbSessions" /> indexer.
+        /// </summary>
+        protected SessionIndexer DbSessions => _sessionIndexer ??= new SessionIndexer(_sessionAccessor);
+
+        protected class SessionIndexer
+        {
+            private readonly IDbSessionAccessor _sessionAccessor;
+
+            public SessionIndexer(IDbSessionAccessor sessionAccessor)
+            {
+                _sessionAccessor = sessionAccessor;
+            }
+
+            public IDbSession this[string name] =>
+                _sessionAccessor.DbSessions[name] ??
+                throw new InvalidOperationException(
+                    $"There is no current {nameof(DbSession)} with name {name}");
+        }
     }
 }

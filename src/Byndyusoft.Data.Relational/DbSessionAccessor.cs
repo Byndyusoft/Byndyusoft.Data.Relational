@@ -1,7 +1,11 @@
-﻿namespace Byndyusoft.Data.Relational
+using Microsoft.Extensions.Options;
+
+namespace Byndyusoft.Data.Relational
 {
     public class DbSessionAccessor : IDbSessionAccessor
     {
-        IDbSession? IDbSessionAccessor.DbSession => DbSession.Current;
+        public IDbSession? DbSession => DbSessions[Options.DefaultName];
+        
+        public IDbSessionsIndexer DbSessions => Relational.DbSession.Current;
     }
 }

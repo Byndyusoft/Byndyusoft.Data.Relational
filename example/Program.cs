@@ -11,7 +11,7 @@ namespace Byndyusoft.Data.Relational.Example
     public static class Program
     {
         private const string FileName = "test.db";
-        private static readonly ActivitySource Activity = new ActivitySource(nameof(Program));
+        private static readonly ActivitySource Activity = new(nameof(Program));
 
         static Program()
         {
@@ -24,14 +24,14 @@ namespace Byndyusoft.Data.Relational.Example
             await File.Create(FileName).DisposeAsync();
 
             using var host = Host.CreateDefaultBuilder(args)
-                .ConfigureServices((context, services) => new Startup().ConfigureServices(services, FileName))
+                .ConfigureServices((_, services) => new Startup().ConfigureServices(services, FileName))
                 .Build();
 
             await host.StartAsync();
 
             using (var activity = Activity.StartActivity(nameof(Main)))
             {
-                Console.WriteLine(activity?.SpanId);
+                //Console.WriteLine(activity?.SpanId);
 
                 try
                 {

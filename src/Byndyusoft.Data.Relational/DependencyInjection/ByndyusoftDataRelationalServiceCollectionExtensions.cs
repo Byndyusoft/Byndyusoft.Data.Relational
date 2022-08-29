@@ -16,10 +16,21 @@ namespace Microsoft.Extensions.DependencyInjection
             Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
             Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
 
-            services.TryAddTransient<IDbSessionAccessor, DbSessionAccessor>();
-            services.TryAddTransient<IDbSessionFactory>(_ => new DbSessionFactory(dbProviderFactory, connectionString));
+            return services.AddRelationalDb(Options.Options.DefaultName, dbProviderFactory, connectionString);
+        }
 
-            return services;
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            string name, DbProviderFactory dbProviderFactory, string connectionString)
+        {
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
+
+            return services.AddRelationalDb(name, options =>
+            {
+                options.DbProviderFactory = dbProviderFactory;
+                options.ConnectionString = connectionString;
+            });
         }
 
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
@@ -29,7 +40,37 @@ namespace Microsoft.Extensions.DependencyInjection
             Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
             Guard.IsNotNull(connectionStringFunc, nameof(connectionStringFunc));
 
-            return services.AddRelationalDb(dbProviderFactory, connectionStringFunc());
+            return services.AddRelationalDb(Options.Options.DefaultName, dbProviderFactory, connectionStringFunc);
+        }
+
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            string name, DbProviderFactory dbProviderFactory, Func<string> connectionStringFunc)
+        {
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNull(connectionStringFunc, nameof(connectionStringFunc));
+
+            return services.AddRelationalDb(name, options =>
+            {
+                options.DbProviderFactory = dbProviderFactory;
+                options.ConnectionString = connectionStringFunc();
+            });
+        }
+
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            string name, Action<DbSessionOptions> configureOptions)
+        {
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(name, nameof(name));
+            Guard.IsNotNull(configureOptions, nameof(configureOptions));
+
+            services.AddOptions();
+            services.Configure(name, configureOptions);
+
+            services.TryAddTransient<IDbSessionAccessor, DbSessionAccessor>();
+            services.TryAddTransient<IDbSessionFactory, DbSessionFactory>();
+
+            return services;
         }
     }
 }

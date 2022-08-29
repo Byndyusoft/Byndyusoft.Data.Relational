@@ -6,16 +6,18 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace Byndyusoft.Data.Relational
 {
-    public partial class DbSession : ICommittableDbSession
+    public class DbSession : ICommittableDbSession
     {
-        private static readonly ActivitySource ActivitySource = DbSessionInstrumentationOptions.CreateActivitySource();
+        private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
         private readonly DbProviderFactory _providerFactory = default!;
         private Activity? _activity;
+        private readonly string _name = default!;
 
         private DbConnection? _connection;
         private DbSessionItems? _items;
@@ -31,6 +33,7 @@ namespace Byndyusoft.Data.Relational
         {
             Guard.IsNotNull(connection, nameof(connection));
 
+            _name = Options.DefaultName;
             _connection = connection;
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
@@ -38,15 +41,17 @@ namespace Byndyusoft.Data.Relational
             _state = DbSessionState.Active;
         }
 
-        internal DbSession(DbProviderFactory providerFactory, string connectionString,
-            IsolationLevel? isolationLevel = null)
-            : this()
+        internal DbSession(string name, DbSessionOptions options, IsolationLevel? isolationLevel = null)
         {
-            _providerFactory = providerFactory;
-            _connectionString = connectionString;
+            Guard.IsNotNull(options, nameof(options));
+            Guard.IsNotNull(name, nameof(name));
+            
+            _providerFactory = options.DbProviderFactory;
+            _connectionString = options.ConnectionString;
             _isolationLevel = isolationLevel;
+            _name = name;
         }
-
+        
         public async ValueTask DisposeAsync()
         {
             if (_state == DbSessionState.Disposed)
@@ -115,6 +120,8 @@ namespace Byndyusoft.Data.Relational
 
         public event DbSessionFinishedEventHandler? Finished;
 
+        internal static readonly DbSessionStorage Current = new();
+
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
@@ -165,7 +172,7 @@ namespace Byndyusoft.Data.Relational
 
             Finished?.Invoke(this, new DbSessionFinishedEventArgs(_state));
 
-            Current = null;
+            Current[_name] = null;
         }
 
         public async Task FinishAsync()
@@ -192,7 +199,7 @@ namespace Byndyusoft.Data.Relational
 
             Finished?.Invoke(this, new DbSessionFinishedEventArgs(_state));
 
-            Current = null;
+            Current[_name] = null;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
@@ -202,7 +209,7 @@ namespace Byndyusoft.Data.Relational
             if (_state == DbSessionState.Active)
                 return;
 
-            _activity = ActivitySource.StartActivity(nameof(DbSession));
+            _activity = _activitySource.StartActivity(nameof(DbSession));
             _activity?.SetTag("provider", _providerFactory.GetType().Name);
             _activity?.SetTag("isolationlevel", _isolationLevel);
 

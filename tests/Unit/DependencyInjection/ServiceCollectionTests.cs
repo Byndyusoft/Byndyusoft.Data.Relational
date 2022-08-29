@@ -132,22 +132,6 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
             Assert.Equal("connectionStringFunc", exception.ParamName);
         }
 
-        [Theory]
-        [InlineData(null, typeof(ArgumentNullException))]
-        [InlineData("", typeof(ArgumentException))]
-        [InlineData(" ", typeof(ArgumentException))]
-        public void AddRelationalDb_Func_NullConnectionString_ThrowsException(string connectionString, Type exceptionType)
-        {
-            // Act
-            var exception =
-                Assert.ThrowsAny<ArgumentException>(() =>
-                    _services.AddRelationalDb(_dbProviderFactory, () => connectionString));
-
-            // Assert
-            Assert.IsType(exceptionType, exception);
-            Assert.Equal("connectionString", exception.ParamName);
-        }
-
         [Fact]
         public void AddRelationalDb_Func_Registers_SessionAccessor()
         {
