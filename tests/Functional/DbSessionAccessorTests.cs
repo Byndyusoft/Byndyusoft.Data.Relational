@@ -21,7 +21,9 @@ namespace Byndyusoft.Data.Relational.Functional
             await using var connection = new SqliteConnection(connectionString);
             await connection.ExecuteAsync("CREATE TABLE test (id INT, name TEXT)");
 
-            _sessionFactory = new DbSessionFactory(SqliteFactory.Instance, connectionString);
+
+            _sessionFactory =
+                new DbSessionFactory(new DbSessionOptionsMonitor(SqliteFactory.Instance, connectionString));
             _service = new Service();
         }
 

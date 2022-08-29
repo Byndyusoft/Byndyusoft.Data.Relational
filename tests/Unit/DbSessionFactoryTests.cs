@@ -15,9 +15,11 @@ namespace Byndyusoft.Data.Relational.Unit
         private readonly DbConnection _connection;
         private readonly string _connectionString;
         private readonly DbProviderFactory _dbProviderFactory;
+        private readonly DbSessionFactory _factory;
         private readonly IsolationLevel _isolationLevel;
         private readonly IDbSessionAccessor _sessionAccessor;
         private readonly DbTransaction _transaction;
+
 
         public DbSessionFactoryTests()
         {
@@ -30,33 +32,21 @@ namespace Byndyusoft.Data.Relational.Unit
             _connection = new Mock<DbConnection> {CallBase = true}.Object;
             _transaction = new Mock<DbTransaction> {CallBase = true}.Object;
 
+            var options = new DbSessionOptionsMonitor(_dbProviderFactory, _connectionString);
+            _factory = new DbSessionFactory(options);
+
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
         }
 
         [Fact]
-        public void Constructor_NullProvider_ThrowsException()
+        public void Constructor_NullOptions_ThrowsException()
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(null, _connectionString));
+            var exception = Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(null!));
 
             // Assert
             Assert.NotNull(exception);
-            Assert.Equal("dbProviderFactory", exception.ParamName);
-        }
-
-        [Theory]
-        [InlineData(null, typeof(ArgumentNullException))]
-        [InlineData("", typeof(ArgumentException))]
-        [InlineData(" ", typeof(ArgumentException))]
-        public void Constructor_NullConnectionString_ThrowsException(string connectionString, Type exceptionType)
-        {
-            // Act
-            var exception =
-                Assert.ThrowsAny<ArgumentException>(() => new DbSessionFactory(_dbProviderFactory, connectionString));
-
-            // Assert
-            Assert.IsType(exceptionType, exception);
-            Assert.Equal("connectionString", exception.ParamName);
+            Assert.Equal("options", exception.ParamName);
         }
 
         [Fact]
@@ -67,8 +57,7 @@ namespace Byndyusoft.Data.Relational.Unit
             Mock.Get(_connection).SetupSet(x => x.ConnectionString = _connectionString);
 
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateSessionAsync(_cancellationToken);
+            await using var session = await _factory.CreateSessionAsync(_cancellationToken);
 
             // Assert
             Assert.Equal(session.Connection, _connection);
@@ -82,8 +71,8 @@ namespace Byndyusoft.Data.Relational.Unit
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(null as DbConnection);
 
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await Assert.ThrowsAsync<InvalidOperationException>(() => factory.CreateSessionAsync(_cancellationToken));
+            await Assert.ThrowsAsync<InvalidOperationException>(
+                () => _factory.CreateSessionAsync(_cancellationToken));
             Assert.Null(_sessionAccessor.DbSession);
         }
 
@@ -91,8 +80,7 @@ namespace Byndyusoft.Data.Relational.Unit
         public async Task CreateSessionAsync_SetsSessionToAccessor()
         {
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateSessionAsync(_cancellationToken);
+            await using var session = await _factory.CreateSessionAsync(_cancellationToken);
 
             // Assert
             Assert.NotNull(_sessionAccessor.DbSession);
@@ -103,12 +91,11 @@ namespace Byndyusoft.Data.Relational.Unit
         public async Task CreateSessionAsync_AlreadyExists_ThrowsException()
         {
             // Arrange
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateSessionAsync(_cancellationToken);
+            await using var session = await _factory.CreateSessionAsync(_cancellationToken);
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                factory.CreateSessionAsync(_cancellationToken));
+                _factory.CreateSessionAsync(_cancellationToken));
         }
 
         [Fact]
@@ -118,9 +105,8 @@ namespace Byndyusoft.Data.Relational.Unit
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(null as DbConnection);
 
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                factory.CreateCommittableSessionAsync(_cancellationToken));
+                _factory.CreateCommittableSessionAsync(_cancellationToken));
             Assert.Null(_sessionAccessor.DbSession);
         }
 
@@ -134,8 +120,7 @@ namespace Byndyusoft.Data.Relational.Unit
                 .Returns(_transaction);
 
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken);
+            await using var session = await _factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken);
 
             // Assert
             Assert.Equal(session.Connection, _connection);
@@ -146,8 +131,7 @@ namespace Byndyusoft.Data.Relational.Unit
         public async Task CreateCommittableSessionAsync_SetsSessionToAccessor()
         {
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-            await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
+            await using var session = await _factory.CreateCommittableSessionAsync(_cancellationToken);
 
             // Assert
             Assert.NotNull(_sessionAccessor.DbSession);
@@ -158,13 +142,11 @@ namespace Byndyusoft.Data.Relational.Unit
         public async Task CreateCommittableSessionAsync_AlreadyExists_ThrowsException()
         {
             // Arrange
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
-
-            await using var session = await factory.CreateCommittableSessionAsync(_cancellationToken);
+            await using var session = await _factory.CreateCommittableSessionAsync(_cancellationToken);
 
             // Act
             await Assert.ThrowsAsync<InvalidOperationException>(() =>
-                factory.CreateCommittableSessionAsync(_cancellationToken));
+                _factory.CreateCommittableSessionAsync(_cancellationToken));
         }
 
         [Fact]
@@ -183,9 +165,8 @@ namespace Byndyusoft.Data.Relational.Unit
 #endif
 
             // Act
-            var factory = new DbSessionFactory(_dbProviderFactory, _connectionString);
             await Assert.ThrowsAsync<DataException>(() =>
-                factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
+                _factory.CreateCommittableSessionAsync(_isolationLevel, _cancellationToken));
 
             // Assert
             Mock.Get(_connection).Protected().Verify("Dispose", Times.Once(), new object[] {true});

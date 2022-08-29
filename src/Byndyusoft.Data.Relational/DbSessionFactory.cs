@@ -18,14 +18,6 @@ namespace Byndyusoft.Data.Relational
             _options = options;
         }
 
-        public DbSessionFactory(DbProviderFactory dbProviderFactory, string connectionString)
-        {
-            Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
-            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
-
-            _options = new DbSessionOptionsMonitor(dbProviderFactory, connectionString);
-        }
-
         public DbProviderFactory ProviderFactory => _options.CurrentValue.DbProviderFactory;
 
         public string ConnectionString => _options.CurrentValue.ConnectionString;
