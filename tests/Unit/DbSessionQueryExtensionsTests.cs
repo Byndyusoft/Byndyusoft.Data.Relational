@@ -309,7 +309,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Assert
             Assert.Equal("session", exception.ParamName);
         }
-        
+
         [Theory]
         [InlineData(null, typeof(ArgumentNullException))]
         [InlineData("", typeof(ArgumentException))]

@@ -8,8 +8,6 @@ namespace Byndyusoft.Data.Relational
     {
         private static readonly AsyncLocal<ConcurrentDictionary<string, DbSession?>?> _current = new();
 
-        IDbSession? IDbSessionsIndexer.this[string name] => this[name];
-
         public DbSession? this[string name]
         {
             get
@@ -21,7 +19,7 @@ namespace Byndyusoft.Data.Relational
             }
             set
             {
-                var dic = _current.Value ??= new();
+                var dic = _current.Value ??= new ConcurrentDictionary<string, DbSession?>();
                 dic.AddOrUpdate(name, value, (_, current) =>
                 {
                     if (value is not null && current is not null)
@@ -30,5 +28,7 @@ namespace Byndyusoft.Data.Relational
                 });
             }
         }
+
+        IDbSession? IDbSessionsIndexer.this[string name] => this[name];
     }
 }

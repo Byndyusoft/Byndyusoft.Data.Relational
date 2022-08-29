@@ -6,21 +6,25 @@ namespace Byndyusoft.Data.Relational
 {
     internal class DbSessionOptionsMonitor : IOptionsMonitor<DbSessionOptions>
     {
-        private readonly DbSessionOptions _options;
-
         public DbSessionOptionsMonitor(DbProviderFactory providerFactory, string connectionString)
         {
-            _options = new DbSessionOptions
+            CurrentValue = new DbSessionOptions
             {
                 ConnectionString = connectionString,
                 DbProviderFactory = providerFactory
             };
         }
 
-        public DbSessionOptions Get(string name) => _options;
+        public DbSessionOptions Get(string name)
+        {
+            return CurrentValue;
+        }
 
-        public IDisposable OnChange(Action<DbSessionOptions, string> listener) => throw new NotImplementedException();
+        public IDisposable OnChange(Action<DbSessionOptions, string> listener)
+        {
+            throw new NotImplementedException();
+        }
 
-        public DbSessionOptions CurrentValue => _options;
+        public DbSessionOptions CurrentValue { get; }
     }
 }

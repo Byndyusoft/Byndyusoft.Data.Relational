@@ -551,7 +551,7 @@ namespace Byndyusoft.Data.Relational
         private static CommandDefinition CreateCommand(string sql, object? param, IDbTransaction? transaction,
             int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken)
         {
-            return new CommandDefinition(sql, param, transaction, commandTimeout, commandType, CommandFlags.Buffered,
+            return new(sql, param, transaction, commandTimeout, commandType, CommandFlags.Buffered,
                 cancellationToken);
         }
     }

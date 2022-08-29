@@ -25,13 +25,13 @@ namespace Byndyusoft.Data.Relational
         IDictionary<string, object> Items { get; }
 
         /// <summary>
+        ///     Gets a string that describes the state of the <see cref="IDbSession" />.
+        /// </summary>
+        DbSessionState State { get; }
+
+        /// <summary>
         ///     Occurs when the session becomes finished.
         /// </summary>
         event DbSessionFinishedEventHandler Finished;
-
-        /// <summary>
-        ///     Gets a string that describes the state of the <see cref="IDbSession"/>.
-        /// </summary>
-        DbSessionState State { get; }
     }
 }

@@ -14,10 +14,10 @@ namespace Byndyusoft.Data.Relational
         public DbSessionFactory(IOptionsMonitor<DbSessionOptions> options)
         {
             Guard.IsNotNull(options, nameof(options));
-            
+
             _options = options;
         }
-        
+
         public DbSessionFactory(DbProviderFactory dbProviderFactory, string connectionString)
         {
             Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
@@ -49,7 +49,8 @@ namespace Byndyusoft.Data.Relational
             return CreateCommittableSessionAsync(Options.DefaultName, cancellationToken);
         }
 
-        public Task<ICommittableDbSession> CreateCommittableSessionAsync(string name, CancellationToken cancellationToken = default)
+        public Task<ICommittableDbSession> CreateCommittableSessionAsync(string name,
+            CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(name, nameof(name));
 

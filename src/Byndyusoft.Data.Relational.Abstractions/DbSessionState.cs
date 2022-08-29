@@ -1,7 +1,7 @@
 namespace Byndyusoft.Data.Relational
 {
     /// <summary>
-    ///     The state of the <see cref="IDbSession"/>.
+    ///     The state of the <see cref="IDbSession" />.
     /// </summary>
     public enum DbSessionState
     {

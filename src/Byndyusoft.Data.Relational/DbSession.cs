@@ -1,4 +1,3 @@
-using CommunityToolkit.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +5,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Options;
 
 namespace Byndyusoft.Data.Relational
@@ -13,16 +13,18 @@ namespace Byndyusoft.Data.Relational
     public class DbSession : ICommittableDbSession
     {
         private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
+
+        internal static readonly DbSessionStorage Current = new();
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
+        private readonly string _name = default!;
         private readonly DbProviderFactory _providerFactory = default!;
         private Activity? _activity;
-        private readonly string _name = default!;
 
         private DbConnection? _connection;
         private DbSessionItems? _items;
-        private DbTransaction? _transaction;
         private DbSessionState _state;
+        private DbTransaction? _transaction;
 
         private DbSession()
         {
@@ -45,13 +47,13 @@ namespace Byndyusoft.Data.Relational
         {
             Guard.IsNotNull(options, nameof(options));
             Guard.IsNotNull(name, nameof(name));
-            
+
             _providerFactory = options.DbProviderFactory;
             _connectionString = options.ConnectionString;
             _isolationLevel = isolationLevel;
             _name = name;
         }
-        
+
         public async ValueTask DisposeAsync()
         {
             if (_state == DbSessionState.Disposed)
@@ -119,8 +121,6 @@ namespace Byndyusoft.Data.Relational
         }
 
         public event DbSessionFinishedEventHandler? Finished;
-
-        internal static readonly DbSessionStorage Current = new();
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {

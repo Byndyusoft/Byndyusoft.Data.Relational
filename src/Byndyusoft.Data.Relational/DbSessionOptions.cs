@@ -6,7 +6,7 @@ namespace Byndyusoft.Data.Relational
 {
     public class DbSessionOptions
     {
-        private string? _connectionString ;
+        private string? _connectionString;
         private DbProviderFactory? _dbProviderFactory;
 
         public string ConnectionString
@@ -40,7 +40,7 @@ namespace Byndyusoft.Data.Relational
                         : $"{nameof(DbSession)} with name {name} hasn't been configured";
                 throw new InvalidOperationException(message);
             }
-                
+
             return this;
         }
     }

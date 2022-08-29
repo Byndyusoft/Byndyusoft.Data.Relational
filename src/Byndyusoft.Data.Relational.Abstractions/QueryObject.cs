@@ -53,7 +53,7 @@ namespace Byndyusoft.Data.Relational
         /// <returns>A new instance of the <see cref="QueryObject" /> class.</returns>
         public static QueryObject Create(string sql, object? parameters = null)
         {
-            return new QueryObject(sql, parameters);
+            return new(sql, parameters);
         }
     }
 }
