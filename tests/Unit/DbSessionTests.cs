@@ -11,7 +11,7 @@ namespace Byndyusoft.Data.Relational.Unit
 {
     public class DbSessionTests
     {
-        private readonly CancellationToken _cancellationToken = new CancellationToken();
+        private readonly CancellationToken _cancellationToken = new();
         private readonly DbConnection _connection;
         private readonly DbTransaction _transaction;
 
