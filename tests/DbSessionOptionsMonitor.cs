@@ -15,15 +15,9 @@ namespace Byndyusoft.Data.Relational
             };
         }
 
-        public DbSessionOptions Get(string name)
-        {
-            return CurrentValue;
-        }
+        public DbSessionOptions Get(string name) => CurrentValue;
 
-        public IDisposable OnChange(Action<DbSessionOptions, string> listener)
-        {
-            throw new NotImplementedException();
-        }
+        public IDisposable OnChange(Action<DbSessionOptions, string> listener) => throw new NotImplementedException();
 
         public DbSessionOptions CurrentValue { get; }
     }
