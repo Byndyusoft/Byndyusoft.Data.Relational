@@ -14,10 +14,10 @@ namespace Byndyusoft.Data.Relational
     {
         private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
 
-        internal static readonly DbSessionStorage Current = new();
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
         private readonly string _name = default!;
+        private readonly IDbSessionStorage _storage = default!;
         private readonly DbProviderFactory _providerFactory = default!;
         private Activity? _activity;
 
@@ -39,19 +39,22 @@ namespace Byndyusoft.Data.Relational
             _connection = connection;
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
-
+            
             _state = DbSessionState.Active;
+            _storage = new AsyncLocalDbSessionStorage();
         }
 
-        internal DbSession(string name, DbSessionOptions options, IsolationLevel? isolationLevel = null)
+        internal DbSession(string name, DbSessionOptions options, IDbSessionStorage storage, IsolationLevel? isolationLevel = null)
         {
-            Guard.IsNotNull(options, nameof(options));
             Guard.IsNotNull(name, nameof(name));
+            Guard.IsNotNull(options, nameof(options));
+            Guard.IsNotNull(storage, nameof(storage));
 
             _providerFactory = options.DbProviderFactory;
             _connectionString = options.ConnectionString;
             _isolationLevel = isolationLevel;
             _name = name;
+            _storage = storage;
         }
 
         public async ValueTask DisposeAsync()
@@ -181,7 +184,7 @@ namespace Byndyusoft.Data.Relational
 
             Finished?.Invoke(this, new DbSessionFinishedEventArgs(_state));
 
-            Current[_name] = null;
+            _storage.SetCurrentSession(_name, null);
         }
 
         public async Task FinishAsync()
@@ -208,7 +211,7 @@ namespace Byndyusoft.Data.Relational
 
             Finished?.Invoke(this, new DbSessionFinishedEventArgs(_state));
 
-            Current[_name] = null;
+            _storage.SetCurrentSession(_name, null);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
