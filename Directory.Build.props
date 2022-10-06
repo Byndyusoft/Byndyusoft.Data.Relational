@@ -1,9 +1,10 @@
 <Project>
 	<PropertyGroup>
-		<Version>0.8.0</Version>
+		<Version>0.9.0</Version>
 		<Authors>Byndyusoft</Authors>
 		<PackageTags>Byndyusoft;Data;Relational</PackageTags>
 		<RepositoryUrl>https://github.com/Byndyusoft/Byndyusoft.Data.Relational</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
+		<LangVersion>9.0</LangVersion>
 	</PropertyGroup>
 </Project>

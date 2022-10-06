@@ -5,21 +5,25 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace Byndyusoft.Data.Relational
 {
-    public partial class DbSession : ICommittableDbSession
+    public class DbSession : ICommittableDbSession
     {
-        private static readonly ActivitySource ActivitySource = DbSessionInstrumentationOptions.CreateActivitySource();
+        private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
+
+        internal static readonly DbSessionStorage Current = new();
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
+        private readonly string _name = default!;
         private readonly DbProviderFactory _providerFactory = default!;
         private Activity? _activity;
 
-        private bool _completed;
         private DbConnection? _connection;
-        private bool _disposed;
         private DbSessionItems? _items;
+        private DbSessionState _state;
         private DbTransaction? _transaction;
 
         private DbSession()
@@ -29,23 +33,30 @@ namespace Byndyusoft.Data.Relational
         internal DbSession(DbConnection connection, DbTransaction? transaction = null)
             : this()
         {
-            _connection = Guard.NotNull(connection, nameof(connection));
+            Guard.IsNotNull(connection, nameof(connection));
+
+            _name = Options.DefaultName;
+            _connection = connection;
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
+
+            _state = DbSessionState.Active;
         }
 
-        internal DbSession(DbProviderFactory providerFactory, string connectionString,
-            IsolationLevel? isolationLevel = null)
-            : this()
+        internal DbSession(string name, DbSessionOptions options, IsolationLevel? isolationLevel = null)
         {
-            _providerFactory = providerFactory;
-            _connectionString = connectionString;
+            Guard.IsNotNull(options, nameof(options));
+            Guard.IsNotNull(name, nameof(name));
+
+            _providerFactory = options.DbProviderFactory;
+            _connectionString = options.ConnectionString;
             _isolationLevel = isolationLevel;
+            _name = name;
         }
 
         public async ValueTask DisposeAsync()
         {
-            if (_disposed)
+            if (_state == DbSessionState.Disposed)
                 return;
 
             await FinishAsync();
@@ -56,12 +67,21 @@ namespace Byndyusoft.Data.Relational
 
         public void Dispose()
         {
-            if (_disposed)
+            if (_state == DbSessionState.Disposed)
                 return;
 
             Finish();
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public string Name
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _name;
+            }
         }
 
         public DbConnection Connection
@@ -100,18 +120,29 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
+        public DbSessionState State
+        {
+            get
+            {
+                ThrowIfDisposed();
+                return _state;
+            }
+        }
+
+        public event DbSessionFinishedEventHandler? Finished;
+
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
 
-            if (_completed)
+            if (_state != DbSessionState.Active)
                 return;
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Committing));
 
             if (_transaction != null) await _transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
 
-            _completed = true;
+            _state = DbSessionState.Committed;
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Commited));
         }
@@ -120,14 +151,14 @@ namespace Byndyusoft.Data.Relational
         {
             ThrowIfDisposed();
 
-            if (_completed)
+            if (_state != DbSessionState.Active)
                 return;
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RollingBack));
 
             if (_transaction != null) await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
 
-            _completed = true;
+            _state = DbSessionState.RolledBack;
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RolledBack));
         }
@@ -148,7 +179,9 @@ namespace Byndyusoft.Data.Relational
             _activity?.Dispose();
             _activity = null;
 
-            Current = null;
+            Finished?.Invoke(this, new DbSessionFinishedEventArgs(_state));
+
+            Current[_name] = null;
         }
 
         public async Task FinishAsync()
@@ -173,14 +206,19 @@ namespace Byndyusoft.Data.Relational
             _activity?.Dispose();
             _activity = null;
 
-            Current = null;
+            Finished?.Invoke(this, new DbSessionFinishedEventArgs(_state));
+
+            Current[_name] = null;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             ThrowIfDisposed();
 
-            _activity = ActivitySource.StartActivity(nameof(DbSession));
+            if (_state == DbSessionState.Active)
+                return;
+
+            _activity = _activitySource.StartActivity(nameof(DbSession));
             _activity?.SetTag("provider", _providerFactory.GetType().Name);
             _activity?.SetTag("isolationlevel", _isolationLevel);
 
@@ -190,6 +228,8 @@ namespace Byndyusoft.Data.Relational
             _transaction = await BeginTransactionAsync(_connection, cancellationToken).ConfigureAwait(false);
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Started));
+
+            _state = DbSessionState.Active;
         }
 
         ~DbSession()
@@ -205,7 +245,7 @@ namespace Byndyusoft.Data.Relational
                 _connection?.Dispose();
                 _items?.Dispose();
                 _activity?.Dispose();
-                _disposed = true;
+                _state = DbSessionState.Disposed;
             }
 
             _transaction = null;
@@ -237,7 +277,7 @@ namespace Byndyusoft.Data.Relational
 
         private void ThrowIfDisposed()
         {
-            if (_disposed)
+            if (_state == DbSessionState.Disposed)
                 throw new ObjectDisposedException(GetType().FullName);
         }
 

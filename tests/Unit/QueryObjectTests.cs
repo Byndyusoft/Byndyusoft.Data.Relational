@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xunit;
 
 namespace Byndyusoft.Data.Relational.Unit
@@ -20,15 +20,17 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void Constructor_NullSql_ThrowsException(string sql)
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentException))]
+        [InlineData(" ", typeof(ArgumentException))]
+        public void Constructor_NullSql_ThrowsException(string sql, Type exceptionType)
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => new QueryObject(sql));
+            var exception = Assert.ThrowsAny<ArgumentException>(
+                () => new QueryObject(sql));
 
             // Assert
+            Assert.IsType(exceptionType, exception);
             Assert.Equal("sql", exception.ParamName);
         }
 
@@ -77,15 +79,16 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        [InlineData(" ")]
-        public void Create_NullSql_ThrowsException(string sql)
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentException))]
+        [InlineData(" ", typeof(ArgumentException))]
+        public void Create_NullSql_ThrowsException(string sql, Type exceptionType)
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => QueryObject.Create(sql));
+            var exception = Assert.ThrowsAny<ArgumentException>(() => QueryObject.Create(sql));
 
             // Assert
+            Assert.IsType(exceptionType, exception);
             Assert.Equal("sql", exception.ParamName);
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Data.Common;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -47,17 +48,19 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         }
 
         [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void AddRelationalDb_NullConnectionString_ThrowsException(string connectionString)
+        [InlineData(null, typeof(ArgumentNullException))]
+        [InlineData("", typeof(ArgumentException))]
+        [InlineData(" ", typeof(ArgumentException))]
+        public void AddRelationalDb_NullConnectionString_ThrowsException(string connectionString, Type exceptionType)
         {
             // Act
             // ReSharper disable once ExpressionIsAlwaysNull
             var exception =
-                Assert.Throws<ArgumentNullException>(() =>
+                Assert.ThrowsAny<ArgumentException>(() =>
                     _services.AddRelationalDb(_dbProviderFactory, connectionString));
 
             // Assert
+            Assert.IsType(exceptionType, exception);
             Assert.Equal("connectionString", exception.ParamName);
         }
 
@@ -79,16 +82,16 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         public void AddRelationalDb_Registers_SessionFactory()
         {
             // Arrange
-            _services.AddRelationalDb(_dbProviderFactory, _connectionString);
+            const string name = "name";
+            _services.AddRelationalDb(name, _dbProviderFactory, _connectionString);
 
             // Act
-            var service = _services.BuildServiceProvider().GetService<IDbSessionFactory>();
+            var options = _services.BuildServiceProvider().GetService<IOptionsMonitor<DbSessionOptions>>();
 
             // Assert
-            Assert.NotNull(service);
-            var sessionFactory = Assert.IsType<DbSessionFactory>(service);
-            Assert.Equal(_dbProviderFactory, sessionFactory.ProviderFactory);
-            Assert.Equal(_connectionString, sessionFactory.ConnectionString);
+            Assert.NotNull(options);
+            Assert.Equal(_dbProviderFactory, options.Get(name).DbProviderFactory);
+            Assert.Equal(_connectionString, options.Get(name).ConnectionString);
         }
 
         [Fact]
@@ -130,21 +133,6 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
             Assert.Equal("connectionStringFunc", exception.ParamName);
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("")]
-        public void AddRelationalDb_Func_NullConnectionString_ThrowsException(string connectionString)
-        {
-            // Act
-            // ReSharper disable once ExpressionIsAlwaysNull
-            var exception =
-                Assert.Throws<ArgumentNullException>(() =>
-                    _services.AddRelationalDb(_dbProviderFactory, () => connectionString));
-
-            // Assert
-            Assert.Equal("connectionString", exception.ParamName);
-        }
-
         [Fact]
         public void AddRelationalDb_Func_Registers_SessionAccessor()
         {
@@ -163,16 +151,16 @@ namespace Byndyusoft.Data.Relational.Unit.DependencyInjection
         public void AddRelationalDb_Func_Registers_SessionFactory()
         {
             // Arrange
-            _services.AddRelationalDb(_dbProviderFactory, () => _connectionString);
+            const string name = "name";
+            _services.AddRelationalDb(name, _dbProviderFactory, () => _connectionString);
 
             // Act
-            var service = _services.BuildServiceProvider().GetService<IDbSessionFactory>();
+            var options = _services.BuildServiceProvider().GetService<IOptionsMonitor<DbSessionOptions>>();
 
             // Assert
-            Assert.NotNull(service);
-            var sessionFactory = Assert.IsType<DbSessionFactory>(service);
-            Assert.Equal(_dbProviderFactory, sessionFactory.ProviderFactory);
-            Assert.Equal(_connectionString, sessionFactory.ConnectionString);
+            Assert.NotNull(options);
+            Assert.Equal(_dbProviderFactory, options.Get(name).DbProviderFactory);
+            Assert.Equal(_connectionString, options.Get(name).ConnectionString);
         }
     }
 }

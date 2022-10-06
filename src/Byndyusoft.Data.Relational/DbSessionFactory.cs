@@ -1,37 +1,60 @@
 using System.Data;
-using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Diagnostics;
+using Microsoft.Extensions.Options;
 
 namespace Byndyusoft.Data.Relational
 {
     public class DbSessionFactory : IDbSessionFactory
     {
-        public DbSessionFactory(DbProviderFactory dbProviderFactory, string connectionString)
+        private readonly IOptionsMonitor<DbSessionOptions> _options;
+
+        public DbSessionFactory(IOptionsMonitor<DbSessionOptions> options)
         {
-            ConnectionString = Guard.NotNullOrWhiteSpace(connectionString, nameof(connectionString));
-            ProviderFactory = Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNull(options, nameof(options));
+
+            _options = options;
         }
-
-        public DbProviderFactory ProviderFactory { get; }
-
-        public string ConnectionString { get; }
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            var session = DbSession.Current = new DbSession(ProviderFactory, ConnectionString);
+            return CreateSessionAsync(Options.DefaultName, cancellationToken);
+        }
+
+        public virtual Task<IDbSession> CreateSessionAsync(string name, CancellationToken cancellationToken = default)
+        {
+            Guard.IsNotNull(name, nameof(name));
+
+            var options = _options.Get(name).Validate(name);
+            var session = DbSession.Current[name] = new DbSession(name, options);
             return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
         public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
         {
-            return CreateCommittableSessionAsync(IsolationLevel.Unspecified, cancellationToken);
+            return CreateCommittableSessionAsync(Options.DefaultName, cancellationToken);
+        }
+
+        public Task<ICommittableDbSession> CreateCommittableSessionAsync(string name,
+            CancellationToken cancellationToken = default)
+        {
+            Guard.IsNotNull(name, nameof(name));
+
+            return CreateCommittableSessionAsync(name, IsolationLevel.Unspecified, cancellationToken);
         }
 
         public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
             IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
-            var session = DbSession.Current = new DbSession(ProviderFactory, ConnectionString, isolationLevel);
+            return CreateCommittableSessionAsync(Options.DefaultName, isolationLevel, cancellationToken);
+        }
+
+        public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
+            string name, IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
+        {
+            var options = _options.Get(name).Validate(name);
+            var session = DbSession.Current[name] = new DbSession(name, options, isolationLevel);
             return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
         }
 

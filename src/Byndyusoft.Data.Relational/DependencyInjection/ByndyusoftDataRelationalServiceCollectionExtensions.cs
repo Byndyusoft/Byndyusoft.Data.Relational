@@ -1,6 +1,7 @@
 using System;
 using System.Data.Common;
 using Byndyusoft.Data.Relational;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
@@ -11,24 +12,65 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
             DbProviderFactory dbProviderFactory, string connectionString)
         {
-            Guard.NotNull(services, nameof(services));
-            Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
-            Guard.NotNullOrWhiteSpace(connectionString, nameof(connectionString));
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
 
-            services.TryAddTransient<IDbSessionAccessor, DbSessionAccessor>();
-            services.TryAddTransient<IDbSessionFactory>(x => new DbSessionFactory(dbProviderFactory, connectionString));
+            return services.AddRelationalDb(Options.Options.DefaultName, dbProviderFactory, connectionString);
+        }
 
-            return services;
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            string name, DbProviderFactory dbProviderFactory, string connectionString)
+        {
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
+
+            return services.AddRelationalDb(name, options =>
+            {
+                options.DbProviderFactory = dbProviderFactory;
+                options.ConnectionString = connectionString;
+            });
         }
 
         public static IServiceCollection AddRelationalDb(this IServiceCollection services,
             DbProviderFactory dbProviderFactory, Func<string> connectionStringFunc)
         {
-            Guard.NotNull(services, nameof(services));
-            Guard.NotNull(dbProviderFactory, nameof(dbProviderFactory));
-            Guard.NotNull(connectionStringFunc, nameof(connectionStringFunc));
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNull(connectionStringFunc, nameof(connectionStringFunc));
 
-            return services.AddRelationalDb(dbProviderFactory, connectionStringFunc());
+            return services.AddRelationalDb(Options.Options.DefaultName, dbProviderFactory, connectionStringFunc);
+        }
+
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            string name, DbProviderFactory dbProviderFactory, Func<string> connectionStringFunc)
+        {
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(dbProviderFactory, nameof(dbProviderFactory));
+            Guard.IsNotNull(connectionStringFunc, nameof(connectionStringFunc));
+
+            return services.AddRelationalDb(name, options =>
+            {
+                options.DbProviderFactory = dbProviderFactory;
+                options.ConnectionString = connectionStringFunc();
+            });
+        }
+
+        public static IServiceCollection AddRelationalDb(this IServiceCollection services,
+            string name, Action<DbSessionOptions> configureOptions)
+        {
+            Guard.IsNotNull(services, nameof(services));
+            Guard.IsNotNull(name, nameof(name));
+            Guard.IsNotNull(configureOptions, nameof(configureOptions));
+
+            services.AddOptions();
+            services.Configure(name, configureOptions);
+
+            services.TryAddSingleton<IDbSessionAccessor, DbSessionAccessor>();
+            services.TryAddSingleton<IDbSessionFactory, DbSessionFactory>();
+
+            return services;
         }
     }
 }

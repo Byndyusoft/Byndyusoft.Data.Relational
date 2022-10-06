@@ -10,6 +10,7 @@ namespace Byndyusoft.Data.Relational.Example
         public void ConfigureServices(IServiceCollection services, string fileName)
         {
             services.AddRelationalDb(SqliteFactory.Instance, $"data source={fileName}");
+            //services.AddRelationalDb("sqlite", SqliteFactory.Instance, $"data source={fileName}");
 
             services.AddOpenTelemetryTracing(builder =>
             {
@@ -18,7 +19,7 @@ namespace Byndyusoft.Data.Relational.Example
                     .SetResourceBuilder(ResourceBuilder.CreateDefault()
                         .AddService(typeof(Startup).Assembly.GetName().Name))
                     .AddDbSessionInstrumentation()
-                    .AddConsoleExporter()
+                    //.AddConsoleExporter()
                     .AddSource(nameof(Program))
                     .AddJaegerExporter(jaeger =>
                     {
