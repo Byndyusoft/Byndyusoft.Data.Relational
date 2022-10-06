@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -19,8 +19,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Byndyusoft.Data.Relational.OpenTelemetry\Byndyusoft.Data.Relational.OpenTelemetry.csproj" />
-		<ProjectReference Include="$(SolutionDir)src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
+	  <ProjectReference Include="..\src\Byndyusoft.Data.Relational.OpenTelemetry\Byndyusoft.Data.Relational.OpenTelemetry.csproj" />
+	  <ProjectReference Include="..\src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
 	</ItemGroup>
-
+	
 </Project>

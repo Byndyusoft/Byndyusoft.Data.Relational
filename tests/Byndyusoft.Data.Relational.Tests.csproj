@@ -7,15 +7,11 @@
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.1|AnyCPU'">
-    <WarningsAsErrors>;NU1605</WarningsAsErrors>
+  <PropertyGroup>
+    <WarningsAsErrors>NU1605</WarningsAsErrors>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.1|AnyCPU'">
-    <WarningsAsErrors>;NU1605</WarningsAsErrors>
-  </PropertyGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.9" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
@@ -33,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
+    <ProjectReference Include="..\src\Byndyusoft.Data.Relational\Byndyusoft.Data.Relational.csproj" />
   </ItemGroup>
 
 </Project>
