@@ -12,7 +12,7 @@ namespace Byndyusoft.Data.Relational
         {
             get
             {
-                DbSession? session = null;
+                DbSession? session;
                 if (_current.Value?.TryGetValue(name, out session) == true)
                     return session;
                 return null;

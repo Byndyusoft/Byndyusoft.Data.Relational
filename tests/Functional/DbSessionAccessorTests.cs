@@ -97,11 +97,11 @@ namespace Byndyusoft.Data.Relational.Functional
 
         private class Service
         {
-            private readonly IDbSessionAccessor _sessionAccessor = new DbSessionAccessor();
+            private readonly IDbSessionAccessor _sessionAccessor = new DbSessionAccessor(null!, null!);
 
             public async Task<dynamic> QueryAsync()
             {
-                return await _sessionAccessor.DbSession.QueryFirstOrDefaultAsync("SELECT * FROM test LIMIT 1");
+                return await _sessionAccessor.DbSession!.QueryFirstOrDefaultAsync("SELECT * FROM test LIMIT 1");
             }
         }
     }
