@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="$(SolutionDir)src\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj" />
+		<ProjectReference Include="..\Byndyusoft.Data.Relational.Abstractions\Byndyusoft.Data.Relational.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>
