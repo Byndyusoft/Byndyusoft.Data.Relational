@@ -10,13 +10,7 @@ namespace Byndyusoft.Data.Relational
 
         public DbSession? this[string name]
         {
-            get
-            {
-                DbSession? session = null;
-                if (_current.Value?.TryGetValue(name, out session) == true)
-                    return session;
-                return null;
-            }
+            get => _current.Value?.TryGetValue(name, out var session) == true ? session : null;
             set
             {
                 var dic = _current.Value ??= new ConcurrentDictionary<string, DbSession?>();

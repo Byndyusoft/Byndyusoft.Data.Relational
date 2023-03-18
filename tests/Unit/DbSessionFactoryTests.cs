@@ -20,13 +20,12 @@ namespace Byndyusoft.Data.Relational.Unit
         private readonly IDbSessionAccessor _sessionAccessor;
         private readonly DbTransaction _transaction;
 
-
         public DbSessionFactoryTests()
         {
             _isolationLevel = IsolationLevel.Serializable;
             _cancellationToken = new CancellationToken();
             _connectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;";
-            _sessionAccessor = new DbSessionAccessor();
+            _sessionAccessor = new DbSessionAccessor(null!, null!);
 
             _dbProviderFactory = new Mock<DbProviderFactory> {CallBase = true}.Object;
             _connection = new Mock<DbConnection> {CallBase = true}.Object;
