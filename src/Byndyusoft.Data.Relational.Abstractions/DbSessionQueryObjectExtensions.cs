@@ -138,7 +138,7 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T> QuerySingleOrDefaultAsync<T>(
+        public static async Task<T?> QuerySingleOrDefaultAsync<T>(
             this IDbSession session,
             IQueryObject queryObject,
             int? commandTimeout = null,
@@ -165,7 +165,7 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic> QuerySingleOrDefaultAsync(
+        public static async Task<dynamic?> QuerySingleOrDefaultAsync(
             this IDbSession session,
             IQueryObject queryObject,
             int? commandTimeout = null,
@@ -251,7 +251,7 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T> QueryFirstOrDefaultAsync<T>(
+        public static async Task<T?> QueryFirstOrDefaultAsync<T>(
             this IDbSession session,
             IQueryObject queryObject,
             int? commandTimeout = null,
@@ -278,7 +278,7 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic> QueryFirstOrDefaultAsync(
+        public static async Task<dynamic?> QueryFirstOrDefaultAsync(
             this IDbSession session,
             IQueryObject queryObject,
             int? commandTimeout = null,
