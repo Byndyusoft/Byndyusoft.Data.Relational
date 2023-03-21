@@ -28,13 +28,13 @@ public class DbSessionsIndexer : IDbSessionsIndexer
             {
                 if (session is ICommitableSession commitableSession)
                 {
-                    var dbSession = _sessionFactory.CreateCommittableSessionAsync(commitableSession.IsolationLevel)
+                    var dbSession = _sessionFactory.CreateCommittableSessionAsync(name, commitableSession.IsolationLevel)
                         .GetAwaiter().GetResult();
                     dependentDbSession = new DependentCommitableDbSession(dbSession);
                 }
                 else
                 {
-                    var dbSession = _sessionFactory.CreateSessionAsync()
+                    var dbSession = _sessionFactory.CreateSessionAsync(name)
                         .GetAwaiter().GetResult();
                     dependentDbSession = new DependentDbSession(dbSession);
                 }
