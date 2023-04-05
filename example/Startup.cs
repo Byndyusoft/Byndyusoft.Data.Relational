@@ -12,12 +12,13 @@ namespace Byndyusoft.Data.Relational.Example
             services.AddRelationalDb(SqliteFactory.Instance, $"data source={fileName}");
             //services.AddRelationalDb("sqlite", SqliteFactory.Instance, $"data source={fileName}");
 
-            services.AddOpenTelemetryTracing(builder =>
+            services.AddOpenTelemetry()
+                .WithTracing(tracing =>
             {
-                builder
+                tracing
                     .SetSampler(new AlwaysOnSampler())
                     .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                        .AddService(typeof(Startup).Assembly.GetName().Name))
+                        .AddService(typeof(Startup).Assembly.GetName().Name!))
                     .AddDbSessionInstrumentation()
                     //.AddConsoleExporter()
                     .AddSource(nameof(Program))

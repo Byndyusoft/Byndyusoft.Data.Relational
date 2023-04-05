@@ -490,7 +490,7 @@ namespace Byndyusoft.Data.Relational
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
 
-            using var reader = await session.Connection.ExecuteReaderAsync(command);
+            using var reader = await session.Connection.ExecuteReaderAsync(command).ConfigureAwait(false);
             if (typeDeserializer == null)
             {
                 var rowParser = reader.GetRowParser<T>();
@@ -538,7 +538,7 @@ namespace Byndyusoft.Data.Relational
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
 
-            using var reader = await session.Connection.ExecuteReaderAsync(command);
+            using var reader = await session.Connection.ExecuteReaderAsync(command).ConfigureAwait(false);
             var rowParser = reader.GetRowParser<dynamic>();
 
             while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
