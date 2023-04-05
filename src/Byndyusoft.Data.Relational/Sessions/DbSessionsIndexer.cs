@@ -1,48 +1,46 @@
-using Byndyusoft.Data.Relational;
 using Byndyusoft.Data.Sessions;
 
-public class DbSessionsIndexer : IDbSessionsIndexer
+namespace Byndyusoft.Data.Relational.Sessions
 {
-    private readonly IDbSessionFactory _sessionFactory;
-    private readonly ISessionStorage _sessionStorage;
-
-    public DbSessionsIndexer(
-        IDbSessionFactory sessionFactory, 
-        ISessionStorage sessionStorage)
+    public class DbSessionsIndexer : IDbSessionsIndexer
     {
-        _sessionFactory = sessionFactory;
-        _sessionStorage = sessionStorage;
-    }
+        private readonly IDbSessionFactory _sessionFactory;
+        private readonly ISessionAccessor _sessionAccessor;
 
-    public IDbSession? this[string name]
-    {
-        get
+        public DbSessionsIndexer(
+            IDbSessionFactory sessionFactory,
+            ISessionAccessor sessionAccessor)
         {
-            var key = $"Byndyusoft.Data.Relational.{name}";
+            _sessionFactory = sessionFactory;
+            _sessionAccessor = sessionAccessor;
+        }
 
-            var session = _sessionStorage.GetCurrent();
-            if (session is null)
-                return null;
-
-            if (session.DependentSessions.TryGetValue(key, out var dependentDbSession) == false)
+        public IDbSession? this[string name]
+        {
+            get
             {
-                if (session is ICommitableSession commitableSession)
-                {
-                    var dbSession = _sessionFactory.CreateCommittableSessionAsync(name, commitableSession.IsolationLevel)
-                        .GetAwaiter().GetResult();
-                    dependentDbSession = new DependentCommitableDbSession(dbSession);
-                }
-                else
-                {
-                    var dbSession = _sessionFactory.CreateSessionAsync(name)
-                        .GetAwaiter().GetResult();
-                    dependentDbSession = new DependentDbSession(dbSession);
-                }
+                var key = $"Byndyusoft.Data.Relational.{name}";
 
-                session.Enlist(key, dependentDbSession);
+                var session = _sessionAccessor.Session;
+                var dbSession =  session?.GetOrEnlist(key, () => Create(name, session));
+                return dbSession?.DbSession;
             }
+        }
 
-            return ((IDependentDbSession) dependentDbSession).DbSession;
+        private IDependentDbSession Create(string name, ISession session)
+        {
+            if (session is ICommitableSession commitableSession)
+            {
+                var dbSession = _sessionFactory.CreateCommittableSessionAsync(name, commitableSession.IsolationLevel)
+                    .ConfigureAwait(false).GetAwaiter().GetResult();
+                return new DependentCommitableDbSession(dbSession);
+            }
+            else
+            {
+                var dbSession = _sessionFactory.CreateSessionAsync(name)
+                    .ConfigureAwait(false).GetAwaiter().GetResult();
+                return new DependentDbSession(dbSession);
+            }
         }
     }
 }
