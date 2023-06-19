@@ -8,23 +8,35 @@ namespace Byndyusoft.Data.Relational.TypeHandlers
 {
     public class JsonTypeHandler<T> : SqlMapper.TypeHandler<T?> where T : class
     {
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
+
+        public JsonTypeHandler()
+        {
+            _jsonSerializerOptions = DefaultJsonTypeHandlerOptions.Instance;
+        }
+
+        public JsonTypeHandler(JsonSerializerOptions jsonSerializerOptions)
+        {
+            _jsonSerializerOptions = jsonSerializerOptions;
+        }
+        
         public override void SetValue(IDbDataParameter parameter, T? value)
         {
             parameter.Value = value == null
                 ? DBNull.Value
-                : JsonSerializer.Serialize(value, JsonTypeHandlerOptions.Instance);
+                : JsonSerializer.Serialize(value, _jsonSerializerOptions);
         }
 
         public override T? Parse(object value)
         {
             if (value is string json)
-                return JsonSerializer.Deserialize<T>(json, JsonTypeHandlerOptions.Instance);
+                return JsonSerializer.Deserialize<T>(json, _jsonSerializerOptions);
 
             return null;
         }
     }
 
-    internal static class JsonTypeHandlerOptions
+    internal static class DefaultJsonTypeHandlerOptions
     {
         public static readonly JsonSerializerOptions Instance = new()
         {
