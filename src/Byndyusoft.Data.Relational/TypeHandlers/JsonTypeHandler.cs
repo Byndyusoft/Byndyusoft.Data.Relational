@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Dapper;
 
 namespace Byndyusoft.Data.Relational.TypeHandlers
@@ -12,7 +11,7 @@ namespace Byndyusoft.Data.Relational.TypeHandlers
 
         public JsonTypeHandler()
         {
-            _jsonSerializerOptions = DefaultJsonTypeHandlerOptions.Instance;
+            _jsonSerializerOptions = DefaultJsonTypeHandlerOptions.DefaultJsonSerializerOptions;
         }
 
         public JsonTypeHandler(JsonSerializerOptions jsonSerializerOptions)
@@ -34,14 +33,5 @@ namespace Byndyusoft.Data.Relational.TypeHandlers
 
             return null;
         }
-    }
-
-    internal static class DefaultJsonTypeHandlerOptions
-    {
-        public static readonly JsonSerializerOptions Instance = new()
-        {
-            Converters = { new JsonStringEnumConverter() },
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        };
     }
 }
