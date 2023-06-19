@@ -11,7 +11,7 @@ namespace Byndyusoft.Data.Relational.TypeHandlers
 
         public JsonTypeHandler()
         {
-            _jsonSerializerOptions = DefaultJsonTypeHandlerOptions.DefaultJsonSerializerOptions;
+            _jsonSerializerOptions = DefaultJsonTypeHandlerOptions.SerializerOptions;
         }
 
         public JsonTypeHandler(JsonSerializerOptions jsonSerializerOptions)

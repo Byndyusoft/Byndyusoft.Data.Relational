@@ -8,13 +8,7 @@ namespace Byndyusoft.Data.Relational.TypeHandlers
         /// <summary>
         ///     Reassign if you want to use another JsonSerializerOptions by default
         /// </summary>
-        public static JsonSerializerOptions DefaultJsonSerializerOptions { get; set; } =
-            JsonTypeHandlerOptionsBase.Instance;
-    }
-    
-    internal static class JsonTypeHandlerOptionsBase
-    {
-        public static readonly JsonSerializerOptions Instance = new()
+        public static JsonSerializerOptions SerializerOptions { get; set; } = new()
         {
             Converters = { new JsonStringEnumConverter() },
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
