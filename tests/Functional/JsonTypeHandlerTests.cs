@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Text.Json;
@@ -54,7 +53,7 @@ namespace Byndyusoft.Data.Relational.Functional
             var actualRow = await _connection.QuerySingleOrDefaultAsync<string>("SELECT user from test WHERE id = 1");
             var actualUser = JsonSerializer.Deserialize<User>(actualRow);
             
-            Assert.Equal(user.Name, actualUser.Name);
+            Assert.Equal(user.Name, actualUser!.Name);
             Assert.Equal(user.Login, actualUser.Login);
             Assert.Equal(user.Age, actualUser.Age);
         }
@@ -91,6 +90,7 @@ namespace Byndyusoft.Data.Relational.Functional
         public int Id { get; set; }
         public User User { get; set; }
     }
+    
     class User
     {
         public string Login { get; set; }
