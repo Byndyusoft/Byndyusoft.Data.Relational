@@ -19,7 +19,7 @@ namespace Byndyusoft.Data.Relational.Functional
         
         public async Task InitializeAsync()
         {
-            _connection = new SqliteConnection($"Data Source={_file}.db;Pooling=false");
+            _connection = new SqliteConnection($"Data Source={_file};Pooling=false");
             await _connection.ExecuteAsync("CREATE TABLE test (id INT, user TEXT)");
 
             _session = new DbSession(_connection);
@@ -82,6 +82,22 @@ namespace Byndyusoft.Data.Relational.Functional
             Assert.Equal("Test", actualRow.User.Name);
             Assert.Equal("Text", actualRow.User.Login);
             Assert.Equal(90, actualRow.User.Age);
+        }
+        
+        [Fact]
+        public async Task Parse_UserIsNullInDb_JsonReadFromDB()
+        {
+            // Arrange
+            SqlMapper.AddTypeHandler(new JsonTypeHandler<User>());
+            await _session.ExecuteAsync(@"INSERT INTO TEST (id, user) VALUES (1, 'null')");
+            
+            var query = new QueryObject("SELECT user from test WHERE id = 1");
+
+            // Act
+            var actualRow = await _connection.QuerySingleOrDefaultAsync<Row>(query.Sql);
+
+            // Assert
+            Assert.Null(actualRow.User);
         }
     }
 
