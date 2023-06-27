@@ -18,7 +18,7 @@ namespace Byndyusoft.Data.Relational.Functional
 
         public async Task InitializeAsync()
         {
-            _connection = new SqliteConnection($"Data Source={_file}.db;Pooling=false");
+            _connection = new SqliteConnection($"Data Source={_file};Pooling=false");
             await _connection.ExecuteAsync("CREATE TABLE test (id INT, name TEXT)");
 
             _session = new DbSession(_connection);
