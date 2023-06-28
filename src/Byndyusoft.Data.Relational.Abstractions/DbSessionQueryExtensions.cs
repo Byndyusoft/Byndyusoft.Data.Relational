@@ -488,7 +488,7 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
-                cancellationToken);
+                cancellationToken, CommandFlags.None);
 
             using var reader = await session.Connection.ExecuteReaderAsync(command).ConfigureAwait(false);
             if (typeDeserializer == null)
@@ -536,7 +536,7 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
-                cancellationToken);
+                cancellationToken, CommandFlags.None);
 
             using var reader = await session.Connection.ExecuteReaderAsync(command).ConfigureAwait(false);
             var rowParser = reader.GetRowParser<dynamic>();
@@ -549,9 +549,9 @@ namespace Byndyusoft.Data.Relational
         }
 
         private static CommandDefinition CreateCommand(string sql, object? param, IDbTransaction? transaction,
-            int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken)
+            int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken, CommandFlags flags = CommandFlags.Buffered)
         {
-            return new(sql, param, transaction, commandTimeout, commandType, CommandFlags.Buffered,
+            return new(sql, param, transaction, commandTimeout, commandType, flags,
                 cancellationToken);
         }
     }
