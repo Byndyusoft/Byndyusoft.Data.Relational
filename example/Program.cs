@@ -29,10 +29,8 @@ namespace Byndyusoft.Data.Relational.Example
 
             await host.StartAsync();
 
-            using (var activity = Activity.StartActivity(nameof(Main)))
+            using (var activity = Activity.StartActivity())
             {
-                //Console.WriteLine(activity?.SpanId);
-
                 try
                 {
                     await WriteAsync(host.Services);
