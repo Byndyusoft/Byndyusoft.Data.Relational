@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Byndyusoft.Data.Relational
 {
     /// <summary>
-    ///     Represents a commitable database session.
+    ///     Represents a committable database session.
     /// </summary>
     public interface ICommittableDbSession : IDbSession
     {

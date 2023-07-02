@@ -32,7 +32,7 @@ namespace Byndyusoft.Data.Relational
         Task<IDbSession> CreateSessionAsync(string name, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Returns a new instance of the commitable database session's class that implements the
+        ///     Returns a new instance of the committable database session's class that implements the
         ///     <see cref="ICommittableDbSession" /> interface.
         /// </summary>
         /// <param name="cancellationToken">
@@ -43,7 +43,7 @@ namespace Byndyusoft.Data.Relational
         Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Returns a new instance of the commitable database session's class that implements the
+        ///     Returns a new instance of the committable database session's class that implements the
         ///     <see cref="ICommittableDbSession" /> interface with specified name.
         /// </summary>
         /// <param name="name">The name of the <see cref="IDbSession" />.</param>
@@ -56,7 +56,7 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Returns a new instance of the commitable database session's class that implements the
+        ///     Returns a new instance of the committable database session's class that implements the
         ///     <see cref="ICommittableDbSession" /> interface with specified <see cref="IsolationLevel" />.
         /// </summary>
         /// <param name="isolationLevel">
@@ -72,7 +72,7 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Returns a new instance of the commitable database session's class that implements the
+        ///     Returns a new instance of the committable database session's class that implements the
         ///     <see cref="ICommittableDbSession" /> interface with specified name and <see cref="IsolationLevel" />.
         /// </summary>
         /// <param name="name">The name of the <see cref="IDbSession" />.</param>

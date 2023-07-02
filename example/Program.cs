@@ -62,7 +62,7 @@ namespace Byndyusoft.Data.Relational.Example
         {
             var sessionFactory = services.GetRequiredService<IDbSessionFactory>();
             await using var session = await sessionFactory.CreateSessionAsync();
-            var result = session.Query("SELECT id, name FROM test");
+            var result = session.QueryUnbufferedAsync("SELECT id, name FROM test");
             await foreach (var row in result) Console.WriteLine(JsonConvert.SerializeObject(row));
         }
     }

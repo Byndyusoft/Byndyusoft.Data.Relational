@@ -275,7 +275,7 @@ namespace Byndyusoft.Data.Relational.Functional
             var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id", new {id = 1});
 
             // Act
-            var rows = await _session.Query(queryObject).ToArrayAsync();
+            var rows = await _session.QueryUnbufferedAsync(queryObject).ToArrayAsync();
 
             // Assert
             var row = Assert.Single(rows);
@@ -292,7 +292,7 @@ namespace Byndyusoft.Data.Relational.Functional
             var queryObject = new QueryObject("SELECT id, name FROM test WHERE id = @id", new {id = 1});
 
             // Act
-            var rows = await _session.Query<Row>(queryObject).ToArrayAsync();
+            var rows = await _session.QueryUnbufferedAsync<Row>(queryObject).ToArrayAsync();
 
             // Assert
             var row = Assert.Single(rows);

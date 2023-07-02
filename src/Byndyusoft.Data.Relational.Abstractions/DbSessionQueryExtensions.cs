@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
@@ -460,93 +459,81 @@ namespace Byndyusoft.Data.Relational
             return await session.Connection.QueryMultipleAsync(command).ConfigureAwait(false);
         }
 
+#if NET5_0_OR_GREATER
+
         /// <summary>
-        ///     Execute a query and returns asynchronous stream.
+        /// Execute a query asynchronously using <see cref="IAsyncEnumerable{dynamic}"/>.
         /// </summary>
         /// <param name="session">The session to query on.</param>
-        /// <typeparam name="T">The type of result to return.</typeparam>
+        /// <param name="sql">The SQL to execute for the query.</param>
+        /// <param name="param">The parameters to pass, if any.</param>
+        /// <param name="commandTimeout">The command timeout (in seconds).</param>
+        /// <param name="commandType">The type of command to execute.</param>
+        /// <returns>
+        /// A sequence of data of dynamic data
+        /// </returns>
+        public static IAsyncEnumerable<dynamic> QueryUnbufferedAsync(
+            this IDbSession session,
+            string sql,
+            object? param = null,
+            int? commandTimeout = null,
+            CommandType? commandType = null)
+        {
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+
+            return session.Connection.QueryUnbufferedAsync(sql, param, session.Transaction, commandTimeout, commandType);
+        }
+
+        /// <summary>
+        /// Execute a query asynchronously using <see cref="IAsyncEnumerable{T}"/>.
+        /// </summary>
+        /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
-        /// <param name="cancellationToken">
-        ///     An optional token to cancel the asynchronous operation. The default value is
-        ///     <see cref="CancellationToken.None" />.
-        /// </param>
-        /// <returns>A <see cref="IAsyncEnumerable{T}" /> representing the asynchronous stream.</returns>
-        public static async IAsyncEnumerable<T> Query<T>(
+        /// <returns>
+        /// A sequence of data of dynamic data
+        /// </returns>
+        public static IAsyncEnumerable<T> QueryUnbufferedAsync<T>(
             this IDbSession session,
             string sql,
             object? param = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T>? typeDeserializer = null,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            ITypeDeserializer<T>? typeDeserializer = null)
         {
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
-                cancellationToken, CommandFlags.None);
-
-            using var reader = await session.Connection.ExecuteReaderAsync(command).ConfigureAwait(false);
-            if (typeDeserializer == null)
-            {
-                var rowParser = reader.GetRowParser<T>();
-                while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    yield return rowParser(reader);
-                }
-            }
-            else
-            {
-                var rowParser = reader.GetRowParser<dynamic>();
-                while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    yield return typeDeserializer.Deserialize(rowParser(reader) as IDictionary<string, object>);
-                }
-            }
+            return typeDeserializer is null
+                ? session.Connection.QueryUnbufferedAsync<T>(sql, param, session.Transaction, commandTimeout,
+                    commandType)
+                : session.QueryUnbufferedAsyncCore(sql, param, commandTimeout,
+                    commandType, typeDeserializer);
         }
 
-        /// <summary>
-        ///     Execute a query and returns asynchronous stream.
-        /// </summary>
-        /// <param name="session">The session to query on.</param>
-        /// <param name="sql">The SQL to execute for the query.</param>
-        /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="commandTimeout">The command timeout (in seconds).</param>
-        /// <param name="commandType">The type of command to execute.</param>
-        /// <param name="cancellationToken">
-        ///     An optional token to cancel the asynchronous operation. The default value is
-        ///     <see cref="CancellationToken.None" />.
-        /// </param>
-        /// <returns>A <see cref="IAsyncEnumerable{dynamic}" /> representing the asynchronous stream.</returns>
-        public static async IAsyncEnumerable<dynamic> Query(
+        private static async IAsyncEnumerable<T> QueryUnbufferedAsyncCore<T>(
             this IDbSession session,
             string sql,
-            object? param = null,
-            int? commandTimeout = null,
-            CommandType? commandType = null,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            object? param,
+            int? commandTimeout,
+            CommandType? commandType,
+            ITypeDeserializer<T> typeDeserializer)
         {
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
-                cancellationToken, CommandFlags.None);
-
-            using var reader = await session.Connection.ExecuteReaderAsync(command).ConfigureAwait(false);
-            var rowParser = reader.GetRowParser<dynamic>();
-
-            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            var rows = session.QueryUnbufferedAsync(sql, param, commandTimeout, commandType);
+            await foreach (var row in rows)
             {
-                cancellationToken.ThrowIfCancellationRequested();
-                yield return rowParser(reader);
+                yield return typeDeserializer.Deserialize(row);
             }
         }
+
+#endif
 
         private static CommandDefinition CreateCommand(string sql, object? param, IDbTransaction? transaction,
             int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken, CommandFlags flags = CommandFlags.Buffered)
