@@ -402,59 +402,55 @@ namespace Byndyusoft.Data.Relational
                 cancellationToken).ConfigureAwait(false);
         }
 
+#if NET5_0_OR_GREATER
+
+
         /// <summary>
-        ///     Execute a query and returns asynchronous stream.
+        /// Execute a query asynchronously using <see cref="IAsyncEnumerable{dynamic}"/>.
         /// </summary>
-        /// <typeparam name="T">The type of result to return.</typeparam>
+        /// <param name="session">The session to query on.</param>
+        /// <param name="queryObject">The query object to execute.</param>
+        /// <param name="commandTimeout">The command timeout (in seconds).</param>
+        /// <param name="commandType">The type of command to execute.</param>
+        /// <returns>
+        /// A sequence of data of dynamic data
+        /// </returns>
+        public static IAsyncEnumerable<dynamic> QueryUnbufferedAsync(
+            this IDbSession session,
+            IQueryObject queryObject,
+            int? commandTimeout = null,
+            CommandType? commandType = null)
+        {
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNull(queryObject, nameof(queryObject));
+
+            return session.QueryUnbufferedAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType);
+        }
+
+        /// <summary>
+        /// Execute a query asynchronously using <see cref="IAsyncEnumerable{T}"/>.
+        /// </summary>
         /// <param name="session">The session to query on.</param>
         /// <param name="queryObject">The query object to execute.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
-        /// <param name="cancellationToken">
-        ///     An optional token to cancel the asynchronous operation. The default value is
-        ///     <see cref="CancellationToken.None" />.
-        /// </param>
-        /// <returns>A <see cref="IAsyncEnumerable{T}" /> representing the asynchronous stream.</returns>
-        public static IAsyncEnumerable<T> Query<T>(
+        /// <returns>
+        /// A sequence of data of dynamic data
+        /// </returns>
+        public static IAsyncEnumerable<T> QueryUnbufferedAsync<T>(
             this IDbSession session,
             IQueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
-            ITypeDeserializer<T>? typeDeserializer = null,
-            CancellationToken cancellationToken = default)
+            ITypeDeserializer<T>? typeDeserializer = null)
         {
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return session.Query(queryObject.Sql, queryObject.Params, commandTimeout, commandType, typeDeserializer,
-                cancellationToken);
+            return session.QueryUnbufferedAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
+                typeDeserializer);
         }
-
-        /// <summary>
-        ///     Execute a query and returns asynchronous stream.
-        /// </summary>
-        /// <param name="session">The session to query on.</param>
-        /// <param name="queryObject">The query object to execute.</param>
-        /// <param name="commandTimeout">The command timeout (in seconds).</param>
-        /// <param name="commandType">The type of command to execute.</param>
-        /// <param name="cancellationToken">
-        ///     An optional token to cancel the asynchronous operation. The default value is
-        ///     <see cref="CancellationToken.None" />.
-        /// </param>
-        /// <returns>A <see cref="IAsyncEnumerable{dynamic}" /> representing the asynchronous stream.</returns>
-        public static IAsyncEnumerable<dynamic> Query(
-            this IDbSession session,
-            IQueryObject queryObject,
-            int? commandTimeout = null,
-            CommandType? commandType = null,
-            CancellationToken cancellationToken = default)
-        {
-            Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
-
-            return session.Query(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                cancellationToken);
-        }
+#endif
     }
 }

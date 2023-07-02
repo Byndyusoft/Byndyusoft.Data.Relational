@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +11,9 @@ namespace Byndyusoft.Data.Relational.Unit
     {
         private QueryObject _queryObject;
         private DbSession _session;
+
+        private static IQueryObject NullQueryObject => null!;
+        private static IDbSession NullDbSession => null!;
 
         public Task InitializeAsync()
         {
@@ -31,7 +34,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QueryAsync<int>(_queryObject));
+                    NullDbSession.QueryAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -42,7 +45,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync<int>((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync<int>(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -53,7 +56,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession) null).QueryAsync(_queryObject));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => NullDbSession.QueryAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -64,7 +67,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -76,7 +79,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QuerySingleAsync<int>(_queryObject));
+                    NullDbSession.QuerySingleAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -88,7 +91,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    _session.QuerySingleAsync<int>((IQueryObject) null));
+                    _session.QuerySingleAsync<int>(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -100,7 +103,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(
-                    () => ((IDbSession) null).QuerySingleAsync(_queryObject));
+                    () => NullDbSession.QuerySingleAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -111,7 +114,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QuerySingleAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QuerySingleAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -123,7 +126,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QuerySingleOrDefaultAsync<int>(_queryObject));
+                    NullDbSession.QuerySingleOrDefaultAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -135,7 +138,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    _session.QuerySingleOrDefaultAsync<int>((IQueryObject) null));
+                    _session.QuerySingleOrDefaultAsync<int>(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -147,7 +150,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QuerySingleOrDefaultAsync(_queryObject));
+                    NullDbSession.QuerySingleOrDefaultAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -159,7 +162,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    _session.QuerySingleOrDefaultAsync((IQueryObject) null));
+                    _session.QuerySingleOrDefaultAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -171,7 +174,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QueryFirstAsync<int>(_queryObject));
+                    NullDbSession.QueryFirstAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -183,7 +186,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(
-                    () => _session.QueryFirstAsync<int>((IQueryObject) null));
+                    () => _session.QueryFirstAsync<int>(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -195,7 +198,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QueryFirstAsync(_queryObject));
+                    NullDbSession.QueryFirstAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -206,7 +209,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryFirstAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryFirstAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -218,7 +221,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QueryFirstOrDefaultAsync<int>(_queryObject));
+                    NullDbSession.QueryFirstOrDefaultAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -230,7 +233,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    _session.QueryFirstOrDefaultAsync<int>((IQueryObject) null));
+                    _session.QueryFirstOrDefaultAsync<int>(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -242,7 +245,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QueryFirstOrDefaultAsync(_queryObject));
+                    NullDbSession.QueryFirstOrDefaultAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -254,7 +257,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    _session.QueryFirstOrDefaultAsync((IQueryObject) null));
+                    _session.QueryFirstOrDefaultAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -265,7 +268,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => ((IDbSession) null).ExecuteAsync(_queryObject));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => NullDbSession.ExecuteAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -276,7 +279,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -288,7 +291,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).ExecuteScalarAsync(_queryObject));
+                    NullDbSession.ExecuteScalarAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -299,7 +302,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteScalarAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.ExecuteScalarAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -311,7 +314,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).ExecuteScalarAsync<int>(_queryObject));
+                    NullDbSession.ExecuteScalarAsync<int>(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -323,7 +326,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    _session.ExecuteScalarAsync<int>((IQueryObject) null));
+                    _session.ExecuteScalarAsync<int>(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -335,7 +338,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             var exception =
                 await Assert.ThrowsAsync<ArgumentNullException>(() =>
-                    ((IDbSession) null).QueryMultipleAsync(_queryObject));
+                    NullDbSession.QueryMultipleAsync(_queryObject));
 
             // Assert
             Assert.Equal("session", exception.ParamName);
@@ -346,7 +349,7 @@ namespace Byndyusoft.Data.Relational.Unit
         {
             // Act
             var exception =
-                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryMultipleAsync((IQueryObject) null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => _session.QueryMultipleAsync(NullQueryObject));
 
             // Assert
             Assert.Equal("queryObject", exception.ParamName);
@@ -358,7 +361,7 @@ namespace Byndyusoft.Data.Relational.Unit
             // Act
             try
             {
-                await _session.Query((IQueryObject) null).ToArrayAsync();
+                await _session.QueryUnbufferedAsync(NullQueryObject).ToArrayAsync();
                 Assert.False(true);
             }
             catch (ArgumentNullException exception)
@@ -369,12 +372,12 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task Query_NullSession_ThrowsException()
+        public async Task QueryUnbufferedAsync_NullSession_ThrowsException()
         {
             // Act
             try
             {
-                await ((IDbSession) null).Query(_queryObject).ToArrayAsync();
+                await NullDbSession!.QueryUnbufferedAsync(_queryObject).ToArrayAsync();
                 Assert.False(true);
             }
             catch (ArgumentNullException exception)
@@ -385,12 +388,12 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task Query_Generic_NullQueryObject_ThrowsException()
+        public async Task QueryUnbufferedAsync_Generic_NullQueryObject_ThrowsException()
         {
             // Act
             try
             {
-                await _session.Query<int>((IQueryObject) null).ToArrayAsync();
+                await _session.QueryUnbufferedAsync<int>(NullQueryObject).ToArrayAsync();
                 Assert.False(true);
             }
             catch (ArgumentNullException exception)
@@ -401,12 +404,12 @@ namespace Byndyusoft.Data.Relational.Unit
         }
 
         [Fact]
-        public async Task Query_Generic_NullSession_ThrowsException()
+        public async Task QueryUnbufferedAsync_Generic_NullSession_ThrowsException()
         {
             // Act
             try
             {
-                await ((IDbSession) null).Query<int>(_queryObject).ToArrayAsync();
+                await NullDbSession!.QueryUnbufferedAsync<int>(_queryObject).ToArrayAsync();
                 Assert.False(true);
             }
             catch (ArgumentNullException exception)

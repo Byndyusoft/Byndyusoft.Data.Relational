@@ -29,11 +29,11 @@ namespace Byndyusoft.Data.Relational.Sessions
 
         private IDependentDbSession Create(string name, ISession session)
         {
-            if (session is ICommitableSession commitableSession)
+            if (session is ICommitableSession committableSession)
             {
-                var dbSession = _sessionFactory.CreateCommittableSessionAsync(name, commitableSession.IsolationLevel)
+                var dbSession = _sessionFactory.CreateCommittableSessionAsync(name, committableSession.IsolationLevel)
                     .ConfigureAwait(false).GetAwaiter().GetResult();
-                return new DependentCommitableDbSession(dbSession);
+                return new DependentCommittableDbSession(dbSession);
             }
             else
             {

@@ -11,7 +11,7 @@ namespace Byndyusoft.Data.Relational
     {
         private static readonly AssemblyName AssemblyName = typeof(DbSession).Assembly.GetName();
         private static readonly string Version = AssemblyName.Version!.ToString();
-        public static readonly string ActivitySourceName = AssemblyName.Name;
+        public static readonly string ActivitySourceName = AssemblyName.Name!;
 
         internal static ActivitySource CreateActivitySource()
         {
