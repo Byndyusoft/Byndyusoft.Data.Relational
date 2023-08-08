@@ -7,7 +7,7 @@ namespace Byndyusoft.Data.Relational
     ///     An object that represents a database query.
     /// </summary>
     /// <see href="https://martinfowler.com/eaaCatalog/queryObject.html" />
-    public class QueryObject : IQueryObject
+    public record QueryObject : IQueryObject
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="QueryObject" /> class.

@@ -11,7 +11,7 @@ namespace System.Data.Common
     /// <summary>
     ///     Extensions to work with <see cref="DbConnection" /> queries.
     /// </summary>
-    public static class DbConnectionQueryExtensions
+    public static class DbConnectionQueryObjectExtensions
     {
         /// <summary>
         ///     Execute a query asynchronously using Task.
@@ -343,8 +343,8 @@ namespace System.Data.Common
         ///     Execute a command asynchronously using Task.
         /// </summary>
         /// <param name="connection">The connection to query on.</param>
-        /// <param name="sql">The SQL to execute for this query.</param>
-        /// <param name="param">The parameters to use for this query.</param>
+        /// <param name="queryObject">The query object to execute.</param>
+        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
@@ -373,8 +373,8 @@ namespace System.Data.Common
         /// </summary>
         /// <typeparam name="T">The type to return.</typeparam>
         /// <param name="connection">The connection to query on.</param>
-        /// <param name="sql">The SQL to execute.</param>
-        /// <param name="param">The parameters to use for this command.</param>
+        /// <param name="queryObject">The query object to execute.</param>
+        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -408,8 +408,8 @@ namespace System.Data.Common
         ///     Asynchronously execute SQL that selects a single value.
         /// </summary>
         /// <param name="connection">The connection to query on.</param>
-        /// <param name="sql">The SQL to execute.</param>
-        /// <param name="param">The parameters to use for this command.</param>
+        /// <param name="queryObject">The query object to execute.</param>
+        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
@@ -437,8 +437,8 @@ namespace System.Data.Common
         ///     Asynchronously execute a command that returns multiple result sets, and access each in turn.
         /// </summary>
         /// <param name="connection">The connection to query on.</param>
-        /// <param name="sql">The SQL to execute for this query.</param>
-        /// <param name="param">The parameters to use for this query.</param>
+        /// <param name="queryObject">The query object to execute.</param>
+        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
