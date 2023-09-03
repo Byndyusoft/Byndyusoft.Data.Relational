@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
@@ -27,7 +28,7 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<IEnumerable<T>> QueryAsync<T>(
+        public static Task<IEnumerable<T>> QueryAsync<T>(
             this IDbSession session,
             string sql,
             object? param = null,
@@ -39,12 +40,14 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QueryAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await session.Connection.QueryAsync<T>(command).ConfigureAwait(false)
-                : await session.Connection.QueryAsync(command).DeserializeAsync(typeDeserializer).ConfigureAwait(false);
         }
 
         /// <summary>

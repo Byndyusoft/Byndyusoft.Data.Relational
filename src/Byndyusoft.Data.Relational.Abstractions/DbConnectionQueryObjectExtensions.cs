@@ -28,7 +28,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<IEnumerable<T>> QueryAsync<T>(
+        public static Task<IEnumerable<T>> QueryAsync<T>(
             this DbConnection connection,
             IQueryObject queryObject,
             DbTransaction? transaction = null,
@@ -40,12 +40,14 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await connection.QueryAsync<T>(command).ConfigureAwait(false)
-                : await connection.QueryAsync(command).DeserializeAsync(typeDeserializer).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -94,7 +96,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T> QuerySingleAsync<T>(
+        public static Task<T> QuerySingleAsync<T>(
             this DbConnection connection,
             IQueryObject queryObject,
             DbTransaction? transaction = null,
@@ -106,13 +108,14 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QuerySingleAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await connection.QuerySingleAsync<T>(command).ConfigureAwait(false)
-                : await connection.QuerySingleAsync(command).DeserializeAsync(typeDeserializer)
-                    .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -159,7 +162,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T?> QuerySingleOrDefaultAsync<T>(
+        public static Task<T?> QuerySingleOrDefaultAsync<T>(
             this DbConnection connection,
             IQueryObject queryObject,
             DbTransaction? transaction = null,
@@ -171,13 +174,14 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QuerySingleOrDefaultAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await connection.QuerySingleOrDefaultAsync<T>(command).ConfigureAwait(false)
-                : await connection.QuerySingleOrDefaultAsync(command).DeserializeAsync(typeDeserializer)
-                    .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -224,7 +228,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T> QueryFirstAsync<T>(
+        public static Task<T> QueryFirstAsync<T>(
             this DbConnection connection,
             IQueryObject queryObject,
             DbTransaction? transaction = null,
@@ -236,13 +240,14 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryFirstAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await connection.QueryFirstAsync<T>(command).ConfigureAwait(false)
-                : await connection.QueryFirstAsync(command).DeserializeAsync(typeDeserializer)
-                    .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -289,7 +294,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T?> QueryFirstOrDefaultAsync<T>(
+        public static Task<T?> QueryFirstOrDefaultAsync<T>(
             this DbConnection connection,
             IQueryObject queryObject,
             DbTransaction? transaction = null,
@@ -301,13 +306,14 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryFirstOrDefaultAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await connection.QueryFirstOrDefaultAsync<T>(command).ConfigureAwait(false)
-                : await connection.QueryFirstOrDefaultAsync(command).DeserializeAsync(typeDeserializer)
-                    .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -383,7 +389,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static async Task<T> ExecuteScalarAsync<T>(
+        public static Task<T> ExecuteScalarAsync<T>(
             this DbConnection connection,
             IQueryObject queryObject,
             DbTransaction? transaction = null,
@@ -395,13 +401,14 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.ExecuteScalarAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? await connection.ExecuteScalarAsync<T>(command).ConfigureAwait(false)
-                : await connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer)
-                    .ConfigureAwait(false);
         }
 
         /// <summary>
@@ -512,7 +519,7 @@ namespace System.Data.Common
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return typeDeserializer is null
-                ? connection.QueryUnbufferedAsync<T>(queryObject, transaction, commandTimeout,
+                ? connection.QueryUnbufferedAsync<T>(queryObject.Sql, queryObject.Params, transaction, commandTimeout,
                     commandType)
                 : connection.QueryUnbufferedAsyncCore(queryObject, transaction, commandTimeout,
                     commandType, typeDeserializer);
@@ -521,7 +528,7 @@ namespace System.Data.Common
         private static async IAsyncEnumerable<T> QueryUnbufferedAsyncCore<T>(
             this DbConnection connection,
             IQueryObject queryObject,
-            DbTransaction transaction,
+            DbTransaction? transaction,
             int? commandTimeout,
             CommandType? commandType,
             ITypeDeserializer<T> typeDeserializer)
