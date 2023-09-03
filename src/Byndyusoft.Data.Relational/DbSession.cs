@@ -5,7 +5,6 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.Data.Sessions;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Options;
 
@@ -42,6 +41,7 @@ namespace Byndyusoft.Data.Relational
             _connection = connection;
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
+            _sessionStorage = new DbSessionStorage();
         }
 
         internal DbSession(
@@ -65,11 +65,11 @@ namespace Byndyusoft.Data.Relational
             if (_disposed)
                 return;
 
-            _disposed = true;
             await FinishAsync();
             await DisposeAsyncCore();
             Dispose(true);
             GC.SuppressFinalize(this);
+            _disposed = true;
         }
 
         public void Dispose()
@@ -77,10 +77,10 @@ namespace Byndyusoft.Data.Relational
             if (_disposed)
                 return;
 
-            _disposed = true;
             Finish();
             Dispose(true);
             GC.SuppressFinalize(this);
+            _disposed = true;
         }
 
         public string Name
@@ -137,7 +137,8 @@ namespace Byndyusoft.Data.Relational
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Committing));
 
-            if (_transaction != null) await _transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
+            if (_transaction != null) 
+                await _transaction.CommitAsync(cancellationToken).ConfigureAwait(false);
 
             _completed = true;
 
@@ -153,7 +154,8 @@ namespace Byndyusoft.Data.Relational
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.RollingBack));
 
-            if (_transaction != null) await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
+            if (_transaction != null) 
+                await _transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
 
             _completed = true;
 
@@ -216,8 +218,8 @@ namespace Byndyusoft.Data.Relational
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Starting));
 
-            _connection = await CreateConnectionAsync(cancellationToken).ConfigureAwait(false);
-            _transaction = await BeginTransactionAsync(_connection, cancellationToken).ConfigureAwait(false);
+            _connection ??= await CreateConnectionAsync(cancellationToken).ConfigureAwait(false);
+            _transaction ??= await BeginTransactionAsync(_connection, cancellationToken).ConfigureAwait(false);
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Started));
         }

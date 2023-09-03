@@ -9,13 +9,13 @@ namespace Byndyusoft.Data.Relational
     /// </summary>
     public class DbSessionInstrumentationOptions
     {
-        private static readonly AssemblyName AssemblyName = typeof(DbSession).Assembly.GetName();
-        private static readonly string Version = AssemblyName.Version!.ToString();
-        public static readonly string ActivitySourceName = AssemblyName.Name!;
+        private static readonly AssemblyName _assemblyName = typeof(DbSession).Assembly.GetName();
+        private static readonly string _version = _assemblyName.Version!.ToString();
+        public static readonly string ActivitySourceName = _assemblyName.Name!;
 
         internal static ActivitySource CreateActivitySource()
         {
-            return new(ActivitySourceName, Version);
+            return new(ActivitySourceName, _version);
         }
     }
 }

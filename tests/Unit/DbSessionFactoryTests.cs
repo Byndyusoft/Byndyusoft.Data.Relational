@@ -19,20 +19,21 @@ namespace Byndyusoft.Data.Relational.Unit
         private readonly IsolationLevel _isolationLevel;
         private readonly IDbSessionAccessor _sessionAccessor;
         private readonly DbTransaction _transaction;
+        private readonly DbSessionStorage _sessionStorage = new();
 
         public DbSessionFactoryTests()
         {
             _isolationLevel = IsolationLevel.Serializable;
             _cancellationToken = new CancellationToken();
             _connectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;";
-            _sessionAccessor = new DbSessionAccessor(null!, null!);
-
+           
             _dbProviderFactory = new Mock<DbProviderFactory> {CallBase = true}.Object;
             _connection = new Mock<DbConnection> {CallBase = true}.Object;
             _transaction = new Mock<DbTransaction> {CallBase = true}.Object;
 
             var options = new DbSessionOptionsMonitor(_dbProviderFactory, _connectionString);
-            _factory = new DbSessionFactory(options);
+            _factory = new DbSessionFactory(options, _sessionStorage);
+            _sessionAccessor = new DbSessionAccessor(_factory, _sessionStorage);
 
             Mock.Get(_dbProviderFactory).Setup(x => x.CreateConnection()).Returns(_connection);
         }
@@ -41,7 +42,7 @@ namespace Byndyusoft.Data.Relational.Unit
         public void Constructor_NullOptions_ThrowsException()
         {
             // Act
-            var exception = Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(null!));
+            var exception = Assert.Throws<ArgumentNullException>(() => new DbSessionFactory(null!, _sessionStorage));
 
             // Assert
             Assert.NotNull(exception);
