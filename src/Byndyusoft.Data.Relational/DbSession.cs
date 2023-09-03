@@ -228,7 +228,7 @@ namespace Byndyusoft.Data.Relational
             Dispose(false);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
