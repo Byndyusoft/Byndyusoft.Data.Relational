@@ -12,7 +12,6 @@ namespace Byndyusoft.Data.Relational
         /// </summary>
         string Sql { get; }
 
-
         /// <summary>
         ///     Database query parameters.
         /// </summary>

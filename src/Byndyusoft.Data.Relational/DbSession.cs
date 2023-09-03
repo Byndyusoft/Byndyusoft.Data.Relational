@@ -14,7 +14,7 @@ namespace Byndyusoft.Data.Relational
     {
         private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
 
-        private readonly IDbSessionStorage _sessionStorage = default!;
+        private readonly IDbSessionStorage? _sessionStorage;
         private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
         private readonly string _name = default!;
@@ -32,7 +32,7 @@ namespace Byndyusoft.Data.Relational
         {
         }
 
-        internal DbSession(DbConnection connection, DbTransaction? transaction = null)
+        public DbSession(DbConnection connection, DbTransaction? transaction = null)
             : this()
         {
             Guard.IsNotNull(connection, nameof(connection));
@@ -41,7 +41,6 @@ namespace Byndyusoft.Data.Relational
             _connection = connection;
             _transaction = transaction;
             _isolationLevel = transaction?.IsolationLevel;
-            _sessionStorage = new DbSessionStorage();
         }
 
         internal DbSession(
@@ -178,7 +177,7 @@ namespace Byndyusoft.Data.Relational
             _activity?.Dispose();
             _activity = null;
 
-            _sessionStorage.SetCurrent(_name, null);
+            _sessionStorage?.SetCurrent(_name, null);
         }
 
         public async Task FinishAsync()
@@ -202,7 +201,7 @@ namespace Byndyusoft.Data.Relational
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Finished));
             _activity?.Dispose();
             _activity = null;
-            _sessionStorage.SetCurrent(_name, null);
+            _sessionStorage?.SetCurrent(_name, null);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
