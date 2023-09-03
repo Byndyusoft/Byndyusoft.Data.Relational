@@ -64,11 +64,13 @@ namespace Microsoft.Extensions.DependencyInjection
             Guard.IsNotNull(name, nameof(name));
             Guard.IsNotNull(configureOptions, nameof(configureOptions));
 
-            services.AddOptions();
-            services.Configure(name, configureOptions);
+            services.AddOptions<DbSessionOptions>(name)
+                .Configure(configureOptions)
+                .ValidateDataAnnotations();
 
             services.TryAddSingleton<IDbSessionAccessor, DbSessionAccessor>();
             services.TryAddSingleton<IDbSessionFactory, DbSessionFactory>();
+            services.TryAddSingleton<IDbSessionStorage, DbSessionStorage>();
 
             return services;
         }

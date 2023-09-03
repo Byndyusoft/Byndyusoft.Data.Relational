@@ -268,7 +268,7 @@ namespace Byndyusoft.Data.Relational.Functional
         }
 
         [Fact]
-        public async Task Query()
+        public async Task QueryUnbufferedAsync()
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
@@ -285,7 +285,7 @@ namespace Byndyusoft.Data.Relational.Functional
         }
 
         [Fact]
-        public async Task Query_Generic()
+        public async Task QueryUnbufferedAsync_Generic()
         {
             // Arrange
             await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");

@@ -1,28 +1,35 @@
+using CommunityToolkit.Diagnostics;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
 namespace Byndyusoft.Data.Relational
 {
-    internal class DbSessionStorage : IDbSessionsIndexer
+    internal class DbSessionStorage : IDbSessionStorage
     {
-        private static readonly AsyncLocal<ConcurrentDictionary<string, DbSession?>?> _current = new();
+        private static readonly AsyncLocal<ConcurrentDictionary<string, IDbSession?>?> _current = new();
 
-        public DbSession? this[string name]
+        IDbSession? IDbSessionsIndexer.this[string name]
+            => GetCurrent(name);
+
+        public IDbSession? GetCurrent(string name)
         {
-            get => _current.Value?.TryGetValue(name, out var session) == true ? session : null;
-            set
-            {
-                var dic = _current.Value ??= new ConcurrentDictionary<string, DbSession?>();
-                dic.AddOrUpdate(name, value, (_, current) =>
-                {
-                    if (value is not null && current is not null)
-                        throw new InvalidOperationException($"{nameof(DbSession)} with name {name} already exists");
-                    return value;
-                });
-            }
+            Guard.IsNotNull(name, nameof(name));
+
+            return _current.Value?.TryGetValue(name, out var session) == true ? session : null;
         }
 
-        IDbSession? IDbSessionsIndexer.this[string name] => this[name];
+        public void SetCurrent(string name, IDbSession? session)
+        {
+            Guard.IsNotNull(name, nameof(name));
+
+            var dic = _current.Value ??= new ();
+            dic.AddOrUpdate(name, session, (_, current) =>
+            {
+                if (session is not null && current is not null)
+                    throw new InvalidOperationException($"{nameof(DbSession)} with name {name} already exists");
+                return session;
+            });
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using CommunityToolkit.Diagnostics;
 
@@ -9,6 +10,7 @@ namespace Byndyusoft.Data.Relational
         private string? _connectionString;
         private DbProviderFactory? _dbProviderFactory;
 
+        [Required(AllowEmptyStrings = false)]
         public string ConnectionString
         {
             get => _connectionString!;
@@ -19,11 +21,11 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
+        [Required]
         public DbProviderFactory DbProviderFactory
         {
             get => _dbProviderFactory!;
             set
-
             {
                 Guard.IsNotNull(value, nameof(DbProviderFactory));
                 _dbProviderFactory = value;

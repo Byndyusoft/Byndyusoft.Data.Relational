@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.Diagnostics;
 using Dapper;
 
+// ReSharper disable once CheckNamespace
 namespace Byndyusoft.Data.Relational
 {
     /// <summary>
@@ -26,9 +28,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<IEnumerable<T>> QueryAsync<T>(
+        public static Task<IEnumerable<T>> QueryAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
@@ -37,8 +39,13 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.QueryAsync(queryObject.Sql, queryObject.Params, commandTimeout,
-                commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
+            return session.Connection.QueryAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout,
+                commandType, 
+                typeDeserializer, 
+                cancellationToken);
         }
 
         /// <summary>
@@ -53,9 +60,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<IEnumerable<dynamic>> QueryAsync(
+        public static Task<IEnumerable<dynamic>> QueryAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -63,8 +70,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.QueryAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                cancellationToken).ConfigureAwait(false);
+            return session.Connection.QueryAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout, 
+                commandType,
+                cancellationToken);
         }
 
         /// <summary>
@@ -81,9 +92,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T> QuerySingleAsync<T>(
+        public static Task<T> QuerySingleAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
@@ -92,9 +103,13 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session
-                .QuerySingleAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                    typeDeserializer, cancellationToken).ConfigureAwait(false);
+            return session.Connection.QuerySingleAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
+                cancellationToken);
         }
 
         /// <summary>
@@ -109,9 +124,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic> QuerySingleAsync(
+        public static Task<dynamic> QuerySingleAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -119,9 +134,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session
-                .QuerySingleAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType, cancellationToken)
-                .ConfigureAwait(false);
+            return session.Connection.QuerySingleAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout, 
+                commandType, 
+                cancellationToken);
         }
 
         /// <summary>
@@ -138,9 +156,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T?> QuerySingleOrDefaultAsync<T>(
+        public static Task<T?> QuerySingleOrDefaultAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
@@ -149,8 +167,13 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.QuerySingleOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout,
-                commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
+            return session.Connection.QuerySingleOrDefaultAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
+                cancellationToken);
         }
 
         /// <summary>
@@ -165,9 +188,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic?> QuerySingleOrDefaultAsync(
+        public static Task<dynamic?> QuerySingleOrDefaultAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -175,9 +198,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session
-                .QuerySingleOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                    cancellationToken).ConfigureAwait(false);
+            return session.Connection.QuerySingleOrDefaultAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                cancellationToken);
         }
 
         /// <summary>
@@ -194,9 +220,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T> QueryFirstAsync<T>(
+        public static Task<T> QueryFirstAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
@@ -205,9 +231,13 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session
-                .QueryFirstAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                    typeDeserializer, cancellationToken).ConfigureAwait(false);
+            return session.Connection.QueryFirstAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
+                cancellationToken);
         }
 
         /// <summary>
@@ -222,9 +252,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic> QueryFirstAsync(
+        public static Task<dynamic> QueryFirstAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -232,9 +262,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session
-                .QueryFirstAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType, cancellationToken)
-                .ConfigureAwait(false);
+            return session.Connection.QueryFirstAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                cancellationToken);
         }
 
         /// <summary>
@@ -251,9 +284,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<T?> QueryFirstOrDefaultAsync<T>(
+        public static Task<T?> QueryFirstOrDefaultAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
@@ -262,8 +295,13 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.QueryFirstOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout,
-                commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
+            return session.Connection.QueryFirstOrDefaultAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout,
+                commandType, 
+                typeDeserializer, 
+                cancellationToken);
         }
 
         /// <summary>
@@ -278,9 +316,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic?> QueryFirstOrDefaultAsync(
+        public static Task<dynamic?> QueryFirstOrDefaultAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -288,9 +326,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session
-                .QueryFirstOrDefaultAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                    cancellationToken).ConfigureAwait(false);
+            return session.Connection.QueryFirstOrDefaultAsync(
+                    queryObject,
+                    session.Transaction,
+                    commandTimeout,
+                    commandType,
+                    cancellationToken);
         }
 
         /// <summary>
@@ -305,9 +346,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The number of rows affected.</returns>
-        public static async Task<int> ExecuteAsync(
+        public static Task<int> ExecuteAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -315,8 +356,11 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.ExecuteAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
-                cancellationToken).ConfigureAwait(false);
+            return session.Connection.ExecuteAsync(queryObject,
+                    session.Transaction,
+                    commandTimeout,
+                    commandType,
+                    cancellationToken);
         }
 
         /// <summary>
@@ -333,9 +377,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static async Task<T> ExecuteScalarAsync<T>(
+        public static Task<T> ExecuteScalarAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
@@ -344,8 +388,13 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.ExecuteScalarAsync(queryObject.Sql, queryObject.Params, commandTimeout,
-                commandType, typeDeserializer, cancellationToken).ConfigureAwait(false);
+            return session.Connection.ExecuteScalarAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout,
+                commandType, 
+                typeDeserializer, 
+                cancellationToken);
         }
 
         /// <summary>
@@ -360,9 +409,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned.</returns>
-        public static async Task<dynamic> ExecuteScalarAsync(
+        public static Task<dynamic> ExecuteScalarAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -370,9 +419,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.ExecuteScalarAsync(queryObject.Sql, queryObject.Params, commandTimeout,
+            return session.Connection.ExecuteScalarAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout,
                 commandType,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken);
         }
 
         /// <summary>
@@ -387,9 +439,9 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>Multiple result set.</returns>
-        public static async Task<SqlMapper.GridReader> QueryMultipleAsync(
+        public static Task<SqlMapper.GridReader> QueryMultipleAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
@@ -397,9 +449,12 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return await session.QueryMultipleAsync(queryObject.Sql, queryObject.Params, commandTimeout,
+            return session.Connection.QueryMultipleAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
                 commandType,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken);
         }
 
 #if NET5_0_OR_GREATER
@@ -417,14 +472,18 @@ namespace Byndyusoft.Data.Relational
         /// </returns>
         public static IAsyncEnumerable<dynamic> QueryUnbufferedAsync(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null)
         {
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return session.QueryUnbufferedAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType);
+            return session.Connection.QueryUnbufferedAsync(
+                queryObject, 
+                session.Transaction, 
+                commandTimeout, 
+                commandType);
         }
 
         /// <summary>
@@ -440,7 +499,7 @@ namespace Byndyusoft.Data.Relational
         /// </returns>
         public static IAsyncEnumerable<T> QueryUnbufferedAsync<T>(
             this IDbSession session,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null)
@@ -448,7 +507,11 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return session.QueryUnbufferedAsync(queryObject.Sql, queryObject.Params, commandTimeout, commandType,
+            return session.Connection.QueryUnbufferedAsync(
+                queryObject,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 typeDeserializer);
         }
 #endif

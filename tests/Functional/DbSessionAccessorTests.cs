@@ -13,6 +13,7 @@ namespace Byndyusoft.Data.Relational.Functional
 
         private Service _service;
         private DbSessionFactory _sessionFactory;
+        private readonly DbSessionStorage _sessionStorage = new();
 
         public async Task InitializeAsync()
         {
@@ -20,11 +21,10 @@ namespace Byndyusoft.Data.Relational.Functional
 
             await using var connection = new SqliteConnection(connectionString);
             await connection.ExecuteAsync("CREATE TABLE test (id INT, name TEXT)");
-
-
+            
             _sessionFactory =
-                new DbSessionFactory(new DbSessionOptionsMonitor(SqliteFactory.Instance, connectionString));
-            _service = new Service();
+                new DbSessionFactory(new DbSessionOptionsMonitor(SqliteFactory.Instance, connectionString), _sessionStorage);
+            _service = new Service(new DbSessionAccessor(_sessionFactory, _sessionStorage));
         }
 
         public Task DisposeAsync()
@@ -97,7 +97,12 @@ namespace Byndyusoft.Data.Relational.Functional
 
         private class Service
         {
-            private readonly IDbSessionAccessor _sessionAccessor = new DbSessionAccessor(null!, null!);
+            private readonly IDbSessionAccessor _sessionAccessor;
+
+            public Service(IDbSessionAccessor sessionAccessor)
+            {
+                _sessionAccessor = sessionAccessor;
+            }
 
             public async Task<dynamic> QueryAsync()
             {

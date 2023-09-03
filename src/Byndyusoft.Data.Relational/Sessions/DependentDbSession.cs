@@ -1,24 +1,24 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.Data.Relational;
 
-internal class DependentDbSession : IDependentDbSession
+namespace Byndyusoft.Data.Relational.Sessions
 {
-    private readonly IDbSession _dbSession;
-
-    public DependentDbSession(IDbSession dbSession)
+    internal class DependentDbSession : IDependentDbSession
     {
-        _dbSession = dbSession;
-    }
+        public DependentDbSession(IDbSession dbSession)
+        {
+            DbSession = dbSession;
+        }
 
-    public IDbSession DbSession => _dbSession;
+        public IDbSession DbSession { get; }
 
-    public ValueTask CommitAsync(CancellationToken cancellationToken) => new();
+        public ValueTask CommitAsync(CancellationToken cancellationToken) 
+            => new();
 
-    public ValueTask RollbackAsync(CancellationToken cancellationToken) => new();
+        public ValueTask RollbackAsync(CancellationToken cancellationToken) 
+            => new();
 
-    public void Dispose()
-    {
-        _dbSession.Dispose();
+        public void Dispose() =>
+            DbSession.Dispose();
     }
 }

@@ -6,7 +6,7 @@ namespace Byndyusoft.Data.Relational
 {
     internal static class TypeDeserializerExtensions
     {
-        public static async Task<T> DeserializeAsync<T>(this Task<dynamic> task, ITypeDeserializer<T> deserializer)
+        public static async Task<T?> DeserializeAsync<T>(this Task<dynamic> task, ITypeDeserializer<T> deserializer)
         {
             var row = await task.ConfigureAwait(false);
 
@@ -20,10 +20,10 @@ namespace Byndyusoft.Data.Relational
             return rows.Select(row => (T) DeserializeCore<T>(deserializer, row));
         }
 
-        private static T DeserializeCore<T>(ITypeDeserializer<T> deserializer, dynamic? row)
+        private static T? DeserializeCore<T>(ITypeDeserializer<T> deserializer, dynamic? row)
         {
             if (row == null)
-                return default!;
+                return default;
             return deserializer.Deserialize((IDictionary<string, object>) row);
         }
     }

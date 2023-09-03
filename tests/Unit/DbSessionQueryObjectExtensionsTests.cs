@@ -12,7 +12,7 @@ namespace Byndyusoft.Data.Relational.Unit
         private QueryObject _queryObject;
         private DbSession _session;
 
-        private static IQueryObject NullQueryObject => null!;
+        private static QueryObject NullQueryObject => null!;
         private static IDbSession NullDbSession => null!;
 
         public Task InitializeAsync()

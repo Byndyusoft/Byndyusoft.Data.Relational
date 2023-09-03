@@ -1,30 +1,26 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Byndyusoft.Data.Relational;
 
-internal class DependentCommittableDbSession : IDependentDbSession
+namespace Byndyusoft.Data.Relational.Sessions
 {
-    private readonly ICommittableDbSession _committableSession;
-
-    public DependentCommittableDbSession(ICommittableDbSession committableSession)
+    internal class DependentCommittableDbSession : IDependentDbSession
     {
-        _committableSession = committableSession;
-    }
+        private readonly ICommittableDbSession _committableSession;
 
-    public IDbSession DbSession => _committableSession;
+        public DependentCommittableDbSession(ICommittableDbSession committableSession)
+        {
+            _committableSession = committableSession;
+        }
 
-    public async ValueTask CommitAsync(CancellationToken cancellationToken)
-    {
-        await _committableSession.CommitAsync(cancellationToken);
-    }
+        public IDbSession DbSession => _committableSession;
 
-    public async ValueTask RollbackAsync(CancellationToken cancellationToken)
-    {
-        await _committableSession.CommitAsync(cancellationToken);
-    }
+        public ValueTask CommitAsync(CancellationToken cancellationToken) =>
+            new(_committableSession.CommitAsync(cancellationToken));
 
-    public void Dispose()
-    {
-        _committableSession.Dispose();
+        public ValueTask RollbackAsync(CancellationToken cancellationToken) =>
+            new(_committableSession.CommitAsync(cancellationToken));
+
+        public void Dispose() =>
+            _committableSession.Dispose();
     }
 }
