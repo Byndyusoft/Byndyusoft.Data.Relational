@@ -546,7 +546,7 @@ namespace System.Data.Common
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             return typeDeserializer is null
-                ? connection.QueryUnbufferedAsync<T>(sql, param, transaction, commandTimeout,
+                ?  SqlMapper.QueryUnbufferedAsync<T>(connection, sql, param, transaction, commandTimeout,
                     commandType)
                 : connection.QueryUnbufferedAsyncCore(sql, param, transaction, commandTimeout,
                     commandType, typeDeserializer);
