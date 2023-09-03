@@ -16,6 +16,7 @@ namespace Byndyusoft.Data.Relational
             IDbSessionStorage sessionStorage)
         {
             Guard.IsNotNull(options, nameof(options));
+            Guard.IsNotNull(sessionStorage, nameof(sessionStorage));
 
             _options = options;
             _sessionStorage = sessionStorage;
@@ -44,8 +45,6 @@ namespace Byndyusoft.Data.Relational
         public Task<ICommittableDbSession> CreateCommittableSessionAsync(string name,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(name, nameof(name));
-
             return CreateCommittableSessionAsync(name, IsolationLevel.Unspecified, cancellationToken);
         }
 
@@ -58,6 +57,8 @@ namespace Byndyusoft.Data.Relational
         public virtual Task<ICommittableDbSession> CreateCommittableSessionAsync(
             string name, IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
+            Guard.IsNotNull(name, nameof(name));
+
             var options = _options.Get(name).Validate(name);
             var session = new DbSession(name, _sessionStorage, options, isolationLevel);
             _sessionStorage.SetCurrent(name, session);
