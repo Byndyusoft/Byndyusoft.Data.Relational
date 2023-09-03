@@ -1,6 +1,7 @@
 using System;
 using CommunityToolkit.Diagnostics;
 
+// ReSharper disable once CheckNamespace
 namespace Byndyusoft.Data.Relational
 {
     /// <summary>

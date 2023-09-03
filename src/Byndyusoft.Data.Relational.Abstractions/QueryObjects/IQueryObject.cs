@@ -1,4 +1,5 @@
-﻿namespace Byndyusoft.Data.Relational
+// ReSharper disable once CheckNamespace
+namespace Byndyusoft.Data.Relational
 {
     /// <summary>
     ///     An object that represents a database query.

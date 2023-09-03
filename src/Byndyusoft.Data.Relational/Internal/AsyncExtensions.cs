@@ -1,11 +1,10 @@
 #if NETSTANDARD2_0
 
-using System.Data;
-using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Byndyusoft.Data.Relational
+// ReSharper disable once CheckNamespace
+namespace System.Data.Common
 {
     internal static class AsyncExtensions
     {
