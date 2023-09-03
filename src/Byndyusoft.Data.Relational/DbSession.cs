@@ -5,12 +5,13 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Byndyusoft.Data.Sessions;
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Options;
 
 namespace Byndyusoft.Data.Relational
 {
-    public class DbSession : ICommittableDbSession
+    public class DbSession : ICommittableDbSession, IDependentSession
     {
         private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
 
@@ -143,6 +144,12 @@ namespace Byndyusoft.Data.Relational
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Commited));
         }
+
+        ValueTask IDependentSession.RollbackAsync(CancellationToken cancellationToken) =>
+            new(RollbackAsync(cancellationToken));
+
+        ValueTask IDependentSession.CommitAsync(CancellationToken cancellationToken) =>
+            new (CommitAsync(cancellationToken));
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
