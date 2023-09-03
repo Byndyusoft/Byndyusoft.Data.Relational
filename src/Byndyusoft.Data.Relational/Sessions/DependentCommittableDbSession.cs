@@ -14,21 +14,13 @@ namespace Byndyusoft.Data.Relational.Sessions
 
         public IDbSession DbSession => _committableSession;
 
-        public async ValueTask CommitAsync(CancellationToken cancellationToken)
-        {
-            await _committableSession.CommitAsync(cancellationToken)
-                .ConfigureAwait(false);
-        }
+        public ValueTask CommitAsync(CancellationToken cancellationToken) =>
+            new(_committableSession.CommitAsync(cancellationToken));
 
-        public async ValueTask RollbackAsync(CancellationToken cancellationToken)
-        {
-            await _committableSession.CommitAsync(cancellationToken)
-                .ConfigureAwait(false);
-        }
+        public ValueTask RollbackAsync(CancellationToken cancellationToken) =>
+            new(_committableSession.CommitAsync(cancellationToken));
 
-        public void Dispose()
-        {
+        public void Dispose() =>
             _committableSession.Dispose();
-        }
     }
 }
