@@ -16,7 +16,6 @@ namespace Byndyusoft.Data.Relational
            return _current.Value?.TryGetValue(name, out var session) == true ? session : null;
         }
 
-
         public void SetCurrent(string name, IDbSession? session)
         {
             var dic = _current.Value ??= new ();
