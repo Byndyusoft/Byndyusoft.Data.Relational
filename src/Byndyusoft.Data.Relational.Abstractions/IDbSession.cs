@@ -28,15 +28,5 @@ namespace Byndyusoft.Data.Relational
         ///     Gets a collection of key/value pairs that provide additional information about the <see cref="IDbSession" />.
         /// </summary>
         IDictionary<string, object> Items { get; }
-
-        /// <summary>
-        ///     Gets a string that describes the state of the <see cref="IDbSession" />.
-        /// </summary>
-        DbSessionState State { get; }
-
-        /// <summary>
-        ///     Occurs when the session becomes finished.
-        /// </summary>
-        event DbSessionFinishedEventHandler Finished;
     }
 }

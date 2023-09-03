@@ -27,7 +27,8 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(name, nameof(name));
 
             var options = _options.Get(name).Validate(name);
-            var session = DbSession.Current[name] = new DbSession(name, options);
+            var session = new DbSession(name, options);
+            DbSession.Current[name] = session;
             return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
@@ -54,7 +55,8 @@ namespace Byndyusoft.Data.Relational
             string name, IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
             var options = _options.Get(name).Validate(name);
-            var session = DbSession.Current[name] = new DbSession(name, options, isolationLevel);
+            var session = new DbSession(name, options, isolationLevel);
+            DbSession.Current[name] = session;
             return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
         }
 
