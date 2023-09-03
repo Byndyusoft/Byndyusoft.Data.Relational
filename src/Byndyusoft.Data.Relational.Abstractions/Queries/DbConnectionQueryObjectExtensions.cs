@@ -30,7 +30,7 @@ namespace System.Data.Common
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<IEnumerable<T>> QueryAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -63,9 +63,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<IEnumerable<dynamic>> QueryAsync(
+        public static Task<IEnumerable<dynamic>> QueryAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -78,7 +78,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.QueryAsync(command).ConfigureAwait(false);
+            return connection.QueryAsync(command);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace System.Data.Common
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T> QuerySingleAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -131,9 +131,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic> QuerySingleAsync(
+        public static Task<dynamic> QuerySingleAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -144,7 +144,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.QuerySingleAsync(command).ConfigureAwait(false);
+            return connection.QuerySingleAsync(command);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace System.Data.Common
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T?> QuerySingleOrDefaultAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -197,9 +197,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic?> QuerySingleOrDefaultAsync(
+        public static Task<dynamic?> QuerySingleOrDefaultAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -210,7 +210,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.QuerySingleOrDefaultAsync(command).ConfigureAwait(false);
+            return connection.QuerySingleOrDefaultAsync(command);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace System.Data.Common
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T> QueryFirstAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -263,9 +263,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic> QueryFirstAsync(
+        public static Task<dynamic> QueryFirstAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -276,7 +276,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.QueryFirstAsync(command).ConfigureAwait(false);
+            return connection.QueryFirstAsync(command);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace System.Data.Common
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T?> QueryFirstOrDefaultAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -329,9 +329,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
-        public static async Task<dynamic?> QueryFirstOrDefaultAsync(
+        public static Task<dynamic?> QueryFirstOrDefaultAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -342,7 +342,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.QueryFirstOrDefaultAsync(command).ConfigureAwait(false);
+            return connection.QueryFirstOrDefaultAsync(command);
         }
 
         /// <summary>
@@ -358,9 +358,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The number of rows affected.</returns>
-        public static async Task<int> ExecuteAsync(
+        public static Task<int> ExecuteAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -371,7 +371,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.ExecuteAsync(command).ConfigureAwait(false);
+            return connection.ExecuteAsync(command);
         }
 
         /// <summary>
@@ -391,7 +391,7 @@ namespace System.Data.Common
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
         public static Task<T> ExecuteScalarAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -424,9 +424,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned.</returns>
-        public static async Task<dynamic> ExecuteScalarAsync(
+        public static Task<dynamic> ExecuteScalarAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -437,7 +437,7 @@ namespace System.Data.Common
 
             var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
                 cancellationToken);
-            return await connection.ExecuteScalarAsync(command).ConfigureAwait(false);
+            return connection.ExecuteScalarAsync(command);
         }
 
         /// <summary>
@@ -453,9 +453,9 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>Multiple result set.</returns>
-        public static async Task<SqlMapper.GridReader> QueryMultipleAsync(
+        public static Task<SqlMapper.GridReader> QueryMultipleAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -464,9 +464,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryMultipleAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return await connection.QueryMultipleAsync(command).ConfigureAwait(false);
         }
 
 #if NET5_0_OR_GREATER
@@ -484,7 +488,7 @@ namespace System.Data.Common
         /// </returns>
         public static IAsyncEnumerable<dynamic> QueryUnbufferedAsync(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null)
@@ -492,7 +496,12 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return connection.QueryUnbufferedAsync(queryObject, transaction, commandTimeout, commandType);
+            return connection.QueryUnbufferedAsync(
+                queryObject.Sql, 
+                queryObject.Params, 
+                transaction, 
+                commandTimeout, 
+                commandType);
         }
 
         /// <summary>
@@ -509,7 +518,7 @@ namespace System.Data.Common
         /// </returns>
         public static IAsyncEnumerable<T> QueryUnbufferedAsync<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
@@ -527,7 +536,7 @@ namespace System.Data.Common
 
         private static async IAsyncEnumerable<T> QueryUnbufferedAsyncCore<T>(
             this DbConnection connection,
-            IQueryObject queryObject,
+            QueryObject queryObject,
             DbTransaction? transaction,
             int? commandTimeout,
             CommandType? commandType,
@@ -545,7 +554,7 @@ namespace System.Data.Common
 
 #endif
 
-        private static CommandDefinition CreateCommand(IQueryObject queryObject, IDbTransaction? transaction,
+        private static CommandDefinition CreateCommand(QueryObject queryObject, IDbTransaction? transaction,
             int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken, CommandFlags flags = CommandFlags.Buffered)
         {
             return new(queryObject.Sql, queryObject.Params, transaction, commandTimeout, commandType, flags,

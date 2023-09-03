@@ -1,3 +1,4 @@
+using CommunityToolkit.Diagnostics;
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -13,11 +14,15 @@ namespace Byndyusoft.Data.Relational
 
         public IDbSession? GetCurrent(string name)
         {
-           return _current.Value?.TryGetValue(name, out var session) == true ? session : null;
+            Guard.IsNotNull(name, nameof(name));
+
+            return _current.Value?.TryGetValue(name, out var session) == true ? session : null;
         }
 
         public void SetCurrent(string name, IDbSession? session)
         {
+            Guard.IsNotNull(name, nameof(name));
+
             var dic = _current.Value ??= new ();
             dic.AddOrUpdate(name, session, (_, current) =>
             {

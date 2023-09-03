@@ -1,5 +1,6 @@
 using Byndyusoft.Data.Relational.Sessions;
 using Byndyusoft.Data.Sessions;
+using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.Options;
 
 namespace Byndyusoft.Data.Relational
@@ -15,6 +16,9 @@ namespace Byndyusoft.Data.Relational
             IDbSessionStorage sessionStorage,
             ISessionAccessor? sessionAccessor = null)
         {
+            Guard.IsNotNull(sessionFactory, nameof(sessionFactory));
+            Guard.IsNotNull(sessionStorage, nameof(sessionStorage));
+
             _sessionFactory = sessionFactory;
             _sessionStorage = sessionStorage;
             _sessionAccessor = sessionAccessor;
@@ -28,6 +32,8 @@ namespace Byndyusoft.Data.Relational
         {
             get
             {
+                Guard.IsNotNull(name, nameof(name));
+
                 var session = _sessionAccessor?.Session;
                 if (session is null)
                 {

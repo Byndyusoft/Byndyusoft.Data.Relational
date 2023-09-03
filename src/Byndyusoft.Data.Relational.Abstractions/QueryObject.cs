@@ -1,14 +1,13 @@
 using System;
 using CommunityToolkit.Diagnostics;
 
-// ReSharper disable once CheckNamespace
 namespace Byndyusoft.Data.Relational
 {
     /// <summary>
     ///     An object that represents a database query.
     /// </summary>
     /// <see href="https://martinfowler.com/eaaCatalog/queryObject.html" />
-    public record QueryObject : IQueryObject
+    public record QueryObject
     {
         /// <summary>
         ///     Initializes a new instance of the <see cref="QueryObject" /> class.
@@ -56,5 +55,8 @@ namespace Byndyusoft.Data.Relational
         {
             return new(sql, parameters);
         }
+
+        public static implicit operator QueryObject(string sql) =>
+            new(sql);
     }
 }
