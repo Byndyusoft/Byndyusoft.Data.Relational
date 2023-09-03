@@ -9,12 +9,16 @@ namespace Byndyusoft.Data.Relational
     public class DbSessionFactory : IDbSessionFactory
     {
         private readonly IOptionsMonitor<DbSessionOptions> _options;
+        private readonly IDbSessionStorage _sessionStorage;
 
-        public DbSessionFactory(IOptionsMonitor<DbSessionOptions> options)
+        public DbSessionFactory(
+            IOptionsMonitor<DbSessionOptions> options,
+            IDbSessionStorage sessionStorage)
         {
             Guard.IsNotNull(options, nameof(options));
 
             _options = options;
+            _sessionStorage = sessionStorage;
         }
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
@@ -27,8 +31,8 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(name, nameof(name));
 
             var options = _options.Get(name).Validate(name);
-            var session = new DbSession(name, options);
-            DbSession.Current[name] = session;
+            var session = new DbSession(name, _sessionStorage, options);
+            _sessionStorage.SetCurrent(name, session);
             return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
@@ -55,8 +59,8 @@ namespace Byndyusoft.Data.Relational
             string name, IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
             var options = _options.Get(name).Validate(name);
-            var session = new DbSession(name, options, isolationLevel);
-            DbSession.Current[name] = session;
+            var session = new DbSession(name, _sessionStorage, options, isolationLevel);
+            _sessionStorage.SetCurrent(name, session);
             return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
         }
 

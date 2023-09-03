@@ -7,12 +7,17 @@ namespace Byndyusoft.Data.Relational
     public class DbSessionAccessor : IDbSessionAccessor
     {
         private readonly IDbSessionFactory _sessionFactory;
+        private readonly IDbSessionStorage _sessionStorage;
         private readonly ISessionAccessor? _sessionAccessor;
         private DbSessionsIndexer? _indexer;
 
-        public DbSessionAccessor(IDbSessionFactory sessionFactory, ISessionAccessor? sessionAccessor = null)
+        public DbSessionAccessor(
+            IDbSessionFactory sessionFactory, 
+            IDbSessionStorage sessionStorage,
+            ISessionAccessor? sessionAccessor = null)
         {
             _sessionFactory = sessionFactory;
+            _sessionStorage = sessionStorage;
             _sessionAccessor = sessionAccessor;
         }
 
@@ -25,7 +30,7 @@ namespace Byndyusoft.Data.Relational
                 var session = _sessionAccessor?.Session;
                 if (session is not null)
                     return _indexer ??= new DbSessionsIndexer(_sessionFactory, _sessionAccessor!);
-                return Relational.DbSession.Current;
+                return _sessionStorage;
             }
         }
     }

@@ -69,6 +69,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.TryAddSingleton<IDbSessionAccessor, DbSessionAccessor>();
             services.TryAddSingleton<IDbSessionFactory, DbSessionFactory>();
+            services.TryAddSingleton<IDbSessionStorage, DbSessionStorage>();
 
             return services;
         }

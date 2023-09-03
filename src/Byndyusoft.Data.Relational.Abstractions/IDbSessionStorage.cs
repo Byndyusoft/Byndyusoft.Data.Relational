@@ -1,6 +1,6 @@
 namespace Byndyusoft.Data.Relational
 {
-    public interface IDbSessionStorage
+    public interface IDbSessionStorage : IDbSessionsIndexer
     {
         /// <summary>
         ///     Gets the current <see cref="IDbSession" /> with specified name.
