@@ -35,11 +35,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
-
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+           
+            return session.Connection.QueryAsync(
+                sql, 
+                param, 
+                session.Transaction, 
+                commandTimeout,
+                commandType, 
                 cancellationToken);
-            return session.Connection.QueryAsync(command);
         }
 
         /// <summary>
@@ -67,14 +70,15 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QueryAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? session.Connection.QueryAsync<T>(command)
-                : session.Connection.QueryAsync(command).DeserializeAsync(typeDeserializer);
         }
 
         /// <summary>
@@ -99,11 +103,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QuerySingleAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return session.Connection.QuerySingleAsync(command);
         }
 
         /// <summary>
@@ -131,14 +138,15 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QuerySingleAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? session.Connection.QuerySingleAsync<T>(command)
-                : session.Connection.QuerySingleAsync(command).DeserializeAsync(typeDeserializer)!;
         }
 
         /// <summary>
@@ -163,12 +171,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QuerySingleOrDefaultAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return session.Connection.QuerySingleOrDefaultAsync(command);
         }
 
         /// <summary>
@@ -196,14 +206,15 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
-                cancellationToken);
-
-            return typeDeserializer == null
-                ? session.Connection.QuerySingleOrDefaultAsync<T?>(command)
-                : session.Connection.QuerySingleOrDefaultAsync(command).DeserializeAsync(typeDeserializer);
+            return session.Connection.QuerySingleOrDefaultAsync<T?>(
+                    sql,
+                    param,
+                    session.Transaction,
+                    commandTimeout,
+                    commandType,
+                    typeDeserializer,
+                    cancellationToken);
         }
 
         /// <summary>
@@ -228,11 +239,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QueryFirstAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return session.Connection.QueryFirstAsync(command);
         }
 
         /// <summary>
@@ -260,14 +274,15 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QueryFirstAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? session.Connection.QueryFirstAsync<T>(command)
-                : session.Connection.QueryFirstAsync(command).DeserializeAsync(typeDeserializer)!;
         }
 
         /// <summary>
@@ -292,11 +307,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.QueryFirstOrDefaultAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return session.Connection.QueryFirstOrDefaultAsync(command);
         }
 
         /// <summary>
@@ -324,14 +342,15 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
-                cancellationToken);
-
-            return typeDeserializer == null
-                ? session.Connection.QueryFirstOrDefaultAsync<T?>(command)
-                : session.Connection.QueryFirstOrDefaultAsync(command).DeserializeAsync(typeDeserializer);
+            return session.Connection.QueryFirstOrDefaultAsync(
+                    sql,
+                    param,
+                    session.Transaction,
+                    commandTimeout,
+                    commandType,
+                    typeDeserializer,
+                    cancellationToken);
         }
 
         /// <summary>
@@ -357,12 +376,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
-
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            
+            return session.Connection.ExecuteScalarAsync<T>(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return session.Connection.ExecuteScalarAsync<T>(command);
         }
 
         /// <summary>
@@ -387,12 +408,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.ExecuteAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return session.Connection.ExecuteAsync(command);
         }
         
         /// <summary>
@@ -416,12 +439,14 @@ namespace System.Data.Common
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
+            return session.Connection.ExecuteScalarAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return session.Connection.ExecuteScalarAsync(command);
         }
 
         /// <summary>
