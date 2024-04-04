@@ -37,7 +37,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryAsync(
                 queryObject, 
@@ -68,7 +67,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryAsync(
                 queryObject, 
@@ -101,7 +99,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QuerySingleAsync(
                 queryObject,
@@ -132,7 +129,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QuerySingleAsync(
                 queryObject, 
@@ -165,7 +161,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QuerySingleOrDefaultAsync(
                 queryObject,
@@ -196,7 +191,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QuerySingleOrDefaultAsync(
                 queryObject,
@@ -229,7 +223,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryFirstAsync(
                 queryObject,
@@ -260,7 +253,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryFirstAsync(
                 queryObject,
@@ -293,7 +285,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryFirstOrDefaultAsync(
                 queryObject, 
@@ -324,7 +315,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryFirstOrDefaultAsync(
                     queryObject,
@@ -354,7 +344,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.ExecuteAsync(queryObject,
                     session.Transaction,
@@ -386,7 +375,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.ExecuteScalarAsync(
                 queryObject, 
@@ -417,7 +405,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.ExecuteScalarAsync(
                 queryObject, 
@@ -447,7 +434,6 @@ namespace Byndyusoft.Data.Relational
             CancellationToken cancellationToken = default)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryMultipleAsync(
                 queryObject,
@@ -477,7 +463,6 @@ namespace Byndyusoft.Data.Relational
             CommandType? commandType = null)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryUnbufferedAsync(
                 queryObject, 
@@ -505,7 +490,6 @@ namespace Byndyusoft.Data.Relational
             ITypeDeserializer<T>? typeDeserializer = null)
         {
             Guard.IsNotNull(session, nameof(session));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
 
             return session.Connection.QueryUnbufferedAsync(
                 queryObject,

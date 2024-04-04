@@ -9,17 +9,16 @@ using Dapper;
 namespace System.Data.Common
 {
     /// <summary>
-    ///     Extensions to work with <see cref="DbConnection" /> queries.
+    ///     Extensions to work with <see cref="IDbSession" /> queries.
     /// </summary>
-    public static class DbConnectionQueryExtensions
+    public static class DbSessionQueryExtensions
     {
         /// <summary>
         ///     Execute a query asynchronously using Task.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="cancellationToken">
@@ -28,30 +27,31 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<IEnumerable<dynamic>> QueryAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
-
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            Guard.IsNotNull(session, nameof(session));
+           
+            return session.Connection.QueryAsync(
+                sql, 
+                param, 
+                session.Transaction, 
+                commandTimeout,
+                commandType, 
                 cancellationToken);
-            return connection.QueryAsync(command);
         }
 
         /// <summary>
         ///     Execute a query asynchronously using Task.
         /// </summary>
         /// <typeparam name="T">The type of result to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -61,33 +61,32 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<IEnumerable<T>> QueryAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QueryAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? connection.QueryAsync<T>(command)
-                : connection.QueryAsync(command).DeserializeAsync(typeDeserializer);
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="cancellationToken">
@@ -96,30 +95,31 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<dynamic> QuerySingleAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QuerySingleAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QuerySingleAsync(command);
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
         /// <typeparam name="T">The type of result to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -129,33 +129,32 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T> QuerySingleAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QuerySingleAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? connection.QuerySingleAsync<T>(command)
-                : connection.QuerySingleAsync(command).DeserializeNullableAsync(typeDeserializer)!;
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="cancellationToken">
@@ -164,31 +163,31 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<dynamic?> QuerySingleOrDefaultAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QuerySingleOrDefaultAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return connection.QuerySingleOrDefaultAsync(command);
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
         /// <typeparam name="T">The type of result to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+        /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -198,33 +197,32 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T?> QuerySingleOrDefaultAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
-                cancellationToken);
-
-            return typeDeserializer == null
-                ? connection.QuerySingleOrDefaultAsync<T?>(command)
-                : connection.QuerySingleOrDefaultAsync(command).DeserializeAsync(typeDeserializer);
+            return session.Connection.QuerySingleOrDefaultAsync<T?>(
+                    sql,
+                    param,
+                    session.Transaction,
+                    commandTimeout,
+                    commandType,
+                    typeDeserializer,
+                    cancellationToken);
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="cancellationToken">
@@ -233,30 +231,31 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<dynamic> QueryFirstAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QueryFirstAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QueryFirstAsync(command);
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
         /// <typeparam name="T">The type of result to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -266,33 +265,32 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T> QueryFirstAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QueryFirstAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer,
                 cancellationToken);
-
-            return typeDeserializer == null
-                ? connection.QueryFirstAsync<T>(command)
-                : connection.QueryFirstAsync(command).DeserializeNullableAsync(typeDeserializer)!;
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="cancellationToken">
@@ -301,30 +299,31 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<dynamic?> QueryFirstOrDefaultAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.QueryFirstOrDefaultAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QueryFirstOrDefaultAsync(command);
         }
 
         /// <summary>
         ///     Execute a single-row query asynchronously using Task.
         /// </summary>
         /// <typeparam name="T">The type of result to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
         /// <param name="commandType">The type of command to execute.</param>
@@ -334,34 +333,33 @@ namespace System.Data.Common
         /// </param>
         /// <returns>A <see cref="Task" /> representing the asynchronous operation.</returns>
         public static Task<T?> QueryFirstOrDefaultAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
-                cancellationToken);
-
-            return typeDeserializer == null
-                ? connection.QueryFirstOrDefaultAsync<T?>(command)
-                : connection.QueryFirstOrDefaultAsync(command).DeserializeAsync(typeDeserializer);
+            return session.Connection.QueryFirstOrDefaultAsync(
+                    sql,
+                    param,
+                    session.Transaction,
+                    commandTimeout,
+                    commandType,
+                    typeDeserializer,
+                    cancellationToken);
         }
 
         /// <summary>
         ///     Asynchronously execute SQL that selects a single value.
         /// </summary>
         /// <typeparam name="T">The type to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
@@ -370,30 +368,30 @@ namespace System.Data.Common
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
         public static Task<T?> ExecuteScalarAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
-
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            Guard.IsNotNull(session, nameof(session));
+            
+            return session.Connection.ExecuteScalarAsync<T>(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return connection.ExecuteScalarAsync<T>(command);
         }
 
         /// <summary>
         ///     Execute a command asynchronously using Task.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for this query.</param>
         /// <param name="param">The parameters to use for this query.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
@@ -402,30 +400,30 @@ namespace System.Data.Common
         /// </param>
         /// <returns>The number of rows affected.</returns>
         public static Task<int> ExecuteAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.ExecuteAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return connection.ExecuteAsync(command);
         }
         
         /// <summary>
         ///     Asynchronously execute SQL that selects a single value.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
@@ -433,31 +431,31 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         public static Task<dynamic> ExecuteScalarAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+            Guard.IsNotNull(session, nameof(session));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            return session.Connection.ExecuteScalarAsync(
+                sql,
+                param,
+                session.Transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-
-            return connection.ExecuteScalarAsync(command) as dynamic;
         }
 
         /// <summary>
         ///     Asynchronously execute SQL that selects a single value.
         /// </summary>
         /// <typeparam name="T">The type to return.</typeparam>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for the query.</param>
         /// <param name="param">The parameters to pass, if any.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -467,33 +465,31 @@ namespace System.Data.Common
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
         public static Task<T?> ExecuteScalarAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
+            Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
 
             return typeDeserializer == null
-                ? connection.ExecuteScalarAsync<T>(command)
-                : connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer);
+                ? session.Connection.ExecuteScalarAsync<T>(command)
+                : session.Connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer);
         }
 
         /// <summary>
         ///     Asynchronously execute a command that returns multiple result sets, and access each in turn.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+         /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for this query.</param>
         /// <param name="param">The parameters to use for this query.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
         /// <param name="commandTimeout">Number of seconds before command execution timeout.</param>
         /// <param name="commandType">Is it a stored proc or a batch?</param>
         /// <param name="cancellationToken">
@@ -502,20 +498,19 @@ namespace System.Data.Common
         /// </param>
         /// <returns>Multiple result set.</returns>
         public static Task<SqlMapper.GridReader> QueryMultipleAsync(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(connection, nameof(connection));
+            Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
-            var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
+            var command = CreateCommand(sql, param, session.Transaction, commandTimeout, commandType,
                 cancellationToken);
-            return connection.QueryMultipleAsync(command);
+            return session.Connection.QueryMultipleAsync(command);
         }
 
 #if NET5_0_OR_GREATER
@@ -523,10 +518,34 @@ namespace System.Data.Common
         /// <summary>
         /// Execute a query asynchronously using <see cref="IAsyncEnumerable{T}"/>.
         /// </summary>
-        /// <param name="connection">The connection to query on.</param>
+        /// <param name="session">The session to query on.</param>
         /// <param name="sql">The SQL to execute for this query.</param>
         /// <param name="param">The parameters to use for this query.</param>
-        /// <param name="transaction">The transaction to use, if any.</param>
+        /// <param name="commandTimeout">The command timeout (in seconds).</param>
+        /// <param name="commandType">The type of command to execute.</param>
+        /// <returns>
+        /// A sequence of data of dynamic data
+        /// </returns>
+        public static IAsyncEnumerable<dynamic> QueryUnbufferedAsync(
+            this IDbSession session,
+            string sql,
+            object? param = null,
+            int? commandTimeout = null,
+            CommandType? commandType = null)
+        {
+            Guard.IsNotNull(session, nameof(session));
+            Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
+
+            return session.Connection.QueryUnbufferedAsync(sql, param, session.Transaction, commandTimeout,
+                commandType);
+        }
+
+        /// <summary>
+        /// Execute a query asynchronously using <see cref="IAsyncEnumerable{T}"/>.
+        /// </summary>
+        /// <param name="session">The session to query on.</param>
+        /// <param name="sql">The SQL to execute for this query.</param>
+        /// <param name="param">The parameters to use for this query.</param>
         /// <param name="commandTimeout">The command timeout (in seconds).</param>
         /// <param name="commandType">The type of command to execute.</param>
         /// <param name="typeDeserializer">The type deserializer.</param>
@@ -534,26 +553,25 @@ namespace System.Data.Common
         /// A sequence of data of dynamic data
         /// </returns>
         public static IAsyncEnumerable<T> QueryUnbufferedAsync<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param = null,
-            DbTransaction? transaction = null,
             int? commandTimeout = null,
             CommandType? commandType = null,
             ITypeDeserializer<T>? typeDeserializer = null)
         {
-            Guard.IsNotNull(connection, nameof(connection));
+            Guard.IsNotNull(session, nameof(session));
             Guard.IsNotNullOrWhiteSpace(sql, nameof(sql));
 
             return typeDeserializer is null
-                ?  SqlMapper.QueryUnbufferedAsync<T>(connection, sql, param, transaction, commandTimeout,
+                ?  SqlMapper.QueryUnbufferedAsync<T>(session.Connection, sql, param, session.Transaction, commandTimeout,
                     commandType)
-                : connection.QueryUnbufferedAsyncCore(sql, param, transaction, commandTimeout,
+                : session.QueryUnbufferedAsyncCore(sql, param, session.Transaction, commandTimeout,
                     commandType, typeDeserializer);
         }
 
         private static async IAsyncEnumerable<T> QueryUnbufferedAsyncCore<T>(
-            this DbConnection connection,
+            this IDbSession session,
             string sql,
             object? param,
             DbTransaction? transaction,
@@ -561,7 +579,7 @@ namespace System.Data.Common
             CommandType? commandType,
             ITypeDeserializer<T> typeDeserializer)
         {
-            var rows = connection.QueryUnbufferedAsync(sql, param, transaction, commandTimeout, commandType);
+            var rows = session.Connection.QueryUnbufferedAsync(sql, param, transaction, commandTimeout, commandType);
             await foreach (var row in rows)
             {
                 yield return typeDeserializer.Deserialize(row);
