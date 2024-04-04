@@ -6,7 +6,14 @@ namespace Byndyusoft.Data.Relational
 {
     internal static class TypeDeserializerExtensions
     {
-        public static async Task<T?> DeserializeAsync<T>(this Task<dynamic> task, ITypeDeserializer<T> deserializer)
+        public static async Task<T?> DeserializeAsync<T>(this Task<dynamic?> task, ITypeDeserializer<T> deserializer)
+        {
+            var row = await task.ConfigureAwait(false);
+
+            return DeserializeCore<T>(deserializer, row);
+        }
+
+        public static async Task<T?> DeserializeNullableAsync<T>(this Task<dynamic> task, ITypeDeserializer<T> deserializer)
         {
             var row = await task.ConfigureAwait(false);
 

@@ -146,7 +146,7 @@ namespace System.Data.Common
 
             return typeDeserializer == null
                 ? connection.QuerySingleAsync<T>(command)
-                : connection.QuerySingleAsync(command).DeserializeAsync(typeDeserializer)!;
+                : connection.QuerySingleAsync(command).DeserializeNullableAsync(typeDeserializer)!;
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace System.Data.Common
 
             return typeDeserializer == null
                 ? connection.QueryFirstAsync<T>(command)
-                : connection.QueryFirstAsync(command).DeserializeAsync(typeDeserializer)!;
+                : connection.QueryFirstAsync(command).DeserializeNullableAsync(typeDeserializer)!;
         }
 
         /// <summary>
@@ -369,7 +369,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static Task<T> ExecuteScalarAsync<T>(
+        public static Task<T?> ExecuteScalarAsync<T>(
             this DbConnection connection,
             string sql,
             object? param = null,
@@ -447,7 +447,7 @@ namespace System.Data.Common
             var command = CreateCommand(sql, param, transaction, commandTimeout, commandType,
                 cancellationToken);
 
-            return connection.ExecuteScalarAsync(command);
+            return connection.ExecuteScalarAsync(command) as dynamic;
         }
 
         /// <summary>
@@ -466,7 +466,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static Task<T> ExecuteScalarAsync<T>(
+        public static Task<T?> ExecuteScalarAsync<T>(
             this DbConnection connection,
             string sql,
             object? param = null,
@@ -484,7 +484,7 @@ namespace System.Data.Common
 
             return typeDeserializer == null
                 ? connection.ExecuteScalarAsync<T>(command)
-                : connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer)!;
+                : connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer);
         }
 
         /// <summary>

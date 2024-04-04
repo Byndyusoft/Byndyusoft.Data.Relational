@@ -74,11 +74,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            connection.Query(queryObject.Sql, queryObject.Params, transaction);
-
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QueryAsync(command);
         }
 
         /// <summary>
@@ -142,9 +144,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QuerySingleAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QuerySingleAsync(command);
         }
 
         /// <summary>
@@ -208,9 +214,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QuerySingleOrDefaultAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QuerySingleOrDefaultAsync(command);
         }
 
         /// <summary>
@@ -274,9 +284,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryFirstAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QueryFirstAsync(command);
         }
 
         /// <summary>
@@ -340,9 +354,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.QueryFirstOrDefaultAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.QueryFirstOrDefaultAsync(command);
         }
 
         /// <summary>
@@ -369,9 +387,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.ExecuteAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.ExecuteAsync(command);
         }
 
         /// <summary>
@@ -389,7 +411,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static Task<T> ExecuteScalarAsync<T>(
+        public static Task<T?> ExecuteScalarAsync<T>(
             this DbConnection connection,
             QueryObject queryObject,
             DbTransaction? transaction = null,
@@ -435,9 +457,13 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            var command = CreateCommand(queryObject, transaction, commandTimeout, commandType,
+            return connection.ExecuteScalarAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
                 cancellationToken);
-            return connection.ExecuteScalarAsync(command);
         }
 
         /// <summary>
@@ -527,38 +553,15 @@ namespace System.Data.Common
             Guard.IsNotNull(connection, nameof(connection));
             Guard.IsNotNull(queryObject, nameof(queryObject));
 
-            return typeDeserializer is null
-                ? connection.QueryUnbufferedAsync<T>(queryObject.Sql, queryObject.Params, transaction, commandTimeout,
-                    commandType)
-                : connection.QueryUnbufferedAsyncCore(queryObject, transaction, commandTimeout,
-                    commandType, typeDeserializer);
-        }
-
-        private static async IAsyncEnumerable<T> QueryUnbufferedAsyncCore<T>(
-            this DbConnection connection,
-            QueryObject queryObject,
-            DbTransaction? transaction,
-            int? commandTimeout,
-            CommandType? commandType,
-            ITypeDeserializer<T> typeDeserializer)
-        {
-            Guard.IsNotNull(connection, nameof(connection));
-            Guard.IsNotNull(queryObject, nameof(queryObject));
-
-            var rows = connection.QueryUnbufferedAsync(queryObject, transaction, commandTimeout, commandType);
-            await foreach (var row in rows)
-            {
-                yield return typeDeserializer.Deserialize(row);
-            }
+            return connection.QueryUnbufferedAsync(
+                queryObject.Sql,
+                queryObject.Params,
+                transaction,
+                commandTimeout,
+                commandType,
+                typeDeserializer);
         }
 
 #endif
-
-        private static CommandDefinition CreateCommand(QueryObject queryObject, IDbTransaction? transaction,
-            int? commandTimeout, CommandType? commandType, CancellationToken cancellationToken, CommandFlags flags = CommandFlags.Buffered)
-        {
-            return new(queryObject.Sql, queryObject.Params, transaction, commandTimeout, commandType, flags,
-                cancellationToken);
-        }
     }
 }

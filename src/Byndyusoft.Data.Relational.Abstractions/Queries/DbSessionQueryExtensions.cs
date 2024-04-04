@@ -367,7 +367,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static Task<T> ExecuteScalarAsync<T>(
+        public static Task<T?> ExecuteScalarAsync<T>(
             this IDbSession session,
             string sql,
             object? param = null,
@@ -464,7 +464,7 @@ namespace System.Data.Common
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static Task<T> ExecuteScalarAsync<T>(
+        public static Task<T?> ExecuteScalarAsync<T>(
             this IDbSession session,
             string sql,
             object? param = null,
@@ -481,7 +481,7 @@ namespace System.Data.Common
 
             return typeDeserializer == null
                 ? session.Connection.ExecuteScalarAsync<T>(command)
-                : session.Connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer)!;
+                : session.Connection.ExecuteScalarAsync(command).DeserializeAsync(typeDeserializer);
         }
 
         /// <summary>
