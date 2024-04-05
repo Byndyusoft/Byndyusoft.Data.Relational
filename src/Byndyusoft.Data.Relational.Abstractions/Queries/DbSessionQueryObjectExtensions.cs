@@ -366,7 +366,7 @@ namespace Byndyusoft.Data.Relational
         ///     <see cref="CancellationToken.None" />.
         /// </param>
         /// <returns>The first cell returned, as <typeparamref name="T" />.</returns>
-        public static Task<T> ExecuteScalarAsync<T>(
+        public static Task<T?> ExecuteScalarAsync<T>(
             this IDbSession session,
             QueryObject queryObject,
             int? commandTimeout = null,
