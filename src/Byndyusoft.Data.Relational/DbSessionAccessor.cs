@@ -48,7 +48,7 @@ namespace Byndyusoft.Data.Relational
 
         private IDependentDbSession Create(string name, ISession session)
         {
-            if (session is ICommitableSession committableSession)
+            if (session is ICommittableSession committableSession)
             {
                 var dbSession = _sessionFactory.CreateCommittableSessionAsync(name, committableSession.IsolationLevel)
                     .ConfigureAwait(false).GetAwaiter().GetResult();
