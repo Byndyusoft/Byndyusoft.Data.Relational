@@ -24,15 +24,25 @@ namespace Byndyusoft.Data.Relational
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            return CreateSessionAsync(Options.DefaultName, cancellationToken);
+            return CreateSessionAsync(Options.DefaultName, IsolationLevel.Unspecified, cancellationToken);
+        }
+
+        public virtual Task<IDbSession> CreateSessionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
+        {
+            return CreateSessionAsync(Options.DefaultName, isolationLevel, cancellationToken);
         }
 
         public virtual Task<IDbSession> CreateSessionAsync(string name, CancellationToken cancellationToken = default)
         {
+            return CreateSessionAsync(name, IsolationLevel.Unspecified, cancellationToken);
+        }
+
+        public Task<IDbSession> CreateSessionAsync(string name, IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
+        {
             Guard.IsNotNull(name, nameof(name));
 
             var options = _options.Get(name).Validate(name);
-            var session = new DbSession(name, _sessionStorage, options);
+            var session = new DbSession(name, _sessionStorage, options, isolationLevel);
             _sessionStorage.SetCurrent(name, session);
             return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
