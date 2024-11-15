@@ -24,7 +24,7 @@ namespace Byndyusoft.Data.Relational
 
         public virtual Task<IDbSession> CreateSessionAsync(CancellationToken cancellationToken = default)
         {
-            return CreateSessionAsync(Options.DefaultName, IsolationLevel.Unspecified, cancellationToken);
+            return CreateSessionAsync(Options.DefaultName, cancellationToken);
         }
 
         public virtual Task<IDbSession> CreateSessionAsync(IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
@@ -34,17 +34,12 @@ namespace Byndyusoft.Data.Relational
 
         public virtual Task<IDbSession> CreateSessionAsync(string name, CancellationToken cancellationToken = default)
         {
-            return CreateSessionAsync(name, IsolationLevel.Unspecified, cancellationToken);
+            return CreateSessionAsyncCore(name, isolationLevel: null, cancellationToken);
         }
 
         public Task<IDbSession> CreateSessionAsync(string name, IsolationLevel isolationLevel, CancellationToken cancellationToken = default)
         {
-            Guard.IsNotNull(name, nameof(name));
-
-            var options = _options.Get(name).Validate(name);
-            var session = new DbSession(name, _sessionStorage, options, isolationLevel);
-            _sessionStorage.SetCurrent(name, session);
-            return StartAsyncCore<IDbSession>(session, cancellationToken);
+            return CreateSessionAsyncCore(name, isolationLevel, cancellationToken);
         }
 
         public Task<ICommittableDbSession> CreateCommittableSessionAsync(CancellationToken cancellationToken = default)
@@ -73,6 +68,16 @@ namespace Byndyusoft.Data.Relational
             var session = new DbSession(name, _sessionStorage, options, isolationLevel);
             _sessionStorage.SetCurrent(name, session);
             return StartAsyncCore<ICommittableDbSession>(session, cancellationToken);
+        }
+
+        private Task<IDbSession> CreateSessionAsyncCore(string name, IsolationLevel? isolationLevel, CancellationToken cancellationToken = default)
+        {
+            Guard.IsNotNull(name, nameof(name));
+
+            var options = _options.Get(name).Validate(name);
+            var session = new DbSession(name, _sessionStorage, options, isolationLevel);
+            _sessionStorage.SetCurrent(name, session);
+            return StartAsyncCore<IDbSession>(session, cancellationToken);
         }
 
         private static async Task<T> StartAsyncCore<T>(DbSession session, CancellationToken cancellationToken)
