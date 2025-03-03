@@ -78,6 +78,21 @@ namespace Byndyusoft.Data.Relational.Unit
             Assert.Equal(parameters, queryObject.Params);
         }
 
+        [Fact]
+        public void CreateOfT_Test()
+        {
+            // Arrange
+            var sql = "SELECT * FROM table";
+            var parameters = new object();
+
+            // Act
+            var queryObject = QueryObject.Create<int>(sql, parameters);
+
+            // Assert
+            Assert.Equal(sql, queryObject.Sql);
+            Assert.Equal(parameters, queryObject.Params);
+        }
+
         [Theory]
         [InlineData(null, typeof(ArgumentNullException))]
         [InlineData("", typeof(ArgumentException))]

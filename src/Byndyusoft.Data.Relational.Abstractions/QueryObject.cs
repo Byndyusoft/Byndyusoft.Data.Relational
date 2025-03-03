@@ -56,7 +56,27 @@ namespace Byndyusoft.Data.Relational
             return new(sql, parameters);
         }
 
+        /// <summary>
+        ///     Creates a new instance of the <see cref="QueryObject" />class.
+        /// </summary>
+        /// <param name="sql">Database query sql text.</param>
+        /// <param name="parameters">Database query parameters.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="sql" /> is null or whitespace</exception>
+        /// <returns>A new instance of the <see cref="QueryObject" /> class.</returns>
+        public static QueryObject<T> Create<T>(string sql, object? parameters = null)
+        {
+            return new(sql, parameters);
+        }
+
         public static implicit operator QueryObject(string sql) =>
             new(sql);
+    }
+
+    public record QueryObject<T> : QueryObject
+    {
+        public QueryObject(string sql, object? parameters = null)
+            : base(sql, parameters)
+        {
+        }
     }
 }

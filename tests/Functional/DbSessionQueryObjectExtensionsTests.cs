@@ -3,7 +3,6 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
 using Microsoft.Data.Sqlite;
 using Xunit;
 
@@ -50,6 +49,23 @@ namespace Byndyusoft.Data.Relational.Functional
         }
 
         [Fact]
+        public async Task QueryAsync_OfT()
+        {
+            // Arrange
+            await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
+            var query = new QueryObject<Row>("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
+
+            // Act
+            var rows = (await _session.QueryAsync(query)).ToArray();
+
+            // Assert
+            var row = Assert.Single(rows);
+            Assert.NotNull(row);
+            Assert.Equal(1, row.Id);
+            Assert.Equal("test1", row.Name);
+        }
+
+        [Fact]
         public async Task QueryAsync()
         {
             // Arrange
@@ -75,6 +91,22 @@ namespace Byndyusoft.Data.Relational.Functional
 
             // Act
             var row = await _session.QueryFirstAsync<Row>(query);
+
+            // Assert
+            Assert.NotNull(row);
+            Assert.Equal(1, row.Id);
+            Assert.Equal("test1", row.Name);
+        }
+
+        [Fact]
+        public async Task QueryFirstAsync_OfT()
+        {
+            // Arrange
+            await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
+            var query = new QueryObject<Row>("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
+
+            // Act
+            var row = await _session.QueryFirstAsync(query);
 
             // Assert
             Assert.NotNull(row);
@@ -115,6 +147,22 @@ namespace Byndyusoft.Data.Relational.Functional
         }
 
         [Fact]
+        public async Task QueryFirstOrDefaultAsync_OfT()
+        {
+            // Arrange
+            await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
+            var query = new QueryObject<Row>("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
+
+            // Act
+            var row = await _session.QueryFirstOrDefaultAsync(query);
+
+            // Assert
+            Assert.NotNull(row);
+            Assert.Equal(1, row.Id);
+            Assert.Equal("test1", row.Name);
+        }
+
+        [Fact]
         public async Task QueryFirstOrDefaultAsync()
         {
             // Arrange
@@ -130,7 +178,6 @@ namespace Byndyusoft.Data.Relational.Functional
             Assert.Equal("test1", row.name);
         }
 
-
         [Fact]
         public async Task QuerySingleAsync_Generic()
         {
@@ -140,6 +187,22 @@ namespace Byndyusoft.Data.Relational.Functional
 
             // Act
             var row = await _session.QuerySingleAsync<Row>(query);
+
+            // Assert
+            Assert.NotNull(row);
+            Assert.Equal(1, row.Id);
+            Assert.Equal("test1", row.Name);
+        }
+
+        [Fact]
+        public async Task QuerySingleAsync_OfT()
+        {
+            // Arrange
+            await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
+            var query = new QueryObject<Row>("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
+
+            // Act
+            var row = await _session.QuerySingleAsync(query);
 
             // Assert
             Assert.NotNull(row);
@@ -172,6 +235,22 @@ namespace Byndyusoft.Data.Relational.Functional
 
             // Act
             var row = await _session.QuerySingleOrDefaultAsync<Row>(query);
+
+            // Assert
+            Assert.NotNull(row);
+            Assert.Equal(1, row.Id);
+            Assert.Equal("test1", row.Name);
+        }
+
+        [Fact]
+        public async Task QuerySingleOrDefaultAsync_OfT()
+        {
+            // Arrange
+            await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
+            var query = new QueryObject<Row>("SELECT id, name FROM test WHERE id=@id", new { id = 1 });
+
+            // Act
+            var row = await _session.QuerySingleOrDefaultAsync(query);
 
             // Assert
             Assert.NotNull(row);
@@ -241,6 +320,21 @@ namespace Byndyusoft.Data.Relational.Functional
         }
 
         [Fact]
+        public async Task ExecuteScalarAsync_OfT()
+        {
+            // Arrange
+            var queryObject =
+                new QueryObject<int>("INSERT INTO test (id, name) VALUES (@id, @name); SELECT last_insert_rowid();",
+                    new { id = 1, name = "name" });
+
+            // Act
+            var id = await _session.ExecuteScalarAsync(queryObject);
+
+            // Assert
+            Assert.Equal(1, id);
+        }
+
+        [Fact]
         public async Task QueryMultipleAsync()
         {
             // Arrange
@@ -293,6 +387,23 @@ namespace Byndyusoft.Data.Relational.Functional
 
             // Act
             var rows = await _session.QueryUnbufferedAsync<Row>(queryObject).ToArrayAsync();
+
+            // Assert
+            var row = Assert.Single(rows);
+            Assert.NotNull(row);
+            Assert.Equal(1, row.Id);
+            Assert.Equal("test1", row.Name);
+        }
+
+        [Fact]
+        public async Task QueryUnbufferedAsync_OfT()
+        {
+            // Arrange
+            await _connection.ExecuteAsync("INSERT INTO test (id, name) VALUES (1, 'test1');");
+            var queryObject = new QueryObject<Row>("SELECT id, name FROM test WHERE id = @id", new { id = 1 });
+
+            // Act
+            var rows = await _session.QueryUnbufferedAsync(queryObject).ToArrayAsync();
 
             // Assert
             var row = Assert.Single(rows);
