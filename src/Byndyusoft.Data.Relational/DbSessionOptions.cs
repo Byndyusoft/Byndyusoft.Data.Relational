@@ -9,6 +9,7 @@ namespace Byndyusoft.Data.Relational
     {
         private string? _connectionString;
         private DbProviderFactory? _dbProviderFactory;
+        private Func<DbConnection>? _createConnectionFunc;
 
         [Required(AllowEmptyStrings = false)]
         public string ConnectionString
@@ -32,6 +33,16 @@ namespace Byndyusoft.Data.Relational
             }
         }
 
+        public Func<DbConnection> CreateConnectionFunc
+        {
+            get => _createConnectionFunc ?? CreateConnection;
+            set
+            {
+                Guard.IsNotNull(value, nameof(CreateConnectionFunc));
+                _createConnectionFunc = value;
+            }
+        } 
+
         internal DbSessionOptions Validate(string name)
         {
             if (_dbProviderFactory is null || _connectionString is null)
@@ -44,6 +55,15 @@ namespace Byndyusoft.Data.Relational
             }
 
             return this;
+        }
+
+        private DbConnection CreateConnection()
+        {
+            var connection = _dbProviderFactory!.CreateConnection();
+            if (connection == null)
+                throw new InvalidOperationException();
+            connection.ConnectionString = _connectionString;
+            return connection;
         }
     }
 }

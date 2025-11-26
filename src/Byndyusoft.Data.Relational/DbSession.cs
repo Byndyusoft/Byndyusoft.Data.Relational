@@ -16,12 +16,11 @@ namespace Byndyusoft.Data.Relational
         private static readonly ActivitySource _activitySource = DbSessionInstrumentationOptions.CreateActivitySource();
 
         private readonly IDbSessionStorage? _sessionStorage;
-        private readonly string _connectionString = default!;
         private readonly IsolationLevel? _isolationLevel;
         private readonly string _name = default!;
-        private readonly DbProviderFactory _providerFactory = default!;
         private Activity? _activity;
-        
+        private readonly DbSessionOptions _options;
+
         private bool _completed;
         private bool _disposed;
 
@@ -54,10 +53,9 @@ namespace Byndyusoft.Data.Relational
             Guard.IsNotNull(name, nameof(name));
 
             _sessionStorage = sessionStorage;
-            _providerFactory = options.DbProviderFactory;
-            _connectionString = options.ConnectionString;
             _isolationLevel = isolationLevel;
             _name = name;
+            _options = options;
         }
 
         public async ValueTask DisposeAsync()
@@ -219,7 +217,7 @@ namespace Byndyusoft.Data.Relational
                 return;
 
             _activity = _activitySource.StartActivity(nameof(DbSession));
-            _activity?.SetTag("provider", _providerFactory.GetType().Name);
+            _activity?.SetTag("provider", _options.DbProviderFactory.GetType().Name);
             _activity?.SetTag("isolationlevel", _isolationLevel);
 
             _activity?.AddEvent(new ActivityEvent(DbSessionEvents.Starting));
@@ -280,10 +278,7 @@ namespace Byndyusoft.Data.Relational
 
         private async Task<DbConnection> CreateConnectionAsync(CancellationToken cancellationToken)
         {
-            var connection = _providerFactory.CreateConnection()!;
-            if (connection == null)
-                throw new InvalidOperationException();
-            connection.ConnectionString = _connectionString;
+            var connection = _options.CreateConnectionFunc();
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
             return connection;
         }
